@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DIU Cover Craft</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+:root{
+  --ui-bg:#eef2fb;
+  --ui-surface:#ffffff;
+  --ui-border:#c8d5ee;
+  --ui-accent:#2d54b8;
+  --ui-text:#1a2540;
+  --ui-muted:#4e5f80;
+  --ui-ph:#9aabc8;
+  --ui-input-b:#c0ceeb;
+  --ui-header:#1a2d62;
+  --ui-sec-bg:#edf1fb;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+body{background:var(--ui-bg);color:var(--ui-text);font-family:'Inter',sans-serif;min-height:100vh;}
+
+/* ═══ HEADER ═══ */
+header{
+  background:var(--ui-header);
+  padding:0 20px;
+  height:51px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:300;
+  box-shadow:0 2px 14px rgba(26,45,98,0.22);
+  gap:10px;
+}
+.header-left{display:flex;align-items:center;gap:12px;}
+.app-title{font-family:'Orbitron',sans-serif;font-weight:900;font-size:13px;letter-spacing:3px;color:#a8c0ff;white-space:nowrap;}
+.app-title span{color:#4ade80;}
+.app-subtitle{font-size:9px;color:rgba(255,255,255,0.3);letter-spacing:1px;font-family:'Inter',sans-serif;white-space:nowrap;}
+
+.header-center{display:flex;align-items:center;}
+.toggle-wrap{display:flex;border-radius:7px;overflow:hidden;border:1.5px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.07);}
+.tbtn{font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:2px;font-weight:700;padding:8px 18px;background:none;border:none;color:rgba(255,255,255,0.45);cursor:pointer;transition:all .2s;}
+.tbtn.active{background:var(--ui-accent);color:#fff;}
+.tbtn:not(.active):hover{color:#fff;}
+
+.header-right{display:flex;align-items:center;gap:8px;}
+.v-badge{font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:1.5px;font-family:'Orbitron',sans-serif;white-space:nowrap;}
+
+/* Hamburger */
+.hamburger{
+  background:none;border:none;cursor:pointer;
+  display:flex;flex-direction:column;justify-content:center;gap:4px;
+  padding:6px;border-radius:6px;transition:background .2s;
+}
+.hamburger:hover{background:rgba(255,255,255,0.1);}
+.hamburger span{display:block;width:20px;height:2px;background:rgba(255,255,255,0.7);border-radius:2px;transition:all .3s;}
+.hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+
+/* Dropdown Menu */
+.dropdown-menu{
+  position:fixed;top:51px;right:0;
+  width:280px;
+  background:#1e3060;
+  border-left:1px solid rgba(255,255,255,0.1);
+  border-bottom:1px solid rgba(255,255,255,0.1);
+  border-radius:0 0 0 10px;
+  box-shadow:-4px 4px 24px rgba(0,0,0,0.4);
+  z-index:400;
+  transform:translateX(100%);
+  transition:transform .28s cubic-bezier(.4,0,.2,1);
+  overflow:hidden;
+}
+.dropdown-menu.open{transform:translateX(0);}
+
+.dm-section{padding:14px 18px 8px;font-size:9px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,0.3);text-transform:uppercase;}
+.dm-item{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 18px;cursor:pointer;
+  color:rgba(255,255,255,0.8);font-size:13px;font-weight:500;
+  transition:background .15s;border:none;background:none;width:100%;text-align:left;
+}
+.dm-item:hover{background:rgba(255,255,255,0.08);color:#fff;}
+.dm-item .dm-icon{font-size:16px;width:22px;text-align:center;flex-shrink:0;}
+.dm-item .dm-desc{font-size:10px;color:rgba(255,255,255,0.4);display:block;margin-top:1px;}
+.dm-divider{height:1px;background:rgba(255,255,255,0.08);margin:6px 0;}
+
+/* Modal backdrop */
+.modal-bg{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,0.5);z-index:500;
+  align-items:center;justify-content:center;
+  padding:20px;
+}
+.modal-bg.open{display:flex;}
+.modal{
+  background:#fff;border-radius:12px;
+  width:100%;max-width:440px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.3);
+  overflow:hidden;
+  animation:modalIn .22s ease;
+}
+@keyframes modalIn{from{opacity:0;transform:scale(.95);}to{opacity:1;transform:scale(1);}}
+.modal-head{
+  background:var(--ui-header);
+  padding:16px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.modal-head h3{color:#fff;font-size:14px;font-weight:700;letter-spacing:.5px;}
+.modal-close{background:none;border:none;color:rgba(255,255,255,0.6);font-size:20px;cursor:pointer;line-height:1;padding:2px 6px;border-radius:4px;}
+.modal-close:hover{color:#fff;background:rgba(255,255,255,0.1);}
+.modal-body{padding:22px 20px;}
+
+/* Dev Info modal */
+.dev-card{display:flex;align-items:center;gap:14px;margin-bottom:18px;}
+.dev-avatar{width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#2d54b8,#4ade80);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.dev-name{font-weight:700;font-size:15px;color:var(--ui-text);}
+.dev-role{font-size:12px;color:var(--ui-muted);margin-top:2px;}
+.dev-links{display:flex;flex-direction:column;gap:8px;}
+.dev-link{
+  display:flex;align-items:center;gap:10px;padding:10px 14px;
+  border-radius:8px;background:var(--ui-sec-bg);
+  color:var(--ui-accent);font-size:13px;font-weight:500;
+  text-decoration:none;border:1.5px solid var(--ui-border);
+  transition:all .15s;
+}
+.dev-link:hover{background:var(--ui-accent);color:#fff;border-color:var(--ui-accent);}
+.dev-link .dl-icon{font-size:15px;}
+
+/* Rating modal */
+.rating-wrap{text-align:center;margin-bottom:16px;}
+.stars{display:flex;justify-content:center;gap:8px;margin:14px 0 6px;}
+.star{font-size:32px;cursor:pointer;transition:transform .1s;filter:grayscale(1);opacity:.4;}
+.star.active{filter:none;opacity:1;transform:scale(1.15);}
+.star:hover{transform:scale(1.2);}
+.rating-label{font-size:12px;color:var(--ui-muted);min-height:18px;}
+.comment-box{width:100%;border:1.5px solid var(--ui-input-b);border-radius:8px;padding:10px 12px;font-family:'Inter',sans-serif;font-size:13px;color:var(--ui-text);resize:vertical;min-height:80px;outline:none;transition:border-color .15s;}
+.comment-box:focus{border-color:var(--ui-accent);box-shadow:0 0 0 3px rgba(45,84,184,0.1);}
+.comment-label{font-size:11px;font-weight:600;color:var(--ui-muted);letter-spacing:.5px;margin-bottom:6px;display:block;text-transform:uppercase;}
+.submit-btn{
+  width:100%;margin-top:14px;padding:11px;
+  background:linear-gradient(130deg,#2d54b8,#1a3880);
+  border:none;border-radius:7px;color:#fff;
+  font-family:'Inter',sans-serif;font-size:13px;font-weight:600;
+  cursor:pointer;transition:all .2s;
+}
+.submit-btn:hover{opacity:.9;transform:translateY(-1px);}
+.submit-success{text-align:center;padding:10px 0 4px;color:#16a34a;font-weight:600;font-size:13px;display:none;}
+
+/* ═══ LAYOUT ═══ */
+.app-layout{display:grid;grid-template-columns:350px 1fr;min-height:calc(100vh - 51px);}
+
+.inp-panel{background:var(--ui-surface);border-right:1.5px solid var(--ui-border);padding:20px 18px 60px;overflow-y:auto;max-height:calc(100vh - 51px);}
+.inp-panel::-webkit-scrollbar{width:5px;}
+.inp-panel::-webkit-scrollbar-thumb{background:#c0ceeb;border-radius:10px;}
+
+.sec-head{font-size:10px;font-weight:700;letter-spacing:2.5px;color:var(--ui-accent);text-transform:uppercase;padding:7px 10px;margin-bottom:11px;background:var(--ui-sec-bg);border-left:3px solid var(--ui-accent);border-radius:0 5px 5px 0;}
+.sec-head-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;}
+.sec-head-row .sec-head{margin-bottom:0;flex:1;}
+.copy-btn{flex-shrink:0;margin-left:8px;padding:4px 9px;background:#16a34a;border:none;border-radius:5px;color:#fff;font-family:'Inter',sans-serif;font-size:10px;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap;box-shadow:0 2px 6px rgba(22,163,74,0.25);}
+.copy-btn:hover{background:#0e7230;transform:translateY(-1px);}
+
+.sgap{height:16px;}
+.fg{margin-bottom:12px;}
+.fg label{display:block;font-size:10.5px;font-weight:600;letter-spacing:1px;color:var(--ui-muted);margin-bottom:4px;text-transform:uppercase;}
+.fg input{width:100%;background:#fff;border:1.5px solid var(--ui-input-b);border-radius:6px;color:var(--ui-text);font-family:'Inter',sans-serif;font-size:13.5px;font-weight:500;padding:8px 12px;outline:none;transition:border-color .15s,box-shadow .15s;}
+.fg input:focus{border-color:var(--ui-accent);box-shadow:0 0 0 3px rgba(45,84,184,0.1);}
+.fg input::placeholder{color:var(--ui-ph);}
+.fg input[type="date"]{color-scheme:light;}
+.fg .readonly-field{background:#f0f4fc;color:var(--ui-muted);border-color:#d8e2f4;cursor:default;font-style:italic;}
+
+.dl-btn{width:100%;margin-top:20px;padding:13px;background:linear-gradient(130deg,#2d54b8,#1a3880);border:none;border-radius:7px;color:#fff;font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2.5px;font-weight:700;cursor:pointer;transition:all .25s;box-shadow:0 4px 18px rgba(45,84,184,0.3);position:relative;overflow:hidden;}
+.dl-btn::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent);transition:left .4s;}
+.dl-btn:hover::after{left:100%;}
+.dl-btn:hover{box-shadow:0 6px 26px rgba(45,84,184,0.42);transform:translateY(-1px);}
+.dl-btn:disabled{opacity:.55;cursor:default;transform:none;}
+
+.mode-panel{display:none;}
+.mode-panel.active{display:block;}
+
+.prev-panel{background:#3a3a3a;display:flex;flex-direction:column;align-items:center;padding:28px 20px 40px;overflow-y:auto;max-height:calc(100vh - 51px);}
+.prev-label{color:rgba(255,255,255,0.38);font-size:9px;letter-spacing:2.5px;margin-bottom:14px;font-family:'Orbitron',sans-serif;}
+
+/* ═══════════════════════════════
+   COVER PAGE
+   FIX: symmetric padding left=right
+═══════════════════════════════ */
+/* https://i.pinimg.com/564x/72/2c/57/722c5710002814308caff02ffb294c0d.jpg */
+#cover-page{
+  width:210mm;
+  min-height:296mm;
+  background:#ffffff;
+  position:relative;
+  box-shadow:0 16px 60px rgba(0,0,0,0.55);
+  margin:0 auto;
+}
+.cv-border{position:absolute;top:16px;left:16px;right:16px;bottom:16px;border:1.5px solid #444;pointer-events:none;z-index:10;}
+.cv-wm{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:420px;height:420px;
+  background-image:url('/img/watermark.jpg');
+  background-size:contain;background-repeat:no-repeat;background-position:center;
+  opacity:0.075;z-index:1;pointer-events:none;
+}
+
+/* FIX: equal left & right padding — was 80px both but border offset caused visual imbalance.
+   The border is 16px each side. Content padding from border edge should be equal.
+   Set padding to exactly 55px left AND right so rendered content is centered. */
+.cv-body{
+  position:relative;z-index:5;
+  padding:36px 55px 40px 55px;
+  min-height:1018px;
+  display:flex;flex-direction:column;
+  font-family:'Calibri','Carlito',Arial,sans-serif;
+  color:#000;
+}
+
+.cv-logo{display:flex;align-items:center;justify-content:center;margin-bottom:10px;padding-top:20px;}
+.cv-logo img{height:120px;width:auto;display:block;}
+
+.cv-title{font-family:'Nirmala UI','Segoe UI','Trebuchet MS',Arial,sans-serif;font-size:27px;font-weight:700;text-decoration:underline;text-align:center;color:#000;margin:0 0 20px 0;}
+
+.cv-row{display:block;margin-bottom:9px;line-height:1.5;}
+.cv-lbl{font-family:'Calibri','Carlito',Arial,sans-serif;font-size:21px;font-weight:700;color:#000;display:inline;}
+.cv-val{font-family:'Calibri','Carlito',Arial,sans-serif;font-size:21px;font-weight:400;color:#000;display:inline;}
+
+.cv-sec{font-family:'Calibri','Carlito',Arial,sans-serif;font-size:21px;font-weight:700;color:#000;margin:18px 0 6px 0;}
+.cv-ib{padding-left:110px;}
+
+.cv-ir{display:block;margin-bottom:10px;margin-top:10px;line-height:1.5;}
+.cv-il{font-family:'Calibri','Carlito',Arial,sans-serif;font-size:19px;font-weight:400;color:#000;display:inline;}
+.cv-iv{font-family:'Calibri','Carlito',Arial,sans-serif;font-size:22px;font-weight:400;color:#000;display:inline;}
+.cv-iv-name{font-size:21px!important;font-weight:700!important;}
+.cv-uline{font-family:'Calibri','Carlito',Arial,sans-serif;font-size:20px;color:#000;margin-bottom:5px;padding-left:0;}
+
+.cv-date-row{display:block;margin-top:12px;margin-bottom:6px;line-height:1.5;}
+/* Only the u tag inside the label gets underlined — colon is excluded */
+.cv-date-row .cv-lbl u{text-decoration:underline;}
+/* Date value is 1px bigger than normal cv-val (21px → 22px) */
+.cv-date-row .cv-val{font-size:22px;}
+
+/* ═══════════════════════════
+   RESPONSIVE
+═══════════════════════════ */
+@media(max-width:940px){
+  .app-layout{grid-template-columns:1fr;}
+  .inp-panel{max-height:none;border-right:none;border-bottom:1.5px solid var(--ui-border);}
+  .prev-panel{max-height:none;padding:20px 10px 40px;}
+  #cover-page{width:100%;max-width:720px;min-height:0;}
+  .cv-body{min-height:0;}
+}
+@media(max-width:700px){
+  .header-center{display:none;}
+  .app-subtitle{display:none;}
+}
+@media(max-width:580px){
+  header{padding:0 14px;}
+  .app-title{font-size:11px;letter-spacing:2px;}
+  .inp-panel{padding:14px 12px 60px;}
+  .cv-body{padding:24px 26px;}
+  .cv-logo img{height:80px;}
+  .cv-title{font-size:18px;}
+  .cv-lbl,.cv-val{font-size:13px!important;}
+  .cv-il,.cv-iv,.cv-uline{font-size:12px!important;}
+  .cv-iv-name{font-size:13px!important;}
+  .cv-sec{font-size:14px!important;}
+  .cv-ib{padding-left:26px;}
+  .cv-date-row .cv-val{font-size:13px!important;}
+  .dropdown-menu{width:100%;}
+}
+@media(max-width:400px){
+  .cv-body{padding:18px 18px;}
+  .cv-lbl,.cv-val{font-size:11px!important;}
+  .cv-il,.cv-iv,.cv-uline{font-size:11px!important;}
+  .cv-iv-name{font-size:12px!important;}
+  .cv-sec{font-size:12px!important;}
+  .cv-title{font-size:15px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header>
+  <div class="header-left">
+    <div>
+      <div class="app-title">DIU <span>COVER</span> CRAFT</div>
+      <div class="app-subtitle">COVER PAGE GENERATOR</div>
+    </div>
+  </div>
+
+  <div class="header-center">
+    <div class="toggle-wrap">
+      <button class="tbtn active" id="btn-a" onclick="setMode('assignment')">ASSIGNMENT</button>
+      <button class="tbtn" id="btn-l" onclick="setMode('lab')">LAB REPORT</button>
+    </div>
+  </div>
+
+  <div class="header-right">
+    <span class="v-badge">v1.0</span>
+    <button class="hamburger" id="hamburgerBtn" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ═══ DROPDOWN MENU ═══ -->
+<div class="dropdown-menu" id="dropdownMenu">
+  <div class="dm-section">Navigation</div>
+  <button class="dm-item" onclick="openModal('devModal')">
+    <span class="dm-icon">👨‍💻</span>
+    <div>
+      <div>Developer Info</div>
+      <span class="dm-desc">About the creator & links</span>
+    </div>
+  </button>
+  <div class="dm-divider"></div>
+  <button class="dm-item" onclick="openModal('ratingModal')">
+    <span class="dm-icon">⭐</span>
+    <div>
+      <div>Comment & Rating</div>
+      <span class="dm-desc">Share your feedback</span>
+    </div>
+  </button>
+  <div class="dm-divider"></div>
+  <!-- Mobile-only mode switcher -->
+  <div class="dm-section" style="display:none" id="mobileModeSection">Switch Mode</div>
+  <button class="dm-item" id="mobileToggleBtn" style="display:none" onclick="toggleModeFromMenu()">
+    <span class="dm-icon">🔄</span>
+    <div>
+      <div id="mobileToggleLabel">Switch to Lab Report</div>
+      <span class="dm-desc">Toggle assignment / lab report</span>
+    </div>
+  </button>
+</div>
+
+<!-- ═══ DEV INFO MODAL ═══ -->
+<div class="modal-bg" id="devModal" onclick="closeBg(event,'devModal')">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>👨‍💻 Developer Info</h3>
+      <button class="modal-close" onclick="closeModal('devModal')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="dev-card">
+        <div class="dev-avatar">🧑‍💻</div>
+        <div>
+          <div class="dev-name">Sifatur Rahman Imran</div>
+          <div class="dev-role">Full Stack Developer · DIU Student</div>
+        </div>
+      </div>
+      <div class="dev-links">
+        <a class="dev-link" href="https://sr-imran.github.io/sri/" target="_blank"><span class="dl-icon">🌐</span> Portfolio Website</a>
+        <a class="dev-link" href="https://github.com/SR-iMrAN?tab=repositories" target="_blank"><span class="dl-icon">🐙</span> GitHub Profile</a>
+        <a class="dev-link" href="https://www.linkedin.com/in/s-r-imran/" target="_blank"><span class="dl-icon">💼</span> LinkedIn</a>
+        <a class="dev-link" href="mailto:srimran423@gmail.com"><span class="dl-icon">✉️</span> Contact via Email</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ COMMENT & RATING MODAL ═══ -->
+<div class="modal-bg" id="ratingModal" onclick="closeBg(event,'ratingModal')">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>⭐ Comment & Rating</h3>
+      <button class="modal-close" onclick="closeModal('ratingModal')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="rating-wrap">
+        <div style="font-size:14px;font-weight:600;color:var(--ui-text);">How would you rate DIU Cover Craft?</div>
+        <div class="stars" id="stars">
+          <span class="star" data-v="1" onclick="setRating(1)">★</span>
+          <span class="star" data-v="2" onclick="setRating(2)">★</span>
+          <span class="star" data-v="3" onclick="setRating(3)">★</span>
+          <span class="star" data-v="4" onclick="setRating(4)">★</span>
+          <span class="star" data-v="5" onclick="setRating(5)">★</span>
+        </div>
+        <div class="rating-label" id="ratingLabel">Click a star to rate</div>
+      </div>
+      <label class="comment-label">Your Comment</label>
+      <textarea class="comment-box" id="commentBox" placeholder="Share your thoughts, suggestions, or feedback..."></textarea>
+      <button class="submit-btn" onclick="submitRating()">Submit Feedback</button>
+      <div class="submit-success" id="submitSuccess">✅ Thank you for your feedback!</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MAIN LAYOUT ═══ -->
+<div class="app-layout">
+  <div class="inp-panel">
+
+    <!-- ASSIGNMENT PANEL -->
+    <div class="mode-panel active" id="panel-assignment">
+      <div class="sec-head">📄 Document Info</div>
+      <div class="fg"><label>Topic Name</label><input type="text" id="a_topicName" placeholder="e.g. SQL SELECT, Query and Sub Query" oninput="render()"></div>
+      <div class="fg"><label>Course Code</label><input type="text" id="a_courseCode" placeholder="e.g. CSE311" oninput="render()"></div>
+      <div class="fg"><label>Course Title</label><input type="text" id="a_courseTitle" placeholder="e.g. Database Management System" oninput="render()"></div>
+      <div class="sgap"></div>
+      <div class="sec-head">👨‍🏫 Submitted To</div>
+      <div class="fg"><label>Teacher Name</label><input type="text" id="a_tName" placeholder="e.g. Md. Abdur Rahman Mojumdar" oninput="render()"></div>
+      <div class="fg"><label>Department</label><input type="text" id="a_tDept" placeholder="e.g. CSE" oninput="render()"></div>
+      <div class="fg"><label>University (Fixed)</label><input class="readonly-field" type="text" value="Daffodil International University." readonly></div>
+      <div class="sgap"></div>
+      <div class="sec-head">🎓 Submitted By</div>
+      <div class="fg"><label>Your Name</label><input type="text" id="a_sName" placeholder="e.g. Raiyan Ahmed Islam" oninput="render()"></div>
+      <div class="fg"><label>Student ID</label><input type="text" id="a_sId" placeholder="e.g. 241-15-001" oninput="render()"></div>
+      <div class="fg"><label>Section</label><input type="text" id="a_sSec" placeholder="e.g. 66_I" oninput="render()"></div>
+      <div class="fg"><label>Semester</label><input type="text" id="a_sSem" placeholder="e.g. Spring 2026" oninput="render()"></div>
+      <div class="fg"><label>Department</label><input type="text" id="a_sDept" placeholder="e.g. CSE" oninput="render()"></div>
+      <div class="fg"><label>University</label><input class="readonly-field" type="text" value="Daffodil International University." readonly></div>
+      <div class="sgap"></div>
+      <div class="sec-head">📅 Submission Date</div>
+      <div class="fg"><label>Date</label><input type="date" id="a_subDate" oninput="render()"></div>
+    </div>
+
+    <!-- LAB REPORT PANEL -->
+    <div class="mode-panel" id="panel-lab">
+      <div class="sec-head">📄 Document Info</div>
+      <div class="fg"><label>Experiment Name</label><input type="text" id="l_expName" placeholder="e.g. Study of Basic Logic Gates" oninput="render()"></div>
+      <div class="fg"><label>Experiment No</label><input type="text" id="l_expNo" placeholder="e.g. 01" oninput="render()"></div>
+      <div class="fg"><label>Course Code</label><input type="text" id="l_courseCode" placeholder="e.g. CSE311" oninput="render()"></div>
+      <div class="fg"><label>Course Title</label><input type="text" id="l_courseTitle" placeholder="e.g. Database Management System" oninput="render()"></div>
+      <div class="sgap"></div>
+      <div class="sec-head-row">
+        <div class="sec-head">👨‍🏫 Submitted To</div>
+        <button class="copy-btn" onclick="copyFromAssignment()">⚡ Copy from Assignment</button>
+      </div>
+      <div class="fg"><label>Teacher Name</label><input type="text" id="l_tName" placeholder="e.g. Md. Abdur Rahman Mojumdar" oninput="render()"></div>
+      <div class="fg"><label>Department</label><input type="text" id="l_tDept" placeholder="e.g. CSE" oninput="render()"></div>
+      <div class="fg"><label>University (Fixed)</label><input class="readonly-field" type="text" value="Daffodil International University." readonly></div>
+      <div class="sgap"></div>
+      <div class="sec-head">🎓 Submitted By</div>
+      <div class="fg"><label>Your Name</label><input type="text" id="l_sName" placeholder="e.g. Raiyan Ahmed Islam" oninput="render()"></div>
+      <div class="fg"><label>Student ID</label><input type="text" id="l_sId" placeholder="e.g. 241-15-001" oninput="render()"></div>
+      <div class="fg"><label>Section</label><input type="text" id="l_sSec" placeholder="e.g. 66_I" oninput="render()"></div>
+      <div class="fg"><label>Semester</label><input type="text" id="l_sSem" placeholder="e.g. Spring 2026" oninput="render()"></div>
+      <div class="fg"><label>Department</label><input type="text" id="l_sDept" placeholder="e.g. CSE" oninput="render()"></div>
+      <div class="fg"><label>University</label><input class="readonly-field" type="text" value="Daffodil International University." readonly></div>
+      <div class="sgap"></div>
+      <div class="sec-head">📅 Submission Date</div>
+      <div class="fg"><label>Date</label><input type="date" id="l_subDate" oninput="render()"></div>
+    </div>
+
+    <button class="dl-btn" id="dlBtn" onclick="downloadPDF()">⬇ &nbsp; DOWNLOAD PDF</button>
+  </div>
+
+  <!-- PREVIEW PANEL -->
+  <div class="prev-panel">
+    <div class="prev-label">LIVE PREVIEW —  COVER PAGE</div>
+    <div id="cover-page">
+      <div class="cv-border"></div>
+      <div class="cv-wm"></div>
+      <div class="cv-body" id="cv-body"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+let mode = 'assignment';
+let currentRating = 0;
+
+/* ── Mode switching ── */
+function setMode(m) {
+  mode = m;
+  document.getElementById('btn-a').className = 'tbtn' + (m==='assignment'?' active':'');
+  document.getElementById('btn-l').className = 'tbtn' + (m==='lab'?' active':'');
+  document.getElementById('panel-assignment').className = 'mode-panel' + (m==='assignment'?' active':'');
+  document.getElementById('panel-lab').className = 'mode-panel' + (m==='lab'?' active':'');
+  document.getElementById('mobileToggleLabel').textContent = m==='assignment' ? 'Switch to Lab Report' : 'Switch to Assignment';
+  render();
+}
+
+/* ── Hamburger / dropdown ── */
+function toggleMenu() {
+  const btn = document.getElementById('hamburgerBtn');
+  const menu = document.getElementById('dropdownMenu');
+  const isOpen = menu.classList.contains('open');
+  btn.classList.toggle('open', !isOpen);
+  menu.classList.toggle('open', !isOpen);
+  // show mobile mode switch on small screens
+  const isMobile = window.innerWidth <= 700;
+  document.getElementById('mobileModeSection').style.display = isMobile ? 'block' : 'none';
+  document.getElementById('mobileToggleBtn').style.display = isMobile ? 'flex' : 'none';
+}
+
+function closeMenu() {
+  document.getElementById('hamburgerBtn').classList.remove('open');
+  document.getElementById('dropdownMenu').classList.remove('open');
+}
+
+document.addEventListener('click', e => {
+  const menu = document.getElementById('dropdownMenu');
+  const btn = document.getElementById('hamburgerBtn');
+  if (menu.classList.contains('open') && !menu.contains(e.target) && !btn.contains(e.target)) closeMenu();
+});
+
+function toggleModeFromMenu() {
+  setMode(mode === 'assignment' ? 'lab' : 'assignment');
+  closeMenu();
+}
+
+/* ── Modals ── */
+function openModal(id) {
+  closeMenu();
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function closeBg(e, id) { if (e.target === document.getElementById(id)) closeModal(id); }
+
+/* ── Star rating ── */
+const ratingLabels = ['','Awful 😞','Not great 😕','OK 😐','Good 😊','Excellent! 🎉'];
+function setRating(v) {
+  currentRating = v;
+  document.querySelectorAll('.star').forEach(s => s.classList.toggle('active', parseInt(s.dataset.v) <= v));
+  document.getElementById('ratingLabel').textContent = ratingLabels[v];
+}
+function submitRating() {
+  const comment = document.getElementById('commentBox').value.trim();
+  if (!currentRating) { document.getElementById('ratingLabel').textContent = '⚠️ Please select a rating first'; return; }
+  // In production this would POST to your server
+  console.log('Rating:', currentRating, '| Comment:', comment);
+  document.getElementById('submitSuccess').style.display = 'block';
+  setTimeout(() => { closeModal('ratingModal'); document.getElementById('submitSuccess').style.display='none'; document.getElementById('commentBox').value=''; currentRating=0; setRating(0); }, 2000);
+}
+
+/* ── Copy from Assignment ── */
+function copyFromAssignment() {
+  ['courseCode','courseTitle','tName','tDept','sName','sId','sSec','sSem','sDept','subDate'].forEach(f => {
+    const src = document.getElementById('a_' + f);
+    const dst = document.getElementById('l_' + f);
+    if (src && dst) dst.value = src.value;
+  });
+  render();
+}
+
+/* ── Helpers ── */
+function g(id) { const e=document.getElementById(id); return e?e.value.trim():''; }
+function gm(field) { return g((mode==='assignment'?'a_':'l_')+field); }
+function fd(s) {
+  if (!s) return '';
+  const d = new Date(s+'T12:00:00');
+  return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();
+}
+function row(lbl,val){return`<div class="cv-row"><span class="cv-lbl">${lbl} </span><span class="cv-val">${val||''}</span></div>`;}
+function irow(lbl,val,bold=false){return`<div class="cv-ir"><span class="cv-il">${lbl} </span><span class="cv-iv${bold?' cv-iv-name':''}">${val||''}</span></div>`;}
+// https://resources.saylor.org/wwwresources/wp-content/uploads/20201118163917/DIU-Logo.png
+/* ── Render ── */
+function render() {
+  const isLab = mode==='lab';
+  let h='';
+  h+=`<div class="cv-logo"><img src="/img/DIU-Logo.png" alt="DIU" onerror="this.style.display='none'"></div>`;
+  h+=`<div class="cv-title">${isLab?'LAB REPORT':'Assignment'}</div>`;
+  if(!isLab){h+=row('Topic Name:',gm('topicName'));}
+  else{h+=row('Experiment Name:',gm('expName'));h+=row('Experiment No:',gm('expNo'));}
+  h+=row('Course Code:',gm('courseCode'));
+  h+=row('Course Title:',gm('courseTitle'));
+  h+=`<div class="cv-sec"><u>Submitted To</u>:</div><div class="cv-ib">
+    ${irow('Teacher Name:',gm('tName'),true)}
+    ${irow('Department:',gm('tDept'))}
+    <div class="cv-uline">Daffodil International University.</div>
+  </div>`;
+  h+=`<div class="cv-sec"><u>Submitted By</u>:</div><div class="cv-ib">
+    ${irow('Name:',gm('sName'),true)}
+    ${irow('ID:',gm('sId'))}
+    ${irow('Section:',gm('sSec'))}
+    ${irow('Semester:',gm('sSem'))}
+    ${irow('Department:',gm('sDept'))}
+    <div class="cv-uline">Daffodil International University.</div>
+  </div>`;
+  h+=`<div style="height:26px"></div>`;
+  h+=`<div class="cv-date-row"><span class="cv-lbl"><u>Submission Date</u>: </span><span class="cv-val">${fd(gm('subDate'))}</span></div>`;
+  document.getElementById('cv-body').innerHTML=h;
+}
+
+/* ── PDF Download ── */
+async function toDataURL(url){
+  try{const res=await fetch(url,{mode:'cors'});const blob=await res.blob();return await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(blob);});}catch(e){return null;}
+}
+async function embedImages(el){
+  try{const logo=el.querySelector('.cv-logo img');if(logo&&logo.src){const d=await toDataURL(logo.src);if(d)logo.src=d;}}catch(e){}
+  try{const wm=el.querySelector('.cv-wm');if(wm){const bg=(wm.style.backgroundImage||getComputedStyle(wm).backgroundImage)||'';const m=bg.match(/url\(["']?(.*?)["']?\)/);if(m&&m[1]){const d=await toDataURL(m[1]);if(d)wm.style.backgroundImage=`url(${d})`;}}  }catch(e){}
+}
+async function downloadPDF(){
+  const btn=document.getElementById('dlBtn');
+  btn.textContent='⏳  Generating...';btn.disabled=true;
+  const el=document.getElementById('cover-page');
+  const fname=(mode==='lab'?'Lab_Report':'Assignment')+'_Cover_DIU.pdf';
+  await embedImages(el);
+  const opt={margin:0,filename:fname,image:{type:'jpeg',quality:1},html2canvas:{scale:3,useCORS:true},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}};
+  try{
+    await html2pdf().set(opt).from(el).save();
+    btn.textContent='✓  Downloaded!';
+    setTimeout(()=>{btn.textContent='⬇  DOWNLOAD PDF';btn.disabled=false;},2000);
+  }catch(e){btn.textContent='⬇  DOWNLOAD PDF';btn.disabled=false;}
+}
+
+render();
+</script>
+</body>
+</html>
