@@ -200,7 +200,7 @@ header{
 .cv-wm{
   position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
   width:420px;height:420px;
-  background-image:url('/img/watermark.jpg');
+  background-image:url('img/watermark.jpg');
   background-size:contain;background-repeat:no-repeat;background-position:center;
   opacity:0.075;z-index:1;pointer-events:none;
 }
@@ -551,7 +551,7 @@ function irow(lbl,val,bold=false){return`<div class="cv-ir"><span class="cv-il">
 function render() {
   const isLab = mode==='lab';
   let h='';
-  h+=`<div class="cv-logo"><img src="/img/DIU-Logo.png" alt="DIU" onerror="this.style.display='none'"></div>`;
+  h+=`<div class="cv-logo"><img src="img/DIU-Logo.png" alt="DIU" onerror="this.style.display='none'"></div>`;
   h+=`<div class="cv-title">${isLab?'LAB REPORT':'Assignment'}</div>`;
   if(!isLab){h+=row('Topic Name:',gm('topicName'));}
   else{h+=row('Experiment Name:',gm('expName'));h+=row('Experiment No:',gm('expNo'));}
