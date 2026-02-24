@@ -27,6 +27,12 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 .tbtn.active{background:var(--ui-accent);color:#fff;}
 .tbtn:not(.active):hover{color:#fff;}
 .header-right{display:flex;align-items:center;gap:8px;}
+
+/* Visitor counter badge */
+.visitor-badge{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:3px 10px 3px 7px;cursor:default;}
+.visitor-icon{font-size:12px;}
+.visitor-count{font-family:'Orbitron',sans-serif;font-size:9px;color:#a8c0ff;letter-spacing:1px;font-weight:700;}
+
 .v-badge{font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:1.5px;font-family:'Orbitron',sans-serif;white-space:nowrap;}
 .hamburger{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;justify-content:center;gap:4px;padding:6px;border-radius:6px;transition:background .2s;}
 .hamburger:hover{background:rgba(255,255,255,0.1);}
@@ -88,17 +94,26 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 .fg input::placeholder{color:var(--ui-ph);}
 .fg input[type="date"]{color-scheme:light;}
 .fg .readonly-field{background:#f0f4fc;color:var(--ui-muted);border-color:#d8e2f4;cursor:default;font-style:italic;}
+
+/* Download button states */
 .dl-btn{width:100%;margin-top:20px;padding:13px;background:linear-gradient(130deg,#2d54b8,#1a3880);border:none;border-radius:7px;color:#fff;font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2.5px;font-weight:700;cursor:pointer;transition:all .25s;box-shadow:0 4px 18px rgba(45,84,184,0.3);position:relative;overflow:hidden;}
 .dl-btn::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent);transition:left .4s;}
 .dl-btn:hover::after{left:100%;}
-.dl-btn:hover{box-shadow:0 6px 26px rgba(45,84,184,0.42);transform:translateY(-1px);}
-.dl-btn:disabled{opacity:.55;cursor:default;transform:none;}
+.dl-btn:hover:not(:disabled){box-shadow:0 6px 26px rgba(45,84,184,0.42);transform:translateY(-1px);}
+.dl-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;background:linear-gradient(130deg,#7a8fbc,#4a5f8a);}
+
+/* Tooltip for disabled button */
+.dl-btn-wrap{position:relative;}
+.dl-btn-tooltip{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#1a2540;color:#fff;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;padding:7px 12px;border-radius:6px;white-space:nowrap;letter-spacing:0;pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,0.25);}
+.dl-btn-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#1a2540;}
+.dl-btn-wrap:hover .dl-btn-tooltip{display:block;}
+
 .mode-panel{display:none;}
 .mode-panel.active{display:block;}
 .prev-panel{background:#3a3a3a;display:flex;flex-direction:column;align-items:center;padding:28px 20px 40px;overflow-y:auto;max-height:calc(100vh - 51px);}
 .prev-label{color:rgba(255,255,255,0.38);font-size:9px;letter-spacing:2.5px;margin-bottom:14px;font-family:'Orbitron',sans-serif;}
 
-/* ═══ COVER PAGE STYLES (shared by preview + PDF clone) ═══ */
+/* ═══ COVER PAGE STYLES ═══ */
 .cv-page{width:210mm;min-height:296mm;background:#ffffff;position:relative;}
 #cover-page{box-shadow:0 16px 60px rgba(0,0,0,0.55);margin:0 auto;}
 .cv-border{position:absolute;top:16px;left:16px;right:19px;bottom:16px;border:1.5px solid #444;pointer-events:none;z-index:10;}
@@ -124,14 +139,15 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 .cv-ib{padding-left:110px;}
 .cv-ir{display:block;margin-bottom:10px;margin-top:10px;line-height:1.5;}
 .cv-il{font-family:'Calibri','Carlito',Arial,sans-serif;font-size:19px;font-weight:400;color:#000;display:inline;}
-.cv-iv{font-family:'Calibri','Carlito',Arial,sans-serif;font-size:22px;font-weight:400;color:#000;display:inline;}
-.cv-iv-name{font-size:21px!important;font-weight:700!important;}
+.cv-iv{font-family:'Calibri','Carlito',Arial,sans-serif;font-size:21px;font-weight:400;color:#000;display:inline;}
+/* Changed: name fields — no bold, slightly larger font + small vertical offset for visual alignment */
+.cv-iv-name{font-size:23px!important;font-weight:400!important;position:relative;top:1px;}
 .cv-uline{font-family:'Calibri','Carlito',Arial,sans-serif;font-size:20px;color:#000;margin-bottom:5px;padding-left:0;}
 .cv-date-row{display:block;margin-top:12px;margin-bottom:6px;line-height:1.5;}
 .cv-date-row .cv-lbl u{text-decoration:underline;}
 .cv-date-row .cv-val{font-size:22px;}
 
-/* ═══ RESPONSIVE (preview only — scoped to #cover-page) ═══ */
+/* ═══ RESPONSIVE ═══ */
 @media(max-width:940px){
   .app-layout{grid-template-columns:1fr;}
   .inp-panel{max-height:none;border-right:none;border-bottom:1.5px solid var(--ui-border);}
@@ -139,7 +155,7 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
   #cover-page{width:100%;max-width:720px;min-height:0;}
   #cover-page .cv-body{min-height:0;}
 }
-@media(max-width:700px){.header-center{display:none;}.app-subtitle{display:none;}}
+@media(max-width:700px){.header-center{display:none;}.app-subtitle{display:none;}.visitor-badge{display:none;}}
 @media(max-width:580px){
   header{padding:0 14px;}
   .app-title{font-size:11px;letter-spacing:2px;}
@@ -149,7 +165,7 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
   #cover-page .cv-title{font-size:18px;}
   #cover-page .cv-lbl,#cover-page .cv-val{font-size:13px!important;}
   #cover-page .cv-il,#cover-page .cv-iv,#cover-page .cv-uline{font-size:12px!important;}
-  #cover-page .cv-iv-name{font-size:13px!important;}
+  #cover-page .cv-iv-name{font-size:14px!important;top:1px;}
   #cover-page .cv-sec{font-size:14px!important;}
   #cover-page .cv-ib{padding-left:26px;}
   #cover-page .cv-date-row .cv-val{font-size:13px!important;}
@@ -159,7 +175,7 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
   #cover-page .cv-body{padding:18px;}
   #cover-page .cv-lbl,#cover-page .cv-val{font-size:11px!important;}
   #cover-page .cv-il,#cover-page .cv-iv,#cover-page .cv-uline{font-size:11px!important;}
-  #cover-page .cv-iv-name{font-size:12px!important;}
+  #cover-page .cv-iv-name{font-size:12px!important;top:1px;}
   #cover-page .cv-sec{font-size:12px!important;}
   #cover-page .cv-title{font-size:15px;}
 }
@@ -181,7 +197,12 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
     </div>
   </div>
   <div class="header-right">
-    <span class="v-badge">v1.3</span>
+    <!-- Visitor Counter -->
+    <div class="visitor-badge" title="Total visitors">
+      <span class="visitor-icon">👁</span>
+      <span class="visitor-count" id="visitorCount">0</span>
+    </div>
+    <span class="v-badge">v1.0</span>
     <button class="hamburger" id="hamburgerBtn" onclick="toggleMenu()" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
@@ -257,12 +278,12 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
       <div class="fg"><label>Course Title</label><input type="text" id="a_courseTitle" placeholder="e.g. Database Management System" oninput="render()"></div>
       <div class="sgap"></div>
       <div class="sec-head">👨‍🏫 Submitted To</div>
-      <div class="fg"><label>Teacher Name</label><input type="text" id="a_tName" placeholder="e.g. Md. Abdur Rahman Mojumdar" oninput="render()"></div>
+      <div class="fg"><label>Teacher Name</label><input type="text" id="a_tName" placeholder="e.g. Ada Lovelace, Alan Turing" oninput="render()"></div>
       <div class="fg"><label>Department</label><input type="text" id="a_tDept" placeholder="e.g. CSE" oninput="render()"></div>
       <div class="fg"><label>University (Fixed)</label><input class="readonly-field" type="text" value="Daffodil International University." readonly></div>
       <div class="sgap"></div>
       <div class="sec-head">🎓 Submitted By</div>
-      <div class="fg"><label>Your Name</label><input type="text" id="a_sName" placeholder="e.g. Raiyan Ahmed Islam" oninput="render()"></div>
+      <div class="fg"><label>Your Name</label><input type="text" id="a_sName" placeholder="e.g. Imran Sifat" oninput="render()"></div>
       <div class="fg"><label>Student ID</label><input type="text" id="a_sId" placeholder="e.g. 241-15-001" oninput="render()"></div>
       <div class="fg"><label>Section</label><input type="text" id="a_sSec" placeholder="e.g. 66_I" oninput="render()"></div>
       <div class="fg"><label>Semester</label><input type="text" id="a_sSem" placeholder="e.g. Spring 2026" oninput="render()"></div>
@@ -284,12 +305,12 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
         <div class="sec-head">👨‍🏫 Submitted To</div>
         <button class="copy-btn" onclick="copyFromAssignment()">⚡ Copy from Assignment</button>
       </div>
-      <div class="fg"><label>Teacher Name</label><input type="text" id="l_tName" placeholder="e.g. Md. Abdur Rahman Mojumdar" oninput="render()"></div>
+      <div class="fg"><label>Teacher Name</label><input type="text" id="l_tName" placeholder="e.g. Grace Hopper, Tim Berners-Lee" oninput="render()"></div>
       <div class="fg"><label>Department</label><input type="text" id="l_tDept" placeholder="e.g. CSE" oninput="render()"></div>
       <div class="fg"><label>University (Fixed)</label><input class="readonly-field" type="text" value="Daffodil International University." readonly></div>
       <div class="sgap"></div>
       <div class="sec-head">🎓 Submitted By</div>
-      <div class="fg"><label>Your Name</label><input type="text" id="l_sName" placeholder="e.g. Raiyan Ahmed Islam" oninput="render()"></div>
+      <div class="fg"><label>Your Name</label><input type="text" id="l_sName" placeholder="e.g. Imran Sifat" oninput="render()"></div>
       <div class="fg"><label>Student ID</label><input type="text" id="l_sId" placeholder="e.g. 241-15-001" oninput="render()"></div>
       <div class="fg"><label>Section</label><input type="text" id="l_sSec" placeholder="e.g. 66_I" oninput="render()"></div>
       <div class="fg"><label>Semester</label><input type="text" id="l_sSem" placeholder="e.g. Spring 2026" oninput="render()"></div>
@@ -300,7 +321,10 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
       <div class="fg"><label>Date</label><input type="date" id="l_subDate" oninput="render()"></div>
     </div>
 
-    <button class="dl-btn" id="dlBtn" onclick="downloadPDF()">⬇ &nbsp; DOWNLOAD PDF</button>
+    <div class="dl-btn-wrap">
+      <div class="dl-btn-tooltip" id="dlTooltip">Fill at least all but 2 fields to download</div>
+      <button class="dl-btn" id="dlBtn" onclick="downloadPDF()" disabled>⬇ &nbsp; DOWNLOAD PDF</button>
+    </div>
   </div>
 
   <div class="prev-panel">
@@ -316,6 +340,91 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 <script>
 let mode = 'assignment';
 let currentRating = 0;
+
+/* ══════════════════════════════════════
+   VISITOR COUNTER — localStorage based
+══════════════════════════════════════ */
+// (function(){
+//   try {
+//     const KEY = 'diu_cover_craft_visitors';
+//     let count = parseInt(localStorage.getItem(KEY) || '0', 10);
+//     // Check if this is a new session visit
+//     const sessionKey = 'diu_cover_craft_session';
+//     if (!sessionStorage.getItem(sessionKey)) {
+//       count++;
+//       localStorage.setItem(KEY, count);
+//       sessionStorage.setItem(sessionKey, '1');
+//     }
+//     // Animate count up
+//     const el = document.getElementById('visitorCount');
+//     if (el) {
+//       let start = Math.max(0, count - 8);
+//       const step = () => {
+//         if (start <= count) { el.textContent = start; start++; setTimeout(step, 60); }
+//       };
+//       step();
+//     }
+//   } catch(e) {
+//     document.getElementById('visitorCount').textContent = '—';
+//   }
+// })();
+/* ══════════════════════════════════════
+   VISITOR COUNTER — Increment Every Refresh
+══════════════════════════════════════ */
+(function(){
+  try {
+    const KEY = 'diu_cover_craft_visitors';
+    let count = parseInt(localStorage.getItem(KEY) || '0', 10);
+
+    // Always increase on every refresh
+    count++;
+    localStorage.setItem(KEY, count);
+
+    // Animate count up
+    const el = document.getElementById('visitorCount');
+    if (el) {
+      let start = Math.max(0, count - 8);
+      const step = () => {
+        if (start <= count) {
+          el.textContent = start;
+          start++;
+          setTimeout(step, 60);
+        }
+      };
+      step();
+    }
+  } catch(e) {
+    document.getElementById('visitorCount').textContent = '—';
+  }
+})();
+/* ══════════════════════════════════════
+   FIELD VALIDATION — disable download
+   if more than 2 required fields empty
+══════════════════════════════════════ */
+const REQUIRED_FIELDS = {
+  assignment: ['a_topicName','a_courseCode','a_courseTitle','a_tName','a_tDept','a_sName','a_sId','a_sSec','a_sSem','a_sDept','a_subDate'],
+  lab:        ['l_expName','l_expNo','l_courseCode','l_courseTitle','l_tName','l_tDept','l_sName','l_sId','l_sSec','l_sSem','l_sDept','l_subDate']
+};
+
+function checkFields(){
+  const fields = REQUIRED_FIELDS[mode];
+  let emptyCount = 0;
+  fields.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el || !el.value.trim()) emptyCount++;
+  });
+  const btn = document.getElementById('dlBtn');
+  const tip = document.getElementById('dlTooltip');
+  const allowed = emptyCount <= 2;
+  btn.disabled = !allowed;
+  // Update tooltip message
+  if (!allowed) {
+    const remaining = emptyCount - 2;
+    tip.textContent = `Fill ${remaining} more field${remaining > 1 ? 's' : ''} to enable download`;
+  } else {
+    tip.textContent = '';
+  }
+}
 
 function setMode(m){
   mode=m;
@@ -369,6 +478,7 @@ function fd(s){
   return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();
 }
 function row(l,v){return`<div class="cv-row"><span class="cv-lbl">${l} </span><span class="cv-val">${v||''}</span></div>`;}
+/* Changed: b parameter kept for API compatibility but name class now gives larger size + offset, not bold */
 function irow(l,v,b=false){return`<div class="cv-ir"><span class="cv-il">${l} </span><span class="cv-iv${b?' cv-iv-name':''}">${v||''}</span></div>`;}
 
 function buildHTML(){
@@ -398,14 +508,14 @@ function buildHTML(){
   return h;
 }
 
-function render(){document.getElementById('cv-body').innerHTML=buildHTML();}
+function render(){
+  document.getElementById('cv-body').innerHTML=buildHTML();
+  checkFields();
+}
 
-/* ══════════════════════════════════════════════
-   PDF DOWNLOAD — uses a completely isolated clone
-   injected into body with visibility:hidden
-   so it renders at 0,0 in document flow,
-   completely independent of page layout.
-══════════════════════════════════════════════ */
+/* ══════════════════════════════════════
+   PDF DOWNLOAD
+══════════════════════════════════════ */
 async function toDataURL(url){
   try{
     const res=await fetch(url,{mode:'cors'});
@@ -416,36 +526,17 @@ async function toDataURL(url){
 
 async function downloadPDF(){
   const btn=document.getElementById('dlBtn');
+  if(btn.disabled) return;
   btn.textContent='⏳  Generating...';
   btn.disabled=true;
 
-  /* 1. Build a fully isolated wrapper — NOT part of page flow */
   const wrapper=document.createElement('div');
-  wrapper.style.cssText=`
-    position:absolute;
-    top:0;left:0;
-    width:793px;
-    height:1122px;
-    overflow:hidden;
-    visibility:hidden;
-    pointer-events:none;
-    z-index:-9999;
-  `;
+  wrapper.style.cssText=`position:absolute;top:0;left:0;width:793px;height:1122px;overflow:hidden;visibility:hidden;pointer-events:none;z-index:-9999;`;
 
-  /* 2. Build the cover page clone inside the wrapper */
   wrapper.innerHTML=`
-    <div id="pdf-clone-inner" style="
-      width:793px;height:1122px;background:#fff;position:relative;
-      font-family:'Calibri','Carlito',Arial,sans-serif;color:#000;
-    ">
+    <div id="pdf-clone-inner" style="width:793px;height:1122px;background:#fff;position:relative;font-family:'Calibri','Carlito',Arial,sans-serif;color:#000;">
       <div style="position:absolute;top:16px;left:22px;right:22px;bottom:16px;border:1.5px solid #444;pointer-events:none;z-index:10;margin-right:2px;"></div>
-      <div id="pdf-wm" style="
-        position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-        width:420px;height:420px;
-        background-image:url('img/watermark.jpg');
-        background-size:contain;background-repeat:no-repeat;background-position:center;
-        opacity:0.075;z-index:1;
-      "></div>
+      <div id="pdf-wm" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:420px;height:420px;background-image:url('img/watermark.jpg');background-size:contain;background-repeat:no-repeat;background-position:center;opacity:0.075;z-index:1;"></div>
       <div style="position:relative;z-index:5;padding:36px 55px 40px 55px;display:flex;flex-direction:column;">
         ${buildHTML()}
       </div>
@@ -455,57 +546,34 @@ async function downloadPDF(){
   document.body.appendChild(wrapper);
   const cloneEl=wrapper.querySelector('#pdf-clone-inner');
 
-  /* 3. Embed logo as base64 */
+  /* Inject name styles into clone for PDF */
+  const styleEl = document.createElement('style');
+  styleEl.textContent = `.cv-iv-name{font-size:23px!important;font-weight:400!important;position:relative;top:2px;}`;
+  cloneEl.appendChild(styleEl);
+
   try{
     const logo=cloneEl.querySelector('.cv-logo img');
-    if(logo&&logo.src&&!logo.src.startsWith('data:')){
-      const d=await toDataURL(logo.src);if(d)logo.src=d;
-    }
+    if(logo&&logo.src&&!logo.src.startsWith('data:')){const d=await toDataURL(logo.src);if(d)logo.src=d;}
   }catch(e){}
-
-  /* 4. Embed watermark as base64 */
   try{
     const wm=cloneEl.querySelector('#pdf-wm');
-    if(wm){
-      const bg=wm.style.backgroundImage||'';
-      const m=bg.match(/url\(['"]?(.*?)['"]?\)/);
-      if(m&&m[1]&&!m[1].startsWith('data:')){
-        const d=await toDataURL(m[1]);if(d)wm.style.backgroundImage=`url(${d})`;
-      }
-    }
+    if(wm){const bg=wm.style.backgroundImage||'';const m=bg.match(/url\(['"]?(.*?)['"]?\)/);if(m&&m[1]&&!m[1].startsWith('data:')){const d=await toDataURL(m[1]);if(d)wm.style.backgroundImage=`url(${d})`;}}
   }catch(e){}
 
-  /* 5. Wait a tick for render */
   await new Promise(r=>setTimeout(r,80));
 
   const fname=(mode==='lab'?'Lab_Report':'Assignment')+'_Cover_DIU.pdf';
-  const opt={
-    margin:0,
-    filename:fname,
-    image:{type:'jpeg',quality:1},
-    html2canvas:{
-      scale:3,
-      useCORS:true,
-      allowTaint:true,
-      logging:false,
-      width:794,
-      height:1122,
-      scrollX:0,
-      scrollY:0
-    },
-    jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
-  };
+  const opt={margin:0,filename:fname,image:{type:'jpeg',quality:1},html2canvas:{scale:3,useCORS:true,allowTaint:true,logging:false,width:794,height:1122,scrollX:0,scrollY:0},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}};
 
   try{
     await html2pdf().set(opt).from(cloneEl).save();
     btn.textContent='✓  Downloaded!';
-    setTimeout(()=>{btn.textContent='⬇  DOWNLOAD PDF';btn.disabled=false;},2000);
+    setTimeout(()=>{btn.textContent='⬇  DOWNLOAD PDF';checkFields();},2000);
   }catch(e){
     btn.textContent='⬇  DOWNLOAD PDF';
-    btn.disabled=false;
+    checkFields();
   }
 
-  /* 6. Remove the clone from DOM */
   document.body.removeChild(wrapper);
 }
 
