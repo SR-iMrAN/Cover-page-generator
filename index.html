@@ -155,7 +155,25 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
   #cover-page{width:100%;max-width:720px;min-height:0;}
   #cover-page .cv-body{min-height:0;}
 }
-@media(max-width:700px){.header-center{display:none;}.app-subtitle{display:none;}.visitor-badge{display:none;}}
+/* @media(max-width:700px){.header-center{display:none;}.app-subtitle{display:none;}.visitor-badge{display:none;}} */
+@media(max-width:700px){
+  .header-center{display:none;}
+  .app-subtitle{display:none;}
+
+  .visitor-badge{
+    padding:2px 6px;
+    border-radius:12px;
+  }
+
+  .visitor-icon{
+    font-size:10px;
+  }
+
+  .visitor-count{
+    font-size:8px;
+    letter-spacing:0.5px;
+  }
+}
 @media(max-width:580px){
   header{padding:0 14px;}
   .app-title{font-size:11px;letter-spacing:2px;}
