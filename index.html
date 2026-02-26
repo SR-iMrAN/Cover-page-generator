@@ -6,6 +6,8 @@
 <title>DIU Cover Craft</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
 :root{
   --ui-bg:#eef2fb;--ui-surface:#ffffff;--ui-border:#c8d5ee;--ui-accent:#2d54b8;
@@ -26,13 +28,11 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 .tbtn{font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:2px;font-weight:700;padding:8px 18px;background:none;border:none;color:rgba(255,255,255,0.45);cursor:pointer;transition:all .2s;}
 .tbtn.active{background:var(--ui-accent);color:#fff;}
 .tbtn:not(.active):hover{color:#fff;}
+.tbtn.merge-tab.active{background:linear-gradient(130deg,#7c3aed,#4f46e5);}
 .header-right{display:flex;align-items:center;gap:8px;}
-
-/* Visitor counter badge */
 .visitor-badge{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:3px 10px 3px 7px;cursor:default;}
 .visitor-icon{font-size:12px;}
 .visitor-count{font-family:'Orbitron',sans-serif;font-size:9px;color:#a8c0ff;letter-spacing:1px;font-weight:700;}
-
 .v-badge{font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:1.5px;font-family:'Orbitron',sans-serif;white-space:nowrap;}
 .hamburger{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;justify-content:center;gap:4px;padding:6px;border-radius:6px;transition:background .2s;}
 .hamburger:hover{background:rgba(255,255,255,0.1);}
@@ -77,6 +77,8 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 .submit-btn{width:100%;margin-top:14px;padding:11px;background:linear-gradient(130deg,#2d54b8,#1a3880);border:none;border-radius:7px;color:#fff;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;}
 .submit-btn:hover{opacity:.9;transform:translateY(-1px);}
 .submit-success{text-align:center;padding:10px 0 4px;color:#16a34a;font-weight:600;font-size:13px;display:none;}
+
+/* MAIN LAYOUT */
 .app-layout{display:grid;grid-template-columns:350px 1fr;min-height:calc(100vh - 51px);}
 .inp-panel{background:var(--ui-surface);border-right:1.5px solid var(--ui-border);padding:20px 18px 60px;overflow-y:auto;max-height:calc(100vh - 51px);}
 .inp-panel::-webkit-scrollbar{width:5px;}
@@ -94,41 +96,26 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 .fg input::placeholder{color:var(--ui-ph);}
 .fg input[type="date"]{color-scheme:light;}
 .fg .readonly-field{background:#f0f4fc;color:var(--ui-muted);border-color:#d8e2f4;cursor:default;font-style:italic;}
-
-/* Download button states */
 .dl-btn{width:100%;margin-top:20px;padding:13px;background:linear-gradient(130deg,#2d54b8,#1a3880);border:none;border-radius:7px;color:#fff;font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2.5px;font-weight:700;cursor:pointer;transition:all .25s;box-shadow:0 4px 18px rgba(45,84,184,0.3);position:relative;overflow:hidden;}
 .dl-btn::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent);transition:left .4s;}
 .dl-btn:hover::after{left:100%;}
 .dl-btn:hover:not(:disabled){box-shadow:0 6px 26px rgba(45,84,184,0.42);transform:translateY(-1px);}
 .dl-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;background:linear-gradient(130deg,#7a8fbc,#4a5f8a);}
-
-/* Tooltip for disabled button */
 .dl-btn-wrap{position:relative;}
-.dl-btn-tooltip{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#1a2540;color:#fff;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;padding:7px 12px;border-radius:6px;white-space:nowrap;letter-spacing:0;pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,0.25);}
+.dl-btn-tooltip{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#1a2540;color:#fff;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;padding:7px 12px;border-radius:6px;white-space:nowrap;letter-spacing:0;pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,0.25);z-index:10;}
 .dl-btn-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#1a2540;}
 .dl-btn-wrap:hover .dl-btn-tooltip{display:block;}
-
 .mode-panel{display:none;}
 .mode-panel.active{display:block;}
 .prev-panel{background:#3a3a3a;display:flex;flex-direction:column;align-items:center;padding:28px 20px 40px;overflow-y:auto;max-height:calc(100vh - 51px);}
 .prev-label{color:rgba(255,255,255,0.38);font-size:9px;letter-spacing:2.5px;margin-bottom:14px;font-family:'Orbitron',sans-serif;}
 
-/* ═══ COVER PAGE STYLES ═══ */
+/* COVER PAGE STYLES */
 .cv-page{width:210mm;min-height:296mm;background:#ffffff;position:relative;}
 #cover-page{box-shadow:0 16px 60px rgba(0,0,0,0.55);margin:0 auto;}
 .cv-border{position:absolute;top:16px;left:16px;right:19px;bottom:16px;border:1.5px solid #444;pointer-events:none;z-index:10;}
-.cv-wm{
-  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:420px;height:420px;
-  background-image:url('img/watermark.jpg');
-  background-size:contain;background-repeat:no-repeat;background-position:center;
-  opacity:0.075;z-index:1;pointer-events:none;
-}
-.cv-body{
-  position:relative;z-index:5;padding:36px 55px 40px 55px;min-height:1018px;
-  display:flex;flex-direction:column;
-  font-family:'Calibri','Carlito',Arial,sans-serif;color:#000;
-}
+.cv-wm{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:420px;height:420px;background-image:url('img/watermark.jpg');background-size:contain;background-repeat:no-repeat;background-position:center;opacity:0.075;z-index:1;pointer-events:none;}
+.cv-body{position:relative;z-index:5;padding:36px 55px 40px 55px;min-height:1018px;display:flex;flex-direction:column;font-family:'Calibri','Carlito',Arial,sans-serif;color:#000;}
 .cv-logo{display:flex;align-items:center;justify-content:center;margin-bottom:10px;padding-top:20px;}
 .cv-logo img{height:120px;width:auto;display:block;}
 .cv-title{font-family:'Nirmala UI','Segoe UI','Trebuchet MS',Arial,sans-serif;font-size:27px;font-weight:700;text-decoration:underline;text-align:center;color:#000;margin:0 0 20px 0;}
@@ -140,14 +127,84 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 .cv-ir{display:block;margin-bottom:10px;margin-top:10px;line-height:1.5;}
 .cv-il{font-family:'Calibri','Carlito',Arial,sans-serif;font-size:19px;font-weight:400;color:#000;display:inline;}
 .cv-iv{font-family:'Calibri','Carlito',Arial,sans-serif;font-size:21px;font-weight:400;color:#000;display:inline;}
-/* Changed: name fields — no bold, slightly larger font + small vertical offset for visual alignment */
 .cv-iv-name{font-size:23px!important;font-weight:400!important;position:relative;top:1px;}
 .cv-uline{font-family:'Calibri','Carlito',Arial,sans-serif;font-size:20px;color:#000;margin-bottom:5px;padding-left:0;}
 .cv-date-row{display:block;margin-top:12px;margin-bottom:6px;line-height:1.5;}
 .cv-date-row .cv-lbl u{text-decoration:underline;}
 .cv-date-row .cv-val{font-size:22px;}
 
-/* ═══ RESPONSIVE ═══ */
+/* ═══════════════════════════════
+   MERGE PDF STYLES
+═══════════════════════════════ */
+.merge-view{display:none;width:100%;min-height:calc(100vh - 51px);background:var(--ui-bg);flex-direction:column;overflow-y:auto;}
+.merge-view.active{display:flex;}
+
+.merge-topbar{background:linear-gradient(135deg,#1a2d62 0%,#2d1b69 100%);padding:18px 28px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;border-bottom:2px solid rgba(124,58,237,0.3);flex-shrink:0;}
+.merge-topbar-title{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:900;letter-spacing:3px;color:#c4b5fd;}
+.merge-topbar-title span{color:#4ade80;}
+.merge-topbar-desc{font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px;letter-spacing:.5px;}
+
+.merge-dropzone-wrap{padding:20px 28px 0;flex-shrink:0;}
+.merge-dropzone{border:2.5px dashed #b0c2e8;border-radius:14px;background:#f4f7fd;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 20px;cursor:pointer;transition:all .2s;text-align:center;position:relative;}
+.merge-dropzone.over{border-color:#2d54b8;background:#e8eeff;box-shadow:0 0 0 4px rgba(45,84,184,0.12);}
+.merge-dropzone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.dz-icon{font-size:34px;margin-bottom:8px;}
+.dz-text{font-size:13px;font-weight:600;color:var(--ui-muted);}
+.dz-sub{font-size:11px;color:var(--ui-ph);margin-top:3px;}
+
+.merge-cards-wrap{padding:20px 28px;flex:1;}
+.merge-cards-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:10px;flex-wrap:wrap;}
+.merge-cards-title{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--ui-accent);text-transform:uppercase;}
+.merge-cards-count{font-size:10px;color:var(--ui-muted);background:var(--ui-sec-bg);border:1px solid var(--ui-border);border-radius:20px;padding:2px 10px;}
+.clear-btn{padding:4px 10px;background:#fee2e2;border:1px solid #fca5a5;border-radius:5px;color:#dc2626;font-size:10px;font-weight:600;cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif;}
+.clear-btn:hover{background:#dc2626;color:#fff;}
+
+.merge-cards{display:flex;flex-wrap:wrap;gap:16px;min-height:60px;align-content:flex-start;}
+.pdf-card{width:145px;background:#fff;border:2px solid var(--ui-border);border-radius:12px;overflow:hidden;cursor:grab;transition:box-shadow .2s,transform .2s,border-color .2s;position:relative;user-select:none;flex-shrink:0;}
+.pdf-card:hover{box-shadow:0 8px 28px rgba(45,84,184,0.15);border-color:#93aee8;}
+.pdf-card.dragging{opacity:.45;transform:scale(.96);cursor:grabbing;}
+.pdf-card.drag-over{border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,237,0.22);transform:scale(1.02);}
+.pdf-card.is-cover{border-color:#4ade80;}
+.card-badge{position:absolute;top:6px;left:6px;font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:var(--ui-accent);color:#fff;border-radius:4px;padding:2px 7px;z-index:5;}
+.pdf-card.is-cover .card-badge{background:#16a34a;}
+.card-remove{position:absolute;top:5px;right:5px;width:20px;height:20px;background:rgba(220,38,38,0.85);border:none;border-radius:50%;color:#fff;font-size:13px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5;transition:background .15s;}
+.card-remove:hover{background:#dc2626;}
+.card-thumb{width:100%;height:112px;background:#f0f4fc;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.card-thumb canvas{width:100%!important;height:100%!important;object-fit:contain;}
+.card-thumb-placeholder{font-size:30px;color:#b0c2e8;}
+.card-info{padding:8px 10px 6px;}
+.card-name{font-size:10px;font-weight:600;color:var(--ui-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.card-pages{font-size:9px;color:var(--ui-muted);margin-top:2px;}
+.card-arrows{display:flex;justify-content:center;gap:5px;padding:0 8px 8px;}
+.arr-btn{flex:1;padding:4px 0;background:var(--ui-sec-bg);border:1px solid var(--ui-border);border-radius:5px;font-size:10px;cursor:pointer;transition:background .15s;color:var(--ui-accent);font-weight:700;}
+.arr-btn:hover:not(:disabled){background:var(--ui-accent);color:#fff;border-color:var(--ui-accent);}
+.arr-btn:disabled{opacity:.28;cursor:default;}
+
+.merge-bottombar{background:var(--ui-surface);border-top:1.5px solid var(--ui-border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;flex-shrink:0;}
+.merge-info{font-size:12px;color:var(--ui-muted);}
+.merge-info strong{color:var(--ui-accent);}
+.merge-dl-btn{padding:12px 26px;background:linear-gradient(130deg,#7c3aed,#4f46e5);border:none;border-radius:8px;color:#fff;font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:2px;font-weight:700;cursor:pointer;transition:all .25s;box-shadow:0 4px 18px rgba(124,58,237,0.35);position:relative;overflow:hidden;white-space:nowrap;}
+.merge-dl-btn::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);transition:left .4s;}
+.merge-dl-btn:hover::after{left:100%;}
+.merge-dl-btn:hover:not(:disabled){box-shadow:0 6px 26px rgba(124,58,237,0.5);transform:translateY(-1px);}
+.merge-dl-btn:disabled{opacity:.38;cursor:not-allowed;transform:none;}
+
+.merge-progress-wrap{padding:0 28px 10px;flex-shrink:0;}
+.merge-progress{height:4px;background:rgba(124,58,237,0.12);border-radius:4px;overflow:hidden;display:none;}
+.merge-progress.show{display:block;}
+.merge-progress-bar{height:100%;background:linear-gradient(90deg,#7c3aed,#4ade80);border-radius:4px;width:0%;transition:width .3s;}
+
+.cover-note{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1px solid #86efac;border-radius:8px;padding:10px 14px;font-size:11px;color:#166534;margin-bottom:14px;display:flex;align-items:flex-start;gap:8px;}
+.merge-empty{text-align:center;padding:48px 20px;color:var(--ui-ph);width:100%;}
+.merge-empty-icon{font-size:50px;margin-bottom:12px;opacity:.35;}
+.merge-empty-text{font-size:13px;font-weight:600;}
+.merge-empty-sub{font-size:11px;margin-top:5px;}
+.drag-hint{font-size:10px;color:var(--ui-ph);display:flex;align-items:center;gap:5px;}
+.add-cover-btn{padding:10px 18px;background:linear-gradient(130deg,#16a34a,#0e7230);border:none;border-radius:7px;color:#fff;font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:1.5px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 3px 12px rgba(22,163,74,0.3);white-space:nowrap;}
+.add-cover-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 5px 18px rgba(22,163,74,0.4);}
+.add-cover-btn:disabled{opacity:.5;cursor:not-allowed;}
+
+/* RESPONSIVE */
 @media(max-width:940px){
   .app-layout{grid-template-columns:1fr;}
   .inp-panel{max-height:none;border-right:none;border-bottom:1.5px solid var(--ui-border);}
@@ -155,24 +212,13 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
   #cover-page{width:100%;max-width:720px;min-height:0;}
   #cover-page .cv-body{min-height:0;}
 }
-/* @media(max-width:700px){.header-center{display:none;}.app-subtitle{display:none;}.visitor-badge{display:none;}} */
 @media(max-width:700px){
   .header-center{display:none;}
   .app-subtitle{display:none;}
-
-  .visitor-badge{
-    padding:2px 6px;
-    border-radius:12px;
-  }
-
-  .visitor-icon{
-    font-size:10px;
-  }
-
-  .visitor-count{
-    font-size:8px;
-    letter-spacing:0.5px;
-  }
+  .visitor-badge{padding:2px 6px;border-radius:12px;}
+  .visitor-icon{font-size:10px;}
+  .visitor-count{font-size:8px;letter-spacing:.5px;}
+  .merge-topbar,.merge-dropzone-wrap,.merge-cards-wrap,.merge-bottombar,.merge-progress-wrap{padding-left:14px;padding-right:14px;}
 }
 @media(max-width:580px){
   header{padding:0 14px;}
@@ -188,6 +234,8 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
   #cover-page .cv-ib{padding-left:26px;}
   #cover-page .cv-date-row .cv-val{font-size:13px!important;}
   .dropdown-menu{width:100%;}
+  .pdf-card{width:128px;}
+  .card-thumb{height:96px;}
 }
 @media(max-width:400px){
   #cover-page .cv-body{padding:18px;}
@@ -212,11 +260,11 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
     <div class="toggle-wrap">
       <button class="tbtn active" id="btn-a" onclick="setMode('assignment')">ASSIGNMENT</button>
       <button class="tbtn" id="btn-l" onclick="setMode('lab')">LAB REPORT</button>
+      <button class="tbtn merge-tab" id="btn-m" onclick="setMode('merge')">⊕ MERGE PDF</button>
     </div>
   </div>
   <div class="header-right">
-    <!-- Visitor Counter -->
-    <div class="visitor-badge" title="Total visitors">
+    <div class="visitor-badge" title="Total page loads">
       <span class="visitor-icon">👁</span>
       <span class="visitor-count" id="visitorCount">0</span>
     </div>
@@ -227,6 +275,7 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
   </div>
 </header>
 
+<!-- DROPDOWN -->
 <div class="dropdown-menu" id="dropdownMenu">
   <div class="dm-section">Navigation</div>
   <button class="dm-item" onclick="openModal('devModal')">
@@ -246,6 +295,7 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
   </button>
 </div>
 
+<!-- MODALS -->
 <div class="modal-bg" id="devModal" onclick="closeBg(event,'devModal')">
   <div class="modal">
     <div class="modal-head"><h3>👨‍💻 Developer Info</h3><button class="modal-close" onclick="closeModal('devModal')">×</button></div>
@@ -287,7 +337,8 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
   </div>
 </div>
 
-<div class="app-layout">
+<!-- MAIN COVER/LAB LAYOUT -->
+<div class="app-layout" id="mainLayout">
   <div class="inp-panel">
     <div class="mode-panel active" id="panel-assignment">
       <div class="sec-head">📄 Document Info</div>
@@ -355,111 +406,120 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
   </div>
 </div>
 
+<!-- ═══════════════════════════════
+     MERGE PDF VIEW
+═══════════════════════════════ -->
+<div class="merge-view" id="mergeView">
+
+  <div class="merge-topbar">
+    <div>
+      <div class="merge-topbar-title">⊕ MERGE <span>PDF</span></div>
+      <div class="merge-topbar-desc">Combine your cover page with any PDF · Drag cards or use arrows to reorder · Download as one file</div>
+    </div>
+    <button class="add-cover-btn" id="addCoverBtn" onclick="addCoverToPile()">＋ ADD MY COVER PAGE</button>
+  </div>
+
+  <div class="merge-dropzone-wrap">
+    <div class="merge-dropzone" id="mergeDropzone">
+      <input type="file" id="mergeFileInput" accept="application/pdf" multiple onchange="handleMergeFiles(this.files)">
+      <div class="dz-icon">📂</div>
+      <div class="dz-text">Drop PDF files here, or click to browse</div>
+      <div class="dz-sub">Multiple files supported · Any PDF works</div>
+    </div>
+  </div>
+
+  <div class="merge-cards-wrap">
+    <div id="coverNoteWrap" style="display:none">
+      <div class="cover-note">
+        <span style="font-size:15px;flex-shrink:0">🟢</span>
+        <span>Your <strong>generated cover page</strong> has been added. Drag it left/right or use the arrows to reorder, then hit Download Merged PDF.</span>
+      </div>
+    </div>
+    <div class="merge-cards-header">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <span class="merge-cards-title">📑 PDF Queue</span>
+        <span class="merge-cards-count" id="cardCount">0 files</span>
+        <span class="drag-hint" id="dragHint" style="display:none">☰ Drag cards to reorder</span>
+      </div>
+      <button class="clear-btn" id="clearBtn" onclick="clearAll()" style="display:none">✕ Clear All</button>
+    </div>
+    <div class="merge-cards" id="mergeCards">
+      <div class="merge-empty" id="mergeEmpty">
+        <div class="merge-empty-icon">🗂️</div>
+        <div class="merge-empty-text">No PDFs yet</div>
+        <div class="merge-empty-sub">Drop files above, or click "Add My Cover Page" to start</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="merge-progress-wrap">
+    <div class="merge-progress" id="mergeProgress">
+      <div class="merge-progress-bar" id="mergeProgressBar"></div>
+    </div>
+  </div>
+
+  <div class="merge-bottombar">
+    <div class="merge-info" id="mergeInfo">Add at least 2 PDFs to merge</div>
+    <button class="merge-dl-btn" id="mergeDlBtn" onclick="doMerge()" disabled>⬇ &nbsp; DOWNLOAD MERGED PDF</button>
+  </div>
+
+</div>
+
 <script>
-let mode = 'assignment';
-let currentRating = 0;
+/* PDF.js worker */
+if(window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-/* ══════════════════════════════════════
-   VISITOR COUNTER — localStorage based
-══════════════════════════════════════ */
-// (function(){
-//   try {
-//     const KEY = 'diu_cover_craft_visitors';
-//     let count = parseInt(localStorage.getItem(KEY) || '0', 10);
-//     // Check if this is a new session visit
-//     const sessionKey = 'diu_cover_craft_session';
-//     if (!sessionStorage.getItem(sessionKey)) {
-//       count++;
-//       localStorage.setItem(KEY, count);
-//       sessionStorage.setItem(sessionKey, '1');
-//     }
-//     // Animate count up
-//     const el = document.getElementById('visitorCount');
-//     if (el) {
-//       let start = Math.max(0, count - 8);
-//       const step = () => {
-//         if (start <= count) { el.textContent = start; start++; setTimeout(step, 60); }
-//       };
-//       step();
-//     }
-//   } catch(e) {
-//     document.getElementById('visitorCount').textContent = '—';
-//   }
-// })();
-/* ══════════════════════════════════════
-   VISITOR COUNTER — Increment Every Refresh
-══════════════════════════════════════ */
+let mode='assignment';
+let currentRating=0;
+let lastModeBeforeMerge='assignment';
+
+/* VISITOR COUNTER */
 (function(){
-  try {
-    const KEY = 'diu_cover_craft_visitors';
-    let count = parseInt(localStorage.getItem(KEY) || '0', 10);
-
-    // Always increase on every refresh
-    count++;
-    localStorage.setItem(KEY, count);
-
-    // Animate count up
-    const el = document.getElementById('visitorCount');
-    if (el) {
-      let start = Math.max(0, count - 8);
-      const step = () => {
-        if (start <= count) {
-          el.textContent = start;
-          start++;
-          setTimeout(step, 60);
-        }
-      };
-      step();
-    }
-  } catch(e) {
-    document.getElementById('visitorCount').textContent = '—';
-  }
+  try{
+    const KEY='diu_cover_craft_visitors';
+    let c=parseInt(localStorage.getItem(KEY)||'0',10);
+    c++;localStorage.setItem(KEY,c);
+    const el=document.getElementById('visitorCount');
+    if(el){let s=Math.max(0,c-8);const t=()=>{if(s<=c){el.textContent=s;s++;setTimeout(t,60);}};t();}
+  }catch(e){try{document.getElementById('visitorCount').textContent='—';}catch(_){}}
 })();
-/* ══════════════════════════════════════
-   FIELD VALIDATION — disable download
-   if more than 2 required fields empty
-══════════════════════════════════════ */
-const REQUIRED_FIELDS = {
-  assignment: ['a_topicName','a_courseCode','a_courseTitle','a_tName','a_tDept','a_sName','a_sId','a_sSec','a_sSem','a_sDept','a_subDate'],
-  lab:        ['l_expName','l_expNo','l_courseCode','l_courseTitle','l_tName','l_tDept','l_sName','l_sId','l_sSec','l_sSem','l_sDept','l_subDate']
-};
 
+/* FIELD VALIDATION */
+const REQUIRED_FIELDS={
+  assignment:['a_topicName','a_courseCode','a_courseTitle','a_tName','a_tDept','a_sName','a_sId','a_sSec','a_sSem','a_sDept','a_subDate'],
+  lab:['l_expName','l_expNo','l_courseCode','l_courseTitle','l_tName','l_tDept','l_sName','l_sId','l_sSec','l_sSem','l_sDept','l_subDate']
+};
 function checkFields(){
-  const fields = REQUIRED_FIELDS[mode];
-  let emptyCount = 0;
-  fields.forEach(id => {
-    const el = document.getElementById(id);
-    if (!el || !el.value.trim()) emptyCount++;
-  });
-  const btn = document.getElementById('dlBtn');
-  const tip = document.getElementById('dlTooltip');
-  const allowed = emptyCount <= 2;
-  btn.disabled = !allowed;
-  // Update tooltip message
-  if (!allowed) {
-    const remaining = emptyCount - 2;
-    tip.textContent = `Fill ${remaining} more field${remaining > 1 ? 's' : ''} to enable download`;
-  } else {
-    tip.textContent = '';
-  }
+  if(mode==='merge')return;
+  const fields=REQUIRED_FIELDS[mode];
+  let empty=0;
+  fields.forEach(id=>{const el=document.getElementById(id);if(!el||!el.value.trim())empty++;});
+  const btn=document.getElementById('dlBtn'),tip=document.getElementById('dlTooltip');
+  const ok=empty<=2;btn.disabled=!ok;
+  tip.textContent=ok?'':`Fill ${empty-2} more field${empty-2>1?'s':''} to enable download`;
 }
 
+/* MODE SWITCHER */
 function setMode(m){
+  if(m!=='merge')lastModeBeforeMerge=m;
   mode=m;
   document.getElementById('btn-a').className='tbtn'+(m==='assignment'?' active':'');
   document.getElementById('btn-l').className='tbtn'+(m==='lab'?' active':'');
+  document.getElementById('btn-m').className='tbtn merge-tab'+(m==='merge'?' active':'');
   document.getElementById('panel-assignment').className='mode-panel'+(m==='assignment'?' active':'');
   document.getElementById('panel-lab').className='mode-panel'+(m==='lab'?' active':'');
-  document.getElementById('mobileToggleLabel').textContent=m==='assignment'?'Switch to Lab Report':'Switch to Assignment';
-  render();
+  document.getElementById('mainLayout').style.display=m==='merge'?'none':'grid';
+  document.getElementById('mergeView').className='merge-view'+(m==='merge'?' active':'');
+  if(m!=='merge'){document.getElementById('mobileToggleLabel').textContent=m==='assignment'?'Switch to Lab Report':'Switch to Assignment';render();}
 }
+
 function toggleMenu(){
   const btn=document.getElementById('hamburgerBtn'),menu=document.getElementById('dropdownMenu');
-  const isOpen=menu.classList.contains('open');
-  btn.classList.toggle('open',!isOpen);menu.classList.toggle('open',!isOpen);
-  const isMobile=window.innerWidth<=700;
-  document.getElementById('mobileModeSection').style.display=isMobile?'block':'none';
-  document.getElementById('mobileToggleBtn').style.display=isMobile?'flex':'none';
+  const o=menu.classList.contains('open');
+  btn.classList.toggle('open',!o);menu.classList.toggle('open',!o);
+  const mob=window.innerWidth<=700;
+  document.getElementById('mobileModeSection').style.display=mob?'block':'none';
+  document.getElementById('mobileToggleBtn').style.display=mob?'flex':'none';
 }
 function closeMenu(){document.getElementById('hamburgerBtn').classList.remove('open');document.getElementById('dropdownMenu').classList.remove('open');}
 document.addEventListener('click',e=>{
@@ -470,6 +530,7 @@ function toggleModeFromMenu(){setMode(mode==='assignment'?'lab':'assignment');cl
 function openModal(id){closeMenu();document.getElementById(id).classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 function closeBg(e,id){if(e.target===document.getElementById(id))closeModal(id);}
+
 const ratingLabels=['','Awful 😞','Not great 😕','OK 😐','Good 😊','Excellent! 🎉'];
 function setRating(v){
   currentRating=v;
@@ -489,18 +550,21 @@ function copyFromAssignment(){
 }
 
 function g(id){const e=document.getElementById(id);return e?e.value.trim():'';}
-function gm(f){return g((mode==='assignment'?'a_':'l_')+f);}
+function gm(f){
+  const m=mode==='merge'?lastModeBeforeMerge:mode;
+  return g((m==='assignment'?'a_':'l_')+f);
+}
 function fd(s){
   if(!s)return'';
   const d=new Date(s+'T12:00:00');
   return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();
 }
 function row(l,v){return`<div class="cv-row"><span class="cv-lbl">${l} </span><span class="cv-val">${v||''}</span></div>`;}
-/* Changed: b parameter kept for API compatibility but name class now gives larger size + offset, not bold */
 function irow(l,v,b=false){return`<div class="cv-ir"><span class="cv-il">${l} </span><span class="cv-iv${b?' cv-iv-name':''}">${v||''}</span></div>`;}
 
 function buildHTML(){
-  const isLab=mode==='lab';
+  const m=mode==='merge'?lastModeBeforeMerge:mode;
+  const isLab=m==='lab';
   let h='';
   h+=`<div class="cv-logo"><img src="img/DIU-Logo.png" alt="DIU" onerror="this.style.display='none'"></div>`;
   h+=`<div class="cv-title">${isLab?'LAB REPORT':'Assignment'}</div>`;
@@ -531,9 +595,7 @@ function render(){
   checkFields();
 }
 
-/* ══════════════════════════════════════
-   PDF DOWNLOAD
-══════════════════════════════════════ */
+/* PDF DOWNLOAD (cover only) */
 async function toDataURL(url){
   try{
     const res=await fetch(url,{mode:'cors'});
@@ -542,57 +604,223 @@ async function toDataURL(url){
   }catch(e){return null;}
 }
 
+async function buildCoverPDFBlob(){
+  const wrapper=document.createElement('div');
+  wrapper.style.cssText='position:absolute;top:0;left:0;width:793px;height:1122px;overflow:hidden;visibility:hidden;pointer-events:none;z-index:-9999;';
+  wrapper.innerHTML=`
+    <div id="pci" style="width:793px;height:1122px;background:#fff;position:relative;font-family:'Calibri','Carlito',Arial,sans-serif;color:#000;">
+      <div style="position:absolute;top:16px;left:22px;right:22px;bottom:16px;border:1.5px solid #444;z-index:10;margin-right:2px;"></div>
+      <div id="pwm" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:420px;height:420px;background-image:url('img/watermark.jpg');background-size:contain;background-repeat:no-repeat;background-position:center;opacity:0.075;z-index:1;"></div>
+      <div style="position:relative;z-index:5;padding:36px 55px 40px 55px;display:flex;flex-direction:column;">${buildHTML()}</div>
+    </div>`;
+  document.body.appendChild(wrapper);
+  const cl=wrapper.querySelector('#pci');
+  const st=document.createElement('style');
+  st.textContent='.cv-iv-name{font-size:23px!important;font-weight:400!important;position:relative;top:2px;}';
+  cl.appendChild(st);
+  try{const lg=cl.querySelector('.cv-logo img');if(lg&&lg.src&&!lg.src.startsWith('data:')){const d=await toDataURL(lg.src);if(d)lg.src=d;}}catch(e){}
+  try{const wm=cl.querySelector('#pwm');if(wm){const bg=wm.style.backgroundImage;const m=bg.match(/url\(['"]?(.*?)['"]?\)/);if(m&&m[1]&&!m[1].startsWith('data:')){const d=await toDataURL(m[1]);if(d)wm.style.backgroundImage=`url(${d})`;}}}catch(e){}
+  await new Promise(r=>setTimeout(r,80));
+  const opt={margin:0,image:{type:'jpeg',quality:1},html2canvas:{scale:3,useCORS:true,allowTaint:true,logging:false,width:794,height:1122,scrollX:0,scrollY:0},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}};
+  const blob=await html2pdf().set(opt).from(cl).outputPdf('blob');
+  document.body.removeChild(wrapper);
+  return blob;
+}
+
 async function downloadPDF(){
   const btn=document.getElementById('dlBtn');
-  if(btn.disabled) return;
-  btn.textContent='⏳  Generating...';
-  btn.disabled=true;
-
-  const wrapper=document.createElement('div');
-  wrapper.style.cssText=`position:absolute;top:0;left:0;width:793px;height:1122px;overflow:hidden;visibility:hidden;pointer-events:none;z-index:-9999;`;
-
-  wrapper.innerHTML=`
-    <div id="pdf-clone-inner" style="width:793px;height:1122px;background:#fff;position:relative;font-family:'Calibri','Carlito',Arial,sans-serif;color:#000;">
-      <div style="position:absolute;top:16px;left:22px;right:22px;bottom:16px;border:1.5px solid #444;pointer-events:none;z-index:10;margin-right:2px;"></div>
-      <div id="pdf-wm" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:420px;height:420px;background-image:url('img/watermark.jpg');background-size:contain;background-repeat:no-repeat;background-position:center;opacity:0.075;z-index:1;"></div>
-      <div style="position:relative;z-index:5;padding:36px 55px 40px 55px;display:flex;flex-direction:column;">
-        ${buildHTML()}
-      </div>
-    </div>
-  `;
-
-  document.body.appendChild(wrapper);
-  const cloneEl=wrapper.querySelector('#pdf-clone-inner');
-
-  /* Inject name styles into clone for PDF */
-  const styleEl = document.createElement('style');
-  styleEl.textContent = `.cv-iv-name{font-size:23px!important;font-weight:400!important;position:relative;top:2px;}`;
-  cloneEl.appendChild(styleEl);
-
+  if(btn.disabled)return;
+  btn.textContent='⏳  Generating...';btn.disabled=true;
   try{
-    const logo=cloneEl.querySelector('.cv-logo img');
-    if(logo&&logo.src&&!logo.src.startsWith('data:')){const d=await toDataURL(logo.src);if(d)logo.src=d;}
-  }catch(e){}
-  try{
-    const wm=cloneEl.querySelector('#pdf-wm');
-    if(wm){const bg=wm.style.backgroundImage||'';const m=bg.match(/url\(['"]?(.*?)['"]?\)/);if(m&&m[1]&&!m[1].startsWith('data:')){const d=await toDataURL(m[1]);if(d)wm.style.backgroundImage=`url(${d})`;}}
-  }catch(e){}
-
-  await new Promise(r=>setTimeout(r,80));
-
-  const fname=(mode==='lab'?'Lab_Report':'Assignment')+'_Cover_DIU.pdf';
-  const opt={margin:0,filename:fname,image:{type:'jpeg',quality:1},html2canvas:{scale:3,useCORS:true,allowTaint:true,logging:false,width:794,height:1122,scrollX:0,scrollY:0},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}};
-
-  try{
-    await html2pdf().set(opt).from(cloneEl).save();
+    const blob=await buildCoverPDFBlob();
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;a.download=(lastModeBeforeMerge==='lab'?'Lab_Report':'Assignment')+'_Cover_DIU.pdf';
+    a.click();URL.revokeObjectURL(url);
     btn.textContent='✓  Downloaded!';
     setTimeout(()=>{btn.textContent='⬇  DOWNLOAD PDF';checkFields();},2000);
-  }catch(e){
-    btn.textContent='⬇  DOWNLOAD PDF';
-    checkFields();
+  }catch(e){btn.textContent='⬇  DOWNLOAD PDF';checkFields();}
+}
+
+/* ═══════════════════════════════
+   MERGE PDF LOGIC
+═══════════════════════════════ */
+let mergeItems=[];
+let dragSrcIdx=null;
+
+const mergeCardsEl=document.getElementById('mergeCards');
+const mergeEmptyEl=document.getElementById('mergeEmpty');
+
+/* Dropzone drag events */
+const dz=document.getElementById('mergeDropzone');
+['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.add('over');}));
+dz.addEventListener('dragleave',()=>dz.classList.remove('over'));
+dz.addEventListener('drop',e=>{
+  e.preventDefault();dz.classList.remove('over');
+  const files=[...e.dataTransfer.files].filter(f=>f.type==='application/pdf');
+  if(files.length)handleMergeFiles(files);
+});
+
+async function handleMergeFiles(files){
+  for(const f of files){
+    const bytes=new Uint8Array(await f.arrayBuffer());
+    const id='f'+Date.now()+Math.random();
+    let pageCount=1,thumb=null;
+    try{
+      const pdf=await pdfjsLib.getDocument({data:bytes.slice()}).promise;
+      pageCount=pdf.numPages;
+      const page=await pdf.getPage(1);
+      const vp=page.getViewport({scale:0.42});
+      const canvas=document.createElement('canvas');
+      canvas.width=vp.width;canvas.height=vp.height;
+      await page.render({canvasContext:canvas.getContext('2d'),viewport:vp}).promise;
+      thumb=canvas;
+    }catch(e){}
+    mergeItems.push({id,name:f.name,bytes,pageCount,isCover:false,thumb});
+  }
+  // Reset file input so same file can be added again if needed
+  document.getElementById('mergeFileInput').value='';
+  renderMergeCards();
+}
+
+async function addCoverToPile(){
+  mergeItems=mergeItems.filter(x=>!x.isCover);
+  const btn=document.getElementById('addCoverBtn');
+  btn.textContent='⏳ Generating...';btn.disabled=true;
+  try{
+    const blob=await buildCoverPDFBlob();
+    const bytes=new Uint8Array(await blob.arrayBuffer());
+    let thumb=null;
+    try{
+      const pdf=await pdfjsLib.getDocument({data:bytes.slice()}).promise;
+      const page=await pdf.getPage(1);
+      const vp=page.getViewport({scale:0.42});
+      const canvas=document.createElement('canvas');
+      canvas.width=vp.width;canvas.height=vp.height;
+      await page.render({canvasContext:canvas.getContext('2d'),viewport:vp}).promise;
+      thumb=canvas;
+    }catch(e){}
+    mergeItems.unshift({id:'cover',name:'Cover Page (Generated)',bytes,pageCount:1,isCover:true,thumb});
+    document.getElementById('coverNoteWrap').style.display='block';
+    renderMergeCards();
+  }catch(e){alert('Could not generate cover. Please fill in your cover details first (go to Assignment or Lab Report tab).');}
+  btn.textContent='＋ ADD MY COVER PAGE';btn.disabled=false;
+}
+
+function renderMergeCards(){
+  mergeCardsEl.innerHTML='';
+  const total=mergeItems.reduce((a,x)=>a+x.pageCount,0);
+  const hasItems=mergeItems.length>0;
+
+  document.getElementById('cardCount').textContent=mergeItems.length+' file'+(mergeItems.length!==1?'s':'');
+  document.getElementById('mergeDlBtn').disabled=mergeItems.length<2;
+  document.getElementById('clearBtn').style.display=hasItems?'':'none';
+  document.getElementById('dragHint').style.display=mergeItems.length>1?'flex':'none';
+
+  if(!hasItems){
+    mergeCardsEl.appendChild(mergeEmptyEl);
+    document.getElementById('coverNoteWrap').style.display='none';
+    document.getElementById('mergeInfo').textContent='Add at least 2 PDFs to merge';
+    return;
   }
 
-  document.body.removeChild(wrapper);
+  document.getElementById('mergeInfo').innerHTML=`<strong>${mergeItems.length} PDF${mergeItems.length!==1?'s':''}</strong> · ${total} page${total!==1?'s':''} total`;
+
+  mergeItems.forEach((item,idx)=>{
+    const card=document.createElement('div');
+    card.className='pdf-card'+(item.isCover?' is-cover':'');
+    card.draggable=true;
+    card.dataset.idx=idx;
+
+    const badge=document.createElement('div');
+    badge.className='card-badge';
+    badge.textContent=item.isCover?'COVER':'#'+(idx+1);
+    card.appendChild(badge);
+
+    const rm=document.createElement('button');
+    rm.className='card-remove';rm.innerHTML='&times;';rm.title='Remove';
+    rm.onclick=e=>{e.stopPropagation();mergeItems.splice(idx,1);if(item.isCover)document.getElementById('coverNoteWrap').style.display='none';renderMergeCards();};
+    card.appendChild(rm);
+
+    const thumb=document.createElement('div');
+    thumb.className='card-thumb';
+    if(item.thumb){
+      const c=item.thumb.cloneNode(true);
+      c.style.cssText='width:100%;height:100%;object-fit:contain;display:block;';
+      thumb.appendChild(c);
+    }else{
+      thumb.innerHTML='<div class="card-thumb-placeholder">📄</div>';
+    }
+    card.appendChild(thumb);
+
+    const info=document.createElement('div');
+    info.className='card-info';
+    info.innerHTML=`<div class="card-name" title="${item.name}">${item.name}</div><div class="card-pages">${item.pageCount} page${item.pageCount!==1?'s':''}</div>`;
+    card.appendChild(info);
+
+    const arrows=document.createElement('div');
+    arrows.className='card-arrows';
+    const lb=document.createElement('button');
+    lb.className='arr-btn';lb.textContent='◀';lb.title='Move left';lb.disabled=idx===0;
+    lb.onclick=e=>{e.stopPropagation();[mergeItems[idx-1],mergeItems[idx]]=[mergeItems[idx],mergeItems[idx-1]];renderMergeCards();};
+    const rb=document.createElement('button');
+    rb.className='arr-btn';rb.textContent='▶';rb.title='Move right';rb.disabled=idx===mergeItems.length-1;
+    rb.onclick=e=>{e.stopPropagation();[mergeItems[idx],mergeItems[idx+1]]=[mergeItems[idx+1],mergeItems[idx]];renderMergeCards();};
+    arrows.appendChild(lb);arrows.appendChild(rb);
+    card.appendChild(arrows);
+
+    /* Drag reorder */
+    card.addEventListener('dragstart',e=>{dragSrcIdx=idx;card.classList.add('dragging');e.dataTransfer.effectAllowed='move';});
+    card.addEventListener('dragend',()=>card.classList.remove('dragging'));
+    card.addEventListener('dragover',e=>{e.preventDefault();card.classList.add('drag-over');});
+    card.addEventListener('dragleave',()=>card.classList.remove('drag-over'));
+    card.addEventListener('drop',e=>{
+      e.preventDefault();card.classList.remove('drag-over');
+      if(dragSrcIdx===null||dragSrcIdx===idx)return;
+      const moved=mergeItems.splice(dragSrcIdx,1)[0];
+      mergeItems.splice(idx,0,moved);
+      dragSrcIdx=null;
+      renderMergeCards();
+    });
+
+    mergeCardsEl.appendChild(card);
+  });
+}
+
+function clearAll(){mergeItems=[];renderMergeCards();}
+
+async function doMerge(){
+  if(mergeItems.length<2)return;
+  const btn=document.getElementById('mergeDlBtn');
+  btn.textContent='⏳ Merging...';btn.disabled=true;
+
+  const prog=document.getElementById('mergeProgress');
+  const bar=document.getElementById('mergeProgressBar');
+  prog.classList.add('show');bar.style.width='0%';
+
+  try{
+    const {PDFDocument}=PDFLib;
+    const merged=await PDFDocument.create();
+    for(let i=0;i<mergeItems.length;i++){
+      bar.style.width=Math.round((i/mergeItems.length)*88)+'%';
+      const src=await PDFDocument.load(mergeItems[i].bytes);
+      const pages=await merged.copyPages(src,src.getPageIndices());
+      pages.forEach(p=>merged.addPage(p));
+    }
+    bar.style.width='96%';
+    const out=await merged.save();
+    bar.style.width='100%';
+    const blob=new Blob([out],{type:'application/pdf'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');a.href=url;a.download='DIU_Merged_Document.pdf';a.click();
+    URL.revokeObjectURL(url);
+    btn.textContent='✓  Downloaded!';
+    setTimeout(()=>{btn.textContent='⬇  DOWNLOAD MERGED PDF';btn.disabled=mergeItems.length<2;prog.classList.remove('show');bar.style.width='0%';},2500);
+  }catch(err){
+    alert('Merge failed. Please make sure your PDFs are valid and not password-protected.');
+    btn.textContent='⬇  DOWNLOAD MERGED PDF';btn.disabled=false;
+    prog.classList.remove('show');
+  }
 }
 
 render();
