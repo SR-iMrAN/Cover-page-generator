@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DIU Cover Craft</title>
+<title>DIU Cover Point</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
@@ -13,6 +13,8 @@
   --ui-bg:#eef2fb;--ui-surface:#ffffff;--ui-border:#c8d5ee;--ui-accent:#2d54b8;
   --ui-text:#1a2540;--ui-muted:#4e5f80;--ui-ph:#9aabc8;--ui-input-b:#c0ceeb;
   --ui-header:#1a2d62;--ui-sec-bg:#edf1fb;
+  /* FIX 3: Distinct merge navbar color */
+  --merge-header:#1a1a2e;--merge-header-accent:#7c3aed;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{height:100%;}
@@ -28,11 +30,15 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 .tbtn{font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:2px;font-weight:700;padding:8px 18px;background:none;border:none;color:rgba(255,255,255,0.45);cursor:pointer;transition:all .2s;}
 .tbtn.active{background:var(--ui-accent);color:#fff;}
 .tbtn:not(.active):hover{color:#fff;}
+.tbtn.merge-tab{display:flex;align-items:center;gap:5px;}
 .tbtn.merge-tab.active{background:linear-gradient(130deg,#7c3aed,#4f46e5);}
 .header-right{display:flex;align-items:center;gap:8px;}
 .visitor-badge{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:3px 10px 3px 7px;cursor:default;}
 .visitor-icon{font-size:12px;}
 .visitor-count{font-family:'Orbitron',sans-serif;font-size:9px;color:#a8c0ff;letter-spacing:1px;font-weight:700;}
+.dl-count-badge{display:flex;align-items:center;gap:5px;background:rgba(74,222,128,0.12);border:1px solid rgba(74,222,128,0.3);border-radius:20px;padding:3px 10px 3px 7px;cursor:default;}
+.dl-count-icon{font-size:12px;}
+.dl-count-val{font-family:'Orbitron',sans-serif;font-size:9px;color:#4ade80;letter-spacing:1px;font-weight:700;}
 .v-badge{font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:1.5px;font-family:'Orbitron',sans-serif;white-space:nowrap;}
 .hamburger{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;justify-content:center;gap:4px;padding:6px;border-radius:6px;transition:background .2s;}
 .hamburger:hover{background:rgba(255,255,255,0.1);}
@@ -48,6 +54,8 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 .dm-item .dm-icon{font-size:16px;width:22px;text-align:center;flex-shrink:0;}
 .dm-item .dm-desc{font-size:10px;color:rgba(255,255,255,0.4);display:block;margin-top:1px;}
 .dm-divider{height:1px;background:rgba(255,255,255,0.08);margin:6px 0;}
+
+/* MODALS */
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:500;align-items:center;justify-content:center;padding:20px;}
 .modal-bg.open{display:flex;}
 .modal{background:#fff;border-radius:12px;width:100%;max-width:440px;box-shadow:0 20px 60px rgba(0,0,0,0.3);overflow:hidden;animation:modalIn .22s ease;}
@@ -78,9 +86,22 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 .submit-btn:hover{opacity:.9;transform:translateY(-1px);}
 .submit-success{text-align:center;padding:10px 0 4px;color:#16a34a;font-weight:600;font-size:13px;display:none;}
 
+/* Choose cover modal */
+.choose-cover-modal .modal-body{padding:18px 20px;}
+.choose-cover-option{display:flex;align-items:center;gap:14px;padding:14px 16px;border:2px solid var(--ui-border);border-radius:10px;cursor:pointer;transition:all .2s;margin-bottom:10px;background:var(--ui-sec-bg);}
+.choose-cover-option:hover{border-color:var(--ui-accent);background:#e8eeff;}
+.choose-cover-option.selected{border-color:var(--ui-accent);background:#dce8ff;}
+.cco-icon{font-size:26px;flex-shrink:0;}
+.cco-info{flex:1;}
+.cco-title{font-size:13px;font-weight:700;color:var(--ui-text);}
+.cco-count{font-size:11px;color:var(--ui-muted);margin-top:2px;}
+.cco-filled{font-size:10px;color:#16a34a;font-weight:600;margin-top:2px;}
+.choose-cover-btn{width:100%;margin-top:6px;padding:11px;background:linear-gradient(130deg,#16a34a,#0e7230);border:none;border-radius:7px;color:#fff;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;}
+.choose-cover-btn:hover{opacity:.9;transform:translateY(-1px);}
+
 /* MAIN LAYOUT */
 .app-layout{display:grid;grid-template-columns:350px 1fr;min-height:calc(100vh - 51px);}
-.inp-panel{background:var(--ui-surface);border-right:1.5px solid var(--ui-border);padding:20px 18px 60px;overflow-y:auto;max-height:calc(100vh - 51px);}
+.inp-panel{background:var(--ui-surface);border-right:1.5px solid var(--ui-border);padding:20px 18px 30px;overflow-y:auto;max-height:calc(100vh - 51px);}
 .inp-panel::-webkit-scrollbar{width:5px;}
 .inp-panel::-webkit-scrollbar-thumb{background:#c0ceeb;border-radius:10px;}
 .sec-head{font-size:10px;font-weight:700;letter-spacing:2.5px;color:var(--ui-accent);text-transform:uppercase;padding:7px 10px;margin-bottom:11px;background:var(--ui-sec-bg);border-left:3px solid var(--ui-accent);border-radius:0 5px 5px 0;}
@@ -96,15 +117,50 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 .fg input::placeholder{color:var(--ui-ph);}
 .fg input[type="date"]{color-scheme:light;}
 .fg .readonly-field{background:#f0f4fc;color:var(--ui-muted);border-color:#d8e2f4;cursor:default;font-style:italic;}
-.dl-btn{width:100%;margin-top:20px;padding:13px;background:linear-gradient(130deg,#2d54b8,#1a3880);border:none;border-radius:7px;color:#fff;font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2.5px;font-weight:700;cursor:pointer;transition:all .25s;box-shadow:0 4px 18px rgba(45,84,184,0.3);position:relative;overflow:hidden;}
+
+/* Download button */
+.dl-btn{width:100%;padding:13px;background:linear-gradient(130deg,#2d54b8,#1a3880);border:none;border-radius:7px;color:#fff;font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2.5px;font-weight:700;cursor:pointer;transition:all .25s;box-shadow:0 4px 18px rgba(45,84,184,0.3);position:relative;overflow:hidden;}
 .dl-btn::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent);transition:left .4s;}
 .dl-btn:hover::after{left:100%;}
 .dl-btn:hover:not(:disabled){box-shadow:0 6px 26px rgba(45,84,184,0.42);transform:translateY(-1px);}
 .dl-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;background:linear-gradient(130deg,#7a8fbc,#4a5f8a);}
-.dl-btn-wrap{position:relative;}
+.dl-btn.generating{background:linear-gradient(130deg,#7c3aed,#4f46e5);animation:dlPulse 1.2s ease-in-out infinite;}
+@keyframes dlPulse{
+  0%{box-shadow:0 0 0 0 rgba(124,58,237,0.7),0 4px 18px rgba(124,58,237,0.4);}
+  50%{box-shadow:0 0 0 12px rgba(124,58,237,0),0 4px 28px rgba(124,58,237,0.6);}
+  100%{box-shadow:0 0 0 0 rgba(124,58,237,0),0 4px 18px rgba(124,58,237,0.4);}
+}
+.dl-btn.success{background:linear-gradient(130deg,#16a34a,#0e7230);animation:dlSuccess .4s ease forwards;}
+@keyframes dlSuccess{
+  0%{transform:scale(1);}
+  30%{transform:scale(1.06);}
+  60%{transform:scale(0.98);}
+  100%{transform:scale(1);}
+}
+
+/* FIX 4: Reset + Undo bar — MOVED BELOW DOWNLOAD */
+.dl-btn-wrap{margin-bottom:10px;}
 .dl-btn-tooltip{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#1a2540;color:#fff;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;padding:7px 12px;border-radius:6px;white-space:nowrap;letter-spacing:0;pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,0.25);z-index:10;}
 .dl-btn-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#1a2540;}
 .dl-btn-wrap:hover .dl-btn-tooltip{display:block;}
+
+/* FIX 4: Reset + Undo bar — now below download */
+.reset-bar{display:flex;align-items:center;gap:8px;margin-top:10px;}
+.reset-btn{flex:1;padding:8px 12px;background:#fee2e2;border:1.5px solid #fca5a5;border-radius:6px;color:#dc2626;font-family:'Inter',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.5px;display:flex;align-items:center;justify-content:center;gap:5px;}
+.reset-btn:hover{background:#dc2626;color:#fff;border-color:#dc2626;}
+.undo-btn{flex:1;padding:8px 12px;background:#fef3c7;border:1.5px solid #fcd34d;border-radius:6px;color:#92400e;font-family:'Inter',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.5px;display:flex;align-items:center;justify-content:center;gap:5px;position:relative;overflow:hidden;}
+.undo-btn:hover:not([disabled]){background:#f59e0b;color:#fff;border-color:#f59e0b;}
+.undo-btn[disabled]{opacity:.35;cursor:not-allowed;}
+.undo-timer{position:absolute;bottom:0;left:0;height:3px;background:#f59e0b;border-radius:0 0 0 4px;}
+
+/* Particle burst */
+.dl-particles{position:fixed;pointer-events:none;z-index:9999;top:0;left:0;width:100%;height:100%;}
+.dl-particle{position:absolute;border-radius:50%;animation:particleBurst 0.9s ease-out forwards;}
+@keyframes particleBurst{
+  0%{opacity:1;transform:translate(0,0) scale(1);}
+  100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0);}
+}
+
 .mode-panel{display:none;}
 .mode-panel.active{display:block;}
 .prev-panel{background:#3a3a3a;display:flex;flex-direction:column;align-items:center;padding:28px 20px 40px;overflow-y:auto;max-height:calc(100vh - 51px);}
@@ -134,19 +190,36 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 .cv-date-row .cv-val{font-size:22px;}
 
 /* ═══════════════════════════════
-   MERGE PDF STYLES
+   FIX 3: MERGE PDF — DISTINCT DARK PURPLE NAVBAR
 ═══════════════════════════════ */
 .merge-view{display:none;width:100%;min-height:calc(100vh - 51px);background:var(--ui-bg);flex-direction:column;overflow-y:auto;}
 .merge-view.active{display:flex;}
 
-.merge-topbar{background:linear-gradient(135deg,#1a2d62 0%,#2d1b69 100%);padding:18px 28px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;border-bottom:2px solid rgba(124,58,237,0.3);flex-shrink:0;}
+.merge-topbar{
+  background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);
+  padding:14px 28px;
+  display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  border-bottom:2px solid rgba(124,58,237,0.5);
+  flex-shrink:0;
+  box-shadow:0 2px 20px rgba(0,0,0,0.4),0 0 40px rgba(124,58,237,0.08);
+}
+.merge-topbar-left{display:flex;flex-direction:column;}
 .merge-topbar-title{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:900;letter-spacing:3px;color:#c4b5fd;}
-.merge-topbar-title span{color:#4ade80;}
-.merge-topbar-desc{font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px;letter-spacing:.5px;}
+.merge-topbar-title span{color:#a78bfa;}
+.merge-topbar-desc{font-size:11px;color:rgba(196,181,253,0.45);margin-top:3px;letter-spacing:.5px;}
+.merge-steps{display:flex;align-items:center;gap:0;background:rgba(255,255,255,0.06);border:1px solid rgba(124,58,237,0.3);border-radius:8px;overflow:hidden;}
+.merge-step{display:flex;align-items:center;gap:6px;padding:7px 14px;font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:1.5px;font-weight:700;color:rgba(196,181,253,0.4);position:relative;}
+.merge-step:not(:last-child)::after{content:'›';position:absolute;right:-1px;color:rgba(196,181,253,0.2);font-size:14px;z-index:1;}
+.merge-step .ms-num{width:18px;height:18px;border-radius:50%;border:1.5px solid rgba(196,181,253,0.25);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;}
+.merge-step.done{color:#a78bfa;}
+.merge-step.done .ms-num{background:#7c3aed;border-color:#7c3aed;color:#fff;}
+.merge-step.active-step{color:#c4b5fd;}
+.merge-step.active-step .ms-num{background:linear-gradient(135deg,#7c3aed,#4f46e5);border-color:#7c3aed;color:#fff;}
+.merge-topbar-right{display:flex;align-items:center;gap:10px;}
 
 .merge-dropzone-wrap{padding:20px 28px 0;flex-shrink:0;}
 .merge-dropzone{border:2.5px dashed #b0c2e8;border-radius:14px;background:#f4f7fd;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 20px;cursor:pointer;transition:all .2s;text-align:center;position:relative;}
-.merge-dropzone.over{border-color:#2d54b8;background:#e8eeff;box-shadow:0 0 0 4px rgba(45,84,184,0.12);}
+.merge-dropzone.over{border-color:#7c3aed;background:#f3f0ff;box-shadow:0 0 0 4px rgba(124,58,237,0.12);}
 .merge-dropzone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
 .dz-icon{font-size:34px;margin-bottom:8px;}
 .dz-text{font-size:13px;font-weight:600;color:var(--ui-muted);}
@@ -172,10 +245,12 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 .card-thumb{width:100%;height:112px;background:#f0f4fc;display:flex;align-items:center;justify-content:center;overflow:hidden;}
 .card-thumb canvas{width:100%!important;height:100%!important;object-fit:contain;}
 .card-thumb-placeholder{font-size:30px;color:#b0c2e8;}
-.card-info{padding:8px 10px 6px;}
+.card-info{padding:8px 10px 4px;}
 .card-name{font-size:10px;font-weight:600;color:var(--ui-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.card-pages{font-size:9px;color:var(--ui-muted);margin-top:2px;}
-.card-arrows{display:flex;justify-content:center;gap:5px;padding:0 8px 8px;}
+.card-meta{display:flex;align-items:center;justify-content:space-between;margin-top:3px;}
+.card-pages{font-size:9px;color:var(--ui-muted);}
+.card-size{font-size:9px;color:var(--ui-ph);background:var(--ui-sec-bg);border-radius:3px;padding:1px 5px;font-weight:600;}
+.card-arrows{display:flex;justify-content:center;gap:5px;padding:4px 8px 8px;}
 .arr-btn{flex:1;padding:4px 0;background:var(--ui-sec-bg);border:1px solid var(--ui-border);border-radius:5px;font-size:10px;cursor:pointer;transition:background .15s;color:var(--ui-accent);font-weight:700;}
 .arr-btn:hover:not(:disabled){background:var(--ui-accent);color:#fff;border-color:var(--ui-accent);}
 .arr-btn:disabled{opacity:.28;cursor:default;}
@@ -183,11 +258,14 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 .merge-bottombar{background:var(--ui-surface);border-top:1.5px solid var(--ui-border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;flex-shrink:0;}
 .merge-info{font-size:12px;color:var(--ui-muted);}
 .merge-info strong{color:var(--ui-accent);}
+
 .merge-dl-btn{padding:12px 26px;background:linear-gradient(130deg,#7c3aed,#4f46e5);border:none;border-radius:8px;color:#fff;font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:2px;font-weight:700;cursor:pointer;transition:all .25s;box-shadow:0 4px 18px rgba(124,58,237,0.35);position:relative;overflow:hidden;white-space:nowrap;}
 .merge-dl-btn::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);transition:left .4s;}
 .merge-dl-btn:hover::after{left:100%;}
 .merge-dl-btn:hover:not(:disabled){box-shadow:0 6px 26px rgba(124,58,237,0.5);transform:translateY(-1px);}
 .merge-dl-btn:disabled{opacity:.38;cursor:not-allowed;transform:none;}
+.merge-dl-btn.generating{animation:dlPulse 1.2s ease-in-out infinite;}
+.merge-dl-btn.success{background:linear-gradient(130deg,#16a34a,#0e7230);animation:dlSuccess .4s ease forwards;}
 
 .merge-progress-wrap{padding:0 28px 10px;flex-shrink:0;}
 .merge-progress{height:4px;background:rgba(124,58,237,0.12);border-radius:4px;overflow:hidden;display:none;}
@@ -200,9 +278,21 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 .merge-empty-text{font-size:13px;font-weight:600;}
 .merge-empty-sub{font-size:11px;margin-top:5px;}
 .drag-hint{font-size:10px;color:var(--ui-ph);display:flex;align-items:center;gap:5px;}
-.add-cover-btn{padding:10px 18px;background:linear-gradient(130deg,#16a34a,#0e7230);border:none;border-radius:7px;color:#fff;font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:1.5px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 3px 12px rgba(22,163,74,0.3);white-space:nowrap;}
-.add-cover-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 5px 18px rgba(22,163,74,0.4);}
+.add-cover-btn{padding:10px 18px;background:linear-gradient(130deg,#7c3aed,#4f46e5);border:none;border-radius:7px;color:#fff;font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:1.5px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 3px 12px rgba(124,58,237,0.3);white-space:nowrap;}
+.add-cover-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 5px 18px rgba(124,58,237,0.4);}
 .add-cover-btn:disabled{opacity:.5;cursor:not-allowed;}
+
+/* FIX 1: Mobile bottom tab bar — MERGE NOW VISIBLE */
+.mobile-tab-bar{display:none;position:fixed;bottom:0;left:0;right:0;background:#1a2d62;border-top:1.5px solid rgba(255,255,255,0.12);z-index:200;padding:0;box-shadow:0 -4px 20px rgba(0,0,0,0.3);}
+.mob-tabs{display:flex;width:100%;}
+.mob-tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 6px 12px;background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.4);font-family:'Orbitron',sans-serif;font-size:7px;letter-spacing:1px;font-weight:700;transition:all .2s;gap:4px;position:relative;}
+.mob-tab .mt-icon{font-size:18px;line-height:1;}
+.mob-tab.active{color:#fff;}
+.mob-tab.active::before{content:'';position:absolute;top:0;left:20%;right:20%;height:2px;background:var(--ui-accent);border-radius:0 0 3px 3px;}
+/* FIX 1: Merge tab always shown, distinct color */
+.mob-tab:nth-child(3).active::before{background:#7c3aed;}
+.mob-tab:nth-child(3){color:rgba(196,181,253,0.5);}
+.mob-tab:nth-child(3).active{color:#c4b5fd;}
 
 /* RESPONSIVE */
 @media(max-width:940px){
@@ -214,16 +304,23 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 }
 @media(max-width:700px){
   .header-center{display:none;}
+  .mobile-tab-bar{display:block;}
+  .app-layout{padding-bottom:64px;}
+  .merge-view.active{padding-bottom:64px;}
   .app-subtitle{display:none;}
   .visitor-badge{padding:2px 6px;border-radius:12px;}
   .visitor-icon{font-size:10px;}
   .visitor-count{font-size:8px;letter-spacing:.5px;}
+  .dl-count-badge{padding:2px 6px;}
+  .dl-count-icon{font-size:10px;}
+  .dl-count-val{font-size:8px;letter-spacing:.5px;}
   .merge-topbar,.merge-dropzone-wrap,.merge-cards-wrap,.merge-bottombar,.merge-progress-wrap{padding-left:14px;padding-right:14px;}
+  .merge-steps{display:none;}
 }
 @media(max-width:580px){
   header{padding:0 14px;}
   .app-title{font-size:11px;letter-spacing:2px;}
-  .inp-panel{padding:14px 12px 60px;}
+  .inp-panel{padding:14px 12px 30px;}
   #cover-page .cv-body{padding:24px 26px;}
   #cover-page .cv-logo img{height:80px;}
   #cover-page .cv-title{font-size:18px;}
@@ -236,6 +333,12 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
   .dropdown-menu{width:100%;}
   .pdf-card{width:128px;}
   .card-thumb{height:96px;}
+  /* Mobile merge layout adjustments */
+  .merge-topbar{flex-direction:column;align-items:flex-start;gap:10px;}
+  .merge-topbar-right{width:100%;}
+  .add-cover-btn{width:100%;text-align:center;}
+  .merge-bottombar{flex-direction:column;align-items:stretch;}
+  .merge-dl-btn{width:100%;text-align:center;}
 }
 @media(max-width:400px){
   #cover-page .cv-body{padding:18px;}
@@ -245,6 +348,7 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
   #cover-page .cv-sec{font-size:12px!important;}
   #cover-page .cv-title{font-size:15px;}
 }
+@keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
 </style>
 </head>
 <body>
@@ -252,7 +356,7 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 <header>
   <div class="header-left">
     <div>
-      <div class="app-title">DIU <span>COVER</span> CRAFT</div>
+      <div class="app-title">DIU <span>COVER</span> POINT</div>
       <div class="app-subtitle">COVER PAGE GENERATOR</div>
     </div>
   </div>
@@ -264,11 +368,15 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
     </div>
   </div>
   <div class="header-right">
+    <div class="dl-count-badge" title="Total downloads">
+      <span class="dl-count-icon">⬇</span>
+      <span class="dl-count-val" id="dlCount">0</span>
+    </div>
     <div class="visitor-badge" title="Total page loads">
       <span class="visitor-icon">👁</span>
       <span class="visitor-count" id="visitorCount">0</span>
     </div>
-    <span class="v-badge">v1.0</span>
+    <span class="v-badge">v2.1</span>
     <button class="hamburger" id="hamburgerBtn" onclick="toggleMenu()" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
@@ -319,7 +427,7 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
     <div class="modal-head"><h3>⭐ Comment &amp; Rating</h3><button class="modal-close" onclick="closeModal('ratingModal')">×</button></div>
     <div class="modal-body">
       <div class="rating-wrap">
-        <div style="font-size:14px;font-weight:600;color:var(--ui-text);">How would you rate DIU Cover Craft?</div>
+        <div style="font-size:14px;font-weight:600;color:var(--ui-text);">How would you rate DIU Cover Point?</div>
         <div class="stars" id="stars">
           <span class="star" data-v="1" onclick="setRating(1)">★</span>
           <span class="star" data-v="2" onclick="setRating(2)">★</span>
@@ -337,7 +445,34 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
   </div>
 </div>
 
-<!-- MAIN COVER/LAB LAYOUT -->
+<!-- FIX 2: Choose cover modal (both covers filled) -->
+<div class="modal-bg" id="chooseCoverModal" onclick="closeBg(event,'chooseCoverModal')">
+  <div class="modal choose-cover-modal">
+    <div class="modal-head"><h3>📋 Choose Cover Page</h3><button class="modal-close" onclick="closeModal('chooseCoverModal')">×</button></div>
+    <div class="modal-body">
+      <p style="font-size:12px;color:var(--ui-muted);margin-bottom:16px;">Both covers have filled fields. Which one would you like to add to the merge queue?</p>
+      <div class="choose-cover-option" id="cco-assignment" onclick="selectCoverChoice('assignment')">
+        <div class="cco-icon">📄</div>
+        <div class="cco-info">
+          <div class="cco-title">Assignment Cover</div>
+          <div class="cco-count" id="cco-a-count">0 fields filled</div>
+          <div class="cco-filled" id="cco-a-fields"></div>
+        </div>
+      </div>
+      <div class="choose-cover-option" id="cco-lab" onclick="selectCoverChoice('lab')">
+        <div class="cco-icon">🔬</div>
+        <div class="cco-info">
+          <div class="cco-title">Lab Report Cover</div>
+          <div class="cco-count" id="cco-l-count">0 fields filled</div>
+          <div class="cco-filled" id="cco-l-fields"></div>
+        </div>
+      </div>
+      <button class="choose-cover-btn" onclick="confirmCoverChoice()">Add Selected Cover</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN LAYOUT -->
 <div class="app-layout" id="mainLayout">
   <div class="inp-panel">
     <div class="mode-panel active" id="panel-assignment">
@@ -390,9 +525,25 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
       <div class="fg"><label>Date</label><input type="date" id="l_subDate" oninput="render()"></div>
     </div>
 
-    <div class="dl-btn-wrap">
+    <!-- FIX 4: Download FIRST, then Reset+Undo below -->
+    <div style="position:relative;" class="dl-btn-wrap">
       <div class="dl-btn-tooltip" id="dlTooltip">Fill at least all but 2 fields to download</div>
       <button class="dl-btn" id="dlBtn" onclick="downloadPDF()" disabled>⬇ &nbsp; DOWNLOAD PDF</button>
+    </div>
+    <!-- FIX 4: Reset + Undo moved BELOW download button -->
+    <div class="reset-bar" id="resetBarA" style="display:none">
+      <button class="reset-btn" onclick="resetFields('assignment')">🗑 Reset</button>
+      <button class="undo-btn" id="undo-btn-a" onclick="undoReset('assignment')" disabled>
+        ↩ Undo <span id="undo-timer-a"></span>
+        <div class="undo-timer" id="undo-bar-a" style="width:0%;height:3px;position:absolute;bottom:0;left:0;background:#f59e0b;border-radius:0 0 0 4px;"></div>
+      </button>
+    </div>
+    <div class="reset-bar" id="resetBarL" style="display:none">
+      <button class="reset-btn" onclick="resetFields('lab')">🗑 Reset</button>
+      <button class="undo-btn" id="undo-btn-l" onclick="undoReset('lab')" disabled>
+        ↩ Undo <span id="undo-timer-l"></span>
+        <div class="undo-timer" id="undo-bar-l" style="width:0%;height:3px;position:absolute;bottom:0;left:0;background:#f59e0b;border-radius:0 0 0 4px;"></div>
+      </button>
     </div>
   </div>
 
@@ -406,17 +557,22 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
   </div>
 </div>
 
-<!-- ═══════════════════════════════
-     MERGE PDF VIEW
-═══════════════════════════════ -->
+<!-- MERGE PDF VIEW — FIX 1: Now accessible on mobile, FIX 3: distinct purple topbar -->
 <div class="merge-view" id="mergeView">
 
   <div class="merge-topbar">
-    <div>
+    <div class="merge-topbar-left">
       <div class="merge-topbar-title">⊕ MERGE <span>PDF</span></div>
-      <div class="merge-topbar-desc">Combine your cover page with any PDF · Drag cards or use arrows to reorder · Download as one file</div>
+      <div class="merge-topbar-desc">Combine cover page with any PDF · Drag to reorder · Download as one file</div>
     </div>
-    <button class="add-cover-btn" id="addCoverBtn" onclick="addCoverToPile()">＋ ADD MY COVER PAGE</button>
+    <div class="merge-steps" id="mergeSteps">
+      <div class="merge-step" id="mstep1"><div class="ms-num">1</div><span>ADD FILES</span></div>
+      <div class="merge-step" id="mstep2"><div class="ms-num">2</div><span>REORDER</span></div>
+      <div class="merge-step" id="mstep3"><div class="ms-num">3</div><span>DOWNLOAD</span></div>
+    </div>
+    <div class="merge-topbar-right">
+      <button class="add-cover-btn" id="addCoverBtn" onclick="addCoverToPile()">＋ ADD MY COVER PAGE</button>
+    </div>
   </div>
 
   <div class="merge-dropzone-wrap">
@@ -432,7 +588,7 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
     <div id="coverNoteWrap" style="display:none">
       <div class="cover-note">
         <span style="font-size:15px;flex-shrink:0">🟢</span>
-        <span>Your <strong>generated cover page</strong> has been added. Drag it left/right or use the arrows to reorder, then hit Download Merged PDF.</span>
+        <span>Your <strong>generated cover page</strong> has been added. Drag it or use arrows to reorder, then hit Download Merged PDF.</span>
       </div>
     </div>
     <div class="merge-cards-header">
@@ -465,13 +621,34 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 
 </div>
 
+<!-- FIX 1: Mobile bottom tab bar — MERGE TAB ALWAYS VISIBLE (no more desktop-only block) -->
+<div class="mobile-tab-bar" id="mobileTabBar">
+  <div class="mob-tabs">
+    <button class="mob-tab active" id="mobtab-a" onclick="setMode('assignment')">
+      <span class="mt-icon">📄</span><span>ASSIGNMENT</span>
+    </button>
+    <button class="mob-tab" id="mobtab-l" onclick="setMode('lab')">
+      <span class="mt-icon">🔬</span><span>LAB REPORT</span>
+    </button>
+    <button class="mob-tab" id="mobtab-m" onclick="setMode('merge')">
+      <span class="mt-icon">⊕</span><span>MERGE</span>
+    </button>
+  </div>
+</div>
+
 <script>
-/* PDF.js worker */
 if(window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
 let mode='assignment';
 let currentRating=0;
 let lastModeBeforeMerge='assignment';
+let coverChoiceSelected='assignment';
+
+/* ── FIX 4: UNDO STATE — properly rewritten ── */
+const undoState={assignment:null,lab:null};
+let undoTimerHandle={assignment:null,lab:null};
+let undoIntervalHandle={assignment:null,lab:null};
+const UNDO_SECONDS=15;
 
 /* VISITOR COUNTER */
 (function(){
@@ -483,6 +660,25 @@ let lastModeBeforeMerge='assignment';
     if(el){let s=Math.max(0,c-8);const t=()=>{if(s<=c){el.textContent=s;s++;setTimeout(t,60);}};t();}
   }catch(e){try{document.getElementById('visitorCount').textContent='—';}catch(_){}}
 })();
+
+/* DOWNLOAD COUNTER */
+(function(){
+  try{
+    const KEY='diu_cover_craft_downloads';
+    let c=parseInt(localStorage.getItem(KEY)||'0',10);
+    const el=document.getElementById('dlCount');
+    if(el){let s=Math.max(0,c-5);const t=()=>{if(s<=c){el.textContent=s;s++;setTimeout(t,70);}};t();}
+  }catch(e){try{document.getElementById('dlCount').textContent='—';}catch(_){}}
+})();
+function incrementDownloadCount(){
+  try{
+    const KEY='diu_cover_craft_downloads';
+    let c=parseInt(localStorage.getItem(KEY)||'0',10);
+    c++;localStorage.setItem(KEY,c);
+    const el=document.getElementById('dlCount');
+    if(el)el.textContent=c;
+  }catch(e){}
+}
 
 /* FIELD VALIDATION */
 const REQUIRED_FIELDS={
@@ -496,13 +692,117 @@ function checkFields(){
   fields.forEach(id=>{const el=document.getElementById(id);if(!el||!el.value.trim())empty++;});
   const btn=document.getElementById('dlBtn'),tip=document.getElementById('dlTooltip');
   const ok=empty<=2;btn.disabled=!ok;
-  tip.textContent=ok?'':`Fill ${empty-2} more field${empty-2>1?'s':''} to enable download`;
+  tip.textContent=ok?'':`Fill ${Math.max(0,empty-2)} more field${(empty-2)>1?'s':''} to enable download`;
+  // Show reset bar only for current mode when in that mode
+  updateResetBarVisibility();
 }
 
-/* MODE SWITCHER */
+function updateResetBarVisibility(){
+  const modeKey=mode==='merge'?lastModeBeforeMerge:mode;
+  document.getElementById('resetBarA').style.display=(mode==='assignment')?'flex':'none';
+  document.getElementById('resetBarL').style.display=(mode==='lab')?'flex':'none';
+}
+
+function countFilledFields(modeKey){
+  return REQUIRED_FIELDS[modeKey].filter(id=>{const el=document.getElementById(id);return el&&el.value.trim();}).length;
+}
+
+/* FIX 4: Reset + Undo — completely rewritten and fixed */
+function captureSnapshot(modeKey){
+  const snap={};
+  REQUIRED_FIELDS[modeKey].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)snap[id]=el.value;
+  });
+  return snap;
+}
+
+function hasAnyData(modeKey){
+  return REQUIRED_FIELDS[modeKey].some(id=>{
+    const el=document.getElementById(id);
+    return el&&el.value.trim();
+  });
+}
+
+function resetFields(modeKey){
+  if(!hasAnyData(modeKey))return;
+  // Capture BEFORE clearing
+  undoState[modeKey]=captureSnapshot(modeKey);
+  // Clear all fields
+  REQUIRED_FIELDS[modeKey].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.value='';
+  });
+  render();
+  startUndoTimer(modeKey);
+}
+
+function startUndoTimer(modeKey){
+  const btn=document.getElementById('undo-btn-'+modeKey);
+  const timerSpan=document.getElementById('undo-timer-'+modeKey);
+  const bar=document.getElementById('undo-bar-'+modeKey);
+
+  // Clear any existing timers
+  if(undoTimerHandle[modeKey])clearTimeout(undoTimerHandle[modeKey]);
+  if(undoIntervalHandle[modeKey])clearInterval(undoIntervalHandle[modeKey]);
+
+  btn.disabled=false;
+  let remaining=UNDO_SECONDS;
+  timerSpan.textContent='('+remaining+'s)';
+
+  // Animate the bar from 100% to 0% over UNDO_SECONDS
+  bar.style.transition='none';
+  bar.style.width='100%';
+  // Force reflow then start transition
+  bar.getBoundingClientRect();
+  bar.style.transition='width '+UNDO_SECONDS+'s linear';
+  bar.style.width='0%';
+
+  undoIntervalHandle[modeKey]=setInterval(()=>{
+    remaining--;
+    if(timerSpan) timerSpan.textContent='('+remaining+'s)';
+    if(remaining<=0){
+      clearInterval(undoIntervalHandle[modeKey]);
+      undoIntervalHandle[modeKey]=null;
+    }
+  },1000);
+
+  undoTimerHandle[modeKey]=setTimeout(()=>{
+    expireUndo(modeKey);
+  },UNDO_SECONDS*1000);
+}
+
+function expireUndo(modeKey){
+  undoState[modeKey]=null;
+  if(undoIntervalHandle[modeKey]){clearInterval(undoIntervalHandle[modeKey]);undoIntervalHandle[modeKey]=null;}
+  const btn=document.getElementById('undo-btn-'+modeKey);
+  const timerSpan=document.getElementById('undo-timer-'+modeKey);
+  const bar=document.getElementById('undo-bar-'+modeKey);
+  if(btn)btn.disabled=true;
+  if(timerSpan)timerSpan.textContent='';
+  if(bar){bar.style.transition='none';bar.style.width='0%';}
+}
+
+function undoReset(modeKey){
+  if(!undoState[modeKey]){return;}
+  const snap=undoState[modeKey];
+  // Restore all field values
+  Object.keys(snap).forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.value=snap[id];
+  });
+  render();
+  // Clear the undo state and stop timers
+  if(undoTimerHandle[modeKey]){clearTimeout(undoTimerHandle[modeKey]);undoTimerHandle[modeKey]=null;}
+  expireUndo(modeKey);
+}
+
+/* MODE SWITCHER — FIX 1: No more mobile blocking for merge */
 function setMode(m){
+  // FIX 1: Removed the mobile merge block entirely — merge works on all screen sizes
   if(m!=='merge')lastModeBeforeMerge=m;
   mode=m;
+
   document.getElementById('btn-a').className='tbtn'+(m==='assignment'?' active':'');
   document.getElementById('btn-l').className='tbtn'+(m==='lab'?' active':'');
   document.getElementById('btn-m').className='tbtn merge-tab'+(m==='merge'?' active':'');
@@ -510,7 +810,28 @@ function setMode(m){
   document.getElementById('panel-lab').className='mode-panel'+(m==='lab'?' active':'');
   document.getElementById('mainLayout').style.display=m==='merge'?'none':'grid';
   document.getElementById('mergeView').className='merge-view'+(m==='merge'?' active':'');
-  if(m!=='merge'){document.getElementById('mobileToggleLabel').textContent=m==='assignment'?'Switch to Lab Report':'Switch to Assignment';render();}
+
+  // Mobile tabs
+  document.querySelectorAll('.mob-tab').forEach(t=>t.classList.remove('active'));
+  if(m==='assignment')document.getElementById('mobtab-a').classList.add('active');
+  else if(m==='lab')document.getElementById('mobtab-l').classList.add('active');
+  else if(m==='merge')document.getElementById('mobtab-m').classList.add('active');
+
+  if(m!=='merge'){
+    document.getElementById('mobileToggleLabel').textContent=m==='assignment'?'Switch to Lab Report':'Switch to Assignment';
+    render();
+  }
+  updateResetBarVisibility();
+  updateMergeSteps();
+}
+
+function updateMergeSteps(){
+  if(mode!=='merge')return;
+  const hasFiles=mergeItems.length>0;
+  const canDl=mergeItems.length>=2;
+  document.getElementById('mstep1').className='merge-step'+(hasFiles?' done':' active-step');
+  document.getElementById('mstep2').className='merge-step'+(canDl?' done':hasFiles?' active-step':'');
+  document.getElementById('mstep3').className='merge-step'+(canDl?' active-step':'');
 }
 
 function toggleMenu(){
@@ -526,7 +847,7 @@ document.addEventListener('click',e=>{
   const menu=document.getElementById('dropdownMenu'),btn=document.getElementById('hamburgerBtn');
   if(menu.classList.contains('open')&&!menu.contains(e.target)&&!btn.contains(e.target))closeMenu();
 });
-function toggleModeFromMenu(){setMode(mode==='assignment'?'lab':'assignment');closeMenu();}
+function toggleModeFromMenu(){setMode(mode==='assignment'||mode==='merge'?'lab':'assignment');closeMenu();}
 function openModal(id){closeMenu();document.getElementById(id).classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 function closeBg(e,id){if(e.target===document.getElementById(id))closeModal(id);}
@@ -550,10 +871,7 @@ function copyFromAssignment(){
 }
 
 function g(id){const e=document.getElementById(id);return e?e.value.trim():'';}
-function gm(f){
-  const m=mode==='merge'?lastModeBeforeMerge:mode;
-  return g((m==='assignment'?'a_':'l_')+f);
-}
+function gmFor(modeKey,f){return g((modeKey==='assignment'?'a_':'l_')+f);}
 function fd(s){
   if(!s)return'';
   const d=new Date(s+'T12:00:00');
@@ -562,40 +880,79 @@ function fd(s){
 function row(l,v){return`<div class="cv-row"><span class="cv-lbl">${l} </span><span class="cv-val">${v||''}</span></div>`;}
 function irow(l,v,b=false){return`<div class="cv-ir"><span class="cv-il">${l} </span><span class="cv-iv${b?' cv-iv-name':''}">${v||''}</span></div>`;}
 
-function buildHTML(){
-  const m=mode==='merge'?lastModeBeforeMerge:mode;
-  const isLab=m==='lab';
+function buildHTMLForMode(modeKey){
+  const isLab=modeKey==='lab';
+  const get=(f)=>gmFor(modeKey,f);
   let h='';
   h+=`<div class="cv-logo"><img src="img/DIU-Logo.png" alt="DIU" onerror="this.style.display='none'"></div>`;
   h+=`<div class="cv-title">${isLab?'LAB REPORT':'Assignment'}</div>`;
-  if(!isLab)h+=row('Topic Name:',gm('topicName'));
-  else{h+=row('Experiment Name:',gm('expName'));h+=row('Experiment No:',gm('expNo'));}
-  h+=row('Course Code:',gm('courseCode'));
-  h+=row('Course Title:',gm('courseTitle'));
+  if(!isLab)h+=row('Topic Name:',get('topicName'));
+  else{h+=row('Experiment Name:',get('expName'));h+=row('Experiment No:',get('expNo'));}
+  h+=row('Course Code:',get('courseCode'));
+  h+=row('Course Title:',get('courseTitle'));
   h+=`<div class="cv-sec"><u>Submitted To</u>:</div><div class="cv-ib">
-    ${irow('Teacher Name:',gm('tName'),true)}
-    ${irow('Department:',gm('tDept'))}
+    ${irow('Teacher Name:',get('tName'),true)}
+    ${irow('Department:',get('tDept'))}
     <div class="cv-uline">Daffodil International University.</div>
   </div>`;
   h+=`<div class="cv-sec"><u>Submitted By</u>:</div><div class="cv-ib">
-    ${irow('Name:',gm('sName'),true)}
-    ${irow('ID:',gm('sId'))}
-    ${irow('Section:',gm('sSec'))}
-    ${irow('Semester:',gm('sSem'))}
-    ${irow('Department:',gm('sDept'))}
+    ${irow('Name:',get('sName'),true)}
+    ${irow('ID:',get('sId'))}
+    ${irow('Section:',get('sSec'))}
+    ${irow('Semester:',get('sSem'))}
+    ${irow('Department:',get('sDept'))}
     <div class="cv-uline">Daffodil International University.</div>
   </div>`;
   h+=`<div style="height:26px"></div>`;
-  h+=`<div class="cv-date-row"><span class="cv-lbl"><u>Submission Date</u>: </span><span class="cv-val">${fd(gm('subDate'))}</span></div>`;
+  h+=`<div class="cv-date-row"><span class="cv-lbl"><u>Submission Date</u>: </span><span class="cv-val">${fd(get('subDate'))}</span></div>`;
   return h;
 }
-
+function buildHTML(){
+  return buildHTMLForMode(mode==='merge'?lastModeBeforeMerge:mode);
+}
 function render(){
   document.getElementById('cv-body').innerHTML=buildHTML();
   checkFields();
 }
 
-/* PDF DOWNLOAD (cover only) */
+/* Particle burst animation */
+function triggerParticleBurst(btn){
+  const rect=btn.getBoundingClientRect();
+  const cx=rect.left+rect.width/2;
+  const cy=rect.top+rect.height/2;
+  const overlay=document.createElement('div');
+  overlay.className='dl-particles';
+  document.body.appendChild(overlay);
+  const colors=['#4ade80','#2d54b8','#a8c0ff','#7c3aed','#fbbf24','#f472b6','#38bdf8','#fb923c'];
+  for(let i=0;i<22;i++){
+    const p=document.createElement('div');
+    p.className='dl-particle';
+    const angle=(Math.PI*2/22)*i;
+    const dist=50+Math.random()*100;
+    const size=6+Math.random()*8;
+    const tx=Math.cos(angle)*dist;
+    const ty=Math.sin(angle)*dist;
+    p.style.cssText=`left:${cx}px;top:${cy}px;width:${size}px;height:${size}px;background:${colors[i%colors.length]};--tx:${tx}px;--ty:${ty}px;animation-duration:${0.5+Math.random()*0.5}s;`;
+    overlay.appendChild(p);
+  }
+  setTimeout(()=>{if(overlay.parentNode)overlay.parentNode.removeChild(overlay);},1400);
+}
+
+/* Universal download */
+function universalDownload(blob,filename){
+  try{
+    if(window.navigator&&window.navigator.msSaveOrOpenBlob){window.navigator.msSaveOrOpenBlob(blob,filename);return;}
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;a.download=filename;a.style.display='none';
+    document.body.appendChild(a);a.click();
+    setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},300);
+    return;
+  }catch(e1){}
+  try{const url=URL.createObjectURL(blob);window.open(url,'_blank');setTimeout(()=>URL.revokeObjectURL(url),10000);return;}catch(e2){}
+  try{const r=new FileReader();r.onload=function(){const a=document.createElement('a');a.href=r.result;a.download=filename;a.click();};r.readAsDataURL(blob);}catch(e3){}
+}
+
 async function toDataURL(url){
   try{
     const res=await fetch(url,{mode:'cors'});
@@ -604,14 +961,14 @@ async function toDataURL(url){
   }catch(e){return null;}
 }
 
-async function buildCoverPDFBlob(){
+async function buildCoverPDFBlobForMode(modeKey){
   const wrapper=document.createElement('div');
   wrapper.style.cssText='position:absolute;top:0;left:0;width:793px;height:1122px;overflow:hidden;visibility:hidden;pointer-events:none;z-index:-9999;';
   wrapper.innerHTML=`
     <div id="pci" style="width:793px;height:1122px;background:#fff;position:relative;font-family:'Calibri','Carlito',Arial,sans-serif;color:#000;">
       <div style="position:absolute;top:16px;left:22px;right:22px;bottom:16px;border:1.5px solid #444;z-index:10;margin-right:2px;"></div>
       <div id="pwm" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:420px;height:420px;background-image:url('img/watermark.jpg');background-size:contain;background-repeat:no-repeat;background-position:center;opacity:0.075;z-index:1;"></div>
-      <div style="position:relative;z-index:5;padding:36px 55px 40px 55px;display:flex;flex-direction:column;">${buildHTML()}</div>
+      <div style="position:relative;z-index:5;padding:36px 55px 40px 55px;display:flex;flex-direction:column;">${buildHTMLForMode(modeKey)}</div>
     </div>`;
   document.body.appendChild(wrapper);
   const cl=wrapper.querySelector('#pci');
@@ -630,28 +987,33 @@ async function buildCoverPDFBlob(){
 async function downloadPDF(){
   const btn=document.getElementById('dlBtn');
   if(btn.disabled)return;
-  btn.textContent='⏳  Generating...';btn.disabled=true;
+  btn.classList.add('generating');
+  btn.innerHTML='<span style="display:inline-block;animation:spin 1s linear infinite;margin-right:8px">⏳</span> GENERATING...';
+  btn.disabled=true;
   try{
-    const blob=await buildCoverPDFBlob();
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement('a');
-    a.href=url;a.download=(lastModeBeforeMerge==='lab'?'Lab_Report':'Assignment')+'_Cover_DIU.pdf';
-    a.click();URL.revokeObjectURL(url);
-    btn.textContent='✓  Downloaded!';
-    setTimeout(()=>{btn.textContent='⬇  DOWNLOAD PDF';checkFields();},2000);
-  }catch(e){btn.textContent='⬇  DOWNLOAD PDF';checkFields();}
+    const modeKey=mode==='merge'?lastModeBeforeMerge:mode;
+    const blob=await buildCoverPDFBlobForMode(modeKey);
+    btn.classList.remove('generating');
+    btn.classList.add('success');
+    const fname=(modeKey==='lab'?'Lab_Report_Cover-diucoverpoint':'Assignment_Cover_Page-diucoverpoint')+'.pdf';
+    triggerParticleBurst(btn);
+    universalDownload(blob,fname);
+    incrementDownloadCount();
+    btn.innerHTML='✅ DOWNLOADED!';
+    setTimeout(()=>{btn.classList.remove('success');btn.innerHTML='⬇ &nbsp; DOWNLOAD PDF';checkFields();},2500);
+  }catch(e){
+    btn.classList.remove('generating');
+    btn.innerHTML='⬇ &nbsp; DOWNLOAD PDF';
+    checkFields();
+  }
 }
 
-/* ═══════════════════════════════
-   MERGE PDF LOGIC
-═══════════════════════════════ */
+/* ═══ MERGE LOGIC ═══ */
 let mergeItems=[];
 let dragSrcIdx=null;
-
 const mergeCardsEl=document.getElementById('mergeCards');
 const mergeEmptyEl=document.getElementById('mergeEmpty');
 
-/* Dropzone drag events */
 const dz=document.getElementById('mergeDropzone');
 ['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.add('over');}));
 dz.addEventListener('dragleave',()=>dz.classList.remove('over'));
@@ -660,6 +1022,12 @@ dz.addEventListener('drop',e=>{
   const files=[...e.dataTransfer.files].filter(f=>f.type==='application/pdf');
   if(files.length)handleMergeFiles(files);
 });
+
+function fmtSize(bytes){
+  if(bytes<1024)return bytes+'B';
+  if(bytes<1024*1024)return(bytes/1024).toFixed(1)+'KB';
+  return(bytes/(1024*1024)).toFixed(1)+'MB';
+}
 
 async function handleMergeFiles(files){
   for(const f of files){
@@ -676,19 +1044,76 @@ async function handleMergeFiles(files){
       await page.render({canvasContext:canvas.getContext('2d'),viewport:vp}).promise;
       thumb=canvas;
     }catch(e){}
-    mergeItems.push({id,name:f.name,bytes,pageCount,isCover:false,thumb});
+    mergeItems.push({id,name:f.name,bytes,pageCount,isCover:false,thumb,size:f.size});
   }
-  // Reset file input so same file can be added again if needed
   document.getElementById('mergeFileInput').value='';
   renderMergeCards();
+  updateMergeSteps();
+}
+
+/* FIX 2: Smart cover selection — auto-select if one has more fields, ask if equal */
+function getCoverModeDecision(){
+  const aC=countFilledFields('assignment');
+  const lC=countFilledFields('lab');
+  if(aC===0&&lC===0)return null; // Nothing filled
+  if(aC>0&&lC===0)return 'assignment'; // Only assignment has data
+  if(lC>0&&aC===0)return 'lab';        // Only lab has data
+  if(aC>lC)return 'assignment';         // Assignment has more
+  if(lC>aC)return 'lab';               // Lab has more
+  return 'equal';                        // Both filled equally — ask user
+}
+
+function selectCoverChoice(choice){
+  coverChoiceSelected=choice;
+  document.getElementById('cco-assignment').classList.toggle('selected',choice==='assignment');
+  document.getElementById('cco-lab').classList.toggle('selected',choice==='lab');
+}
+
+async function confirmCoverChoice(){
+  closeModal('chooseCoverModal');
+  await addCoverWithMode(coverChoiceSelected);
 }
 
 async function addCoverToPile(){
+  const decision=getCoverModeDecision();
+  if(decision===null){
+    alert('Please fill in at least some fields in the Assignment or Lab Report tab first.');
+    return;
+  }
+  if(decision==='equal'){
+    // Both covers have same number of fields — show chooser modal
+    const aC=countFilledFields('assignment');
+    const lC=countFilledFields('lab');
+    document.getElementById('cco-a-count').textContent=aC+' field'+(aC!==1?'s':'')+' filled';
+    document.getElementById('cco-l-count').textContent=lC+' field'+(lC!==1?'s':'')+' filled';
+    const aFields=REQUIRED_FIELDS['assignment']
+      .filter(id=>{const e=document.getElementById(id);return e&&e.value.trim();})
+      .map(id=>{
+        const labels={a_topicName:'Topic',a_courseCode:'Code',a_courseTitle:'Title',a_tName:'Teacher',a_tDept:'Dept',a_sName:'Name',a_sId:'ID',a_sSec:'Section',a_sSem:'Semester',a_sDept:'S.Dept',a_subDate:'Date'};
+        return labels[id]||id;
+      }).join(', ');
+    const lFields=REQUIRED_FIELDS['lab']
+      .filter(id=>{const e=document.getElementById(id);return e&&e.value.trim();})
+      .map(id=>{
+        const labels={l_expName:'Exp Name',l_expNo:'Exp No',l_courseCode:'Code',l_courseTitle:'Title',l_tName:'Teacher',l_tDept:'Dept',l_sName:'Name',l_sId:'ID',l_sSec:'Section',l_sSem:'Semester',l_sDept:'S.Dept',l_subDate:'Date'};
+        return labels[id]||id;
+      }).join(', ');
+    document.getElementById('cco-a-fields').textContent=aFields?aFields:'';
+    document.getElementById('cco-l-fields').textContent=lFields?lFields:'';
+    selectCoverChoice('assignment');
+    openModal('chooseCoverModal');
+    return;
+  }
+  // Auto-select the one with more data
+  await addCoverWithMode(decision);
+}
+
+async function addCoverWithMode(modeKey){
   mergeItems=mergeItems.filter(x=>!x.isCover);
   const btn=document.getElementById('addCoverBtn');
   btn.textContent='⏳ Generating...';btn.disabled=true;
   try{
-    const blob=await buildCoverPDFBlob();
+    const blob=await buildCoverPDFBlobForMode(modeKey);
     const bytes=new Uint8Array(await blob.arrayBuffer());
     let thumb=null;
     try{
@@ -700,16 +1125,19 @@ async function addCoverToPile(){
       await page.render({canvasContext:canvas.getContext('2d'),viewport:vp}).promise;
       thumb=canvas;
     }catch(e){}
-    mergeItems.unshift({id:'cover',name:'Cover Page (Generated)',bytes,pageCount:1,isCover:true,thumb});
+    const label=modeKey==='lab'?'Lab Cover (Generated)':'Assignment Cover (Generated)';
+    mergeItems.unshift({id:'cover',name:label,bytes,pageCount:1,isCover:true,thumb,size:blob.size});
     document.getElementById('coverNoteWrap').style.display='block';
     renderMergeCards();
-  }catch(e){alert('Could not generate cover. Please fill in your cover details first (go to Assignment or Lab Report tab).');}
+    updateMergeSteps();
+  }catch(e){alert('Could not generate cover. Please fill in cover details first.');}
   btn.textContent='＋ ADD MY COVER PAGE';btn.disabled=false;
 }
 
 function renderMergeCards(){
   mergeCardsEl.innerHTML='';
   const total=mergeItems.reduce((a,x)=>a+x.pageCount,0);
+  const totalSize=mergeItems.reduce((a,x)=>a+(x.size||0),0);
   const hasItems=mergeItems.length>0;
 
   document.getElementById('cardCount').textContent=mergeItems.length+' file'+(mergeItems.length!==1?'s':'');
@@ -724,7 +1152,7 @@ function renderMergeCards(){
     return;
   }
 
-  document.getElementById('mergeInfo').innerHTML=`<strong>${mergeItems.length} PDF${mergeItems.length!==1?'s':''}</strong> · ${total} page${total!==1?'s':''} total`;
+  document.getElementById('mergeInfo').innerHTML=`<strong>${mergeItems.length} PDF${mergeItems.length!==1?'s':''}</strong> · ${total} page${total!==1?'s':''} · ${fmtSize(totalSize)}`;
 
   mergeItems.forEach((item,idx)=>{
     const card=document.createElement('div');
@@ -739,7 +1167,7 @@ function renderMergeCards(){
 
     const rm=document.createElement('button');
     rm.className='card-remove';rm.innerHTML='&times;';rm.title='Remove';
-    rm.onclick=e=>{e.stopPropagation();mergeItems.splice(idx,1);if(item.isCover)document.getElementById('coverNoteWrap').style.display='none';renderMergeCards();};
+    rm.onclick=e=>{e.stopPropagation();mergeItems.splice(idx,1);if(item.isCover)document.getElementById('coverNoteWrap').style.display='none';renderMergeCards();updateMergeSteps();};
     card.appendChild(rm);
 
     const thumb=document.createElement('div');
@@ -755,21 +1183,24 @@ function renderMergeCards(){
 
     const info=document.createElement('div');
     info.className='card-info';
-    info.innerHTML=`<div class="card-name" title="${item.name}">${item.name}</div><div class="card-pages">${item.pageCount} page${item.pageCount!==1?'s':''}</div>`;
+    info.innerHTML=`<div class="card-name" title="${item.name}">${item.name}</div>
+      <div class="card-meta">
+        <span class="card-pages">${item.pageCount} pg${item.pageCount!==1?'s':''}</span>
+        <span class="card-size">${fmtSize(item.size||0)}</span>
+      </div>`;
     card.appendChild(info);
 
     const arrows=document.createElement('div');
     arrows.className='card-arrows';
     const lb=document.createElement('button');
     lb.className='arr-btn';lb.textContent='◀';lb.title='Move left';lb.disabled=idx===0;
-    lb.onclick=e=>{e.stopPropagation();[mergeItems[idx-1],mergeItems[idx]]=[mergeItems[idx],mergeItems[idx-1]];renderMergeCards();};
+    lb.onclick=e=>{e.stopPropagation();[mergeItems[idx-1],mergeItems[idx]]=[mergeItems[idx],mergeItems[idx-1]];renderMergeCards();updateMergeSteps();};
     const rb=document.createElement('button');
     rb.className='arr-btn';rb.textContent='▶';rb.title='Move right';rb.disabled=idx===mergeItems.length-1;
-    rb.onclick=e=>{e.stopPropagation();[mergeItems[idx],mergeItems[idx+1]]=[mergeItems[idx+1],mergeItems[idx]];renderMergeCards();};
+    rb.onclick=e=>{e.stopPropagation();[mergeItems[idx],mergeItems[idx+1]]=[mergeItems[idx+1],mergeItems[idx]];renderMergeCards();updateMergeSteps();};
     arrows.appendChild(lb);arrows.appendChild(rb);
     card.appendChild(arrows);
 
-    /* Drag reorder */
     card.addEventListener('dragstart',e=>{dragSrcIdx=idx;card.classList.add('dragging');e.dataTransfer.effectAllowed='move';});
     card.addEventListener('dragend',()=>card.classList.remove('dragging'));
     card.addEventListener('dragover',e=>{e.preventDefault();card.classList.add('drag-over');});
@@ -780,19 +1211,21 @@ function renderMergeCards(){
       const moved=mergeItems.splice(dragSrcIdx,1)[0];
       mergeItems.splice(idx,0,moved);
       dragSrcIdx=null;
-      renderMergeCards();
+      renderMergeCards();updateMergeSteps();
     });
 
     mergeCardsEl.appendChild(card);
   });
 }
 
-function clearAll(){mergeItems=[];renderMergeCards();}
+function clearAll(){mergeItems=[];renderMergeCards();updateMergeSteps();}
 
 async function doMerge(){
   if(mergeItems.length<2)return;
   const btn=document.getElementById('mergeDlBtn');
-  btn.textContent='⏳ Merging...';btn.disabled=true;
+  btn.classList.add('generating');
+  btn.innerHTML='<span style="display:inline-block;animation:spin 1s linear infinite;margin-right:6px">⏳</span> MERGING...';
+  btn.disabled=true;
 
   const prog=document.getElementById('mergeProgress');
   const bar=document.getElementById('mergeProgressBar');
@@ -811,19 +1244,24 @@ async function doMerge(){
     const out=await merged.save();
     bar.style.width='100%';
     const blob=new Blob([out],{type:'application/pdf'});
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement('a');a.href=url;a.download='DIU_Merged_Document.pdf';a.click();
-    URL.revokeObjectURL(url);
-    btn.textContent='✓  Downloaded!';
-    setTimeout(()=>{btn.textContent='⬇  DOWNLOAD MERGED PDF';btn.disabled=mergeItems.length<2;prog.classList.remove('show');bar.style.width='0%';},2500);
+    btn.classList.remove('generating');
+    btn.classList.add('success');
+    triggerParticleBurst(btn);
+    universalDownload(blob,'DIU_Merged_Document-diucoverpoint.pdf');
+    incrementDownloadCount();
+    btn.innerHTML='✅ DOWNLOADED!';
+    setTimeout(()=>{btn.classList.remove('success');btn.innerHTML='⬇ &nbsp; DOWNLOAD MERGED PDF';btn.disabled=mergeItems.length<2;prog.classList.remove('show');bar.style.width='0%';},2500);
   }catch(err){
-    alert('Merge failed. Please make sure your PDFs are valid and not password-protected.');
-    btn.textContent='⬇  DOWNLOAD MERGED PDF';btn.disabled=false;
+    btn.classList.remove('generating');
+    alert('Merge failed. Make sure PDFs are valid and not password-protected.');
+    btn.innerHTML='⬇ &nbsp; DOWNLOAD MERGED PDF';btn.disabled=false;
     prog.classList.remove('show');
   }
 }
 
+// Initialize
 render();
+updateResetBarVisibility();
 </script>
 </body>
 </html>
