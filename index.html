@@ -1054,14 +1054,23 @@ async function handleMergeFiles(files){
 
 /* FIX 2: Smart cover selection — auto-select if one has more fields, ask if equal */
 function getCoverModeDecision(){
-  const aC=countFilledFields('assignment');
-  const lC=countFilledFields('lab');
-  if(aC===0&&lC===0)return null; // Nothing filled
-  if(aC>0&&lC===0)return 'assignment'; // Only assignment has data
-  if(lC>0&&aC===0)return 'lab';        // Only lab has data
-  if(aC>lC)return 'assignment';         // Assignment has more
-  if(lC>aC)return 'lab';               // Lab has more
-  return 'equal';                        // Both filled equally — ask user
+  const aTotal = REQUIRED_FIELDS['assignment'].length;
+  const lTotal = REQUIRED_FIELDS['lab'].length;
+
+  const aC = countFilledFields('assignment');
+  const lC = countFilledFields('lab');
+
+  const aPercent = aC / aTotal;
+  const lPercent = lC / lTotal;
+
+  if(aC === 0 && lC === 0) return null;
+  if(aC > 0 && lC === 0) return 'assignment';
+  if(lC > 0 && aC === 0) return 'lab';
+
+  if(aPercent > lPercent) return 'assignment';
+  if(lPercent > aPercent) return 'lab';
+
+  return 'equal';
 }
 
 function selectCoverChoice(choice){
