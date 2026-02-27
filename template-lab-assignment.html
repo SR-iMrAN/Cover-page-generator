@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DIU Cover Point — Lab Assignment Report</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+:root{
+  --ui-bg:#eef2fb;--ui-surface:#fff;--ui-border:#c8d5ee;--ui-accent:#2d54b8;
+  --ui-text:#1a2540;--ui-muted:#4e5f80;--ui-ph:#9aabc8;--ui-input-b:#c0ceeb;
+  --ui-header:#1a2d62;--ui-sec-bg:#edf1fb;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+body{background:var(--ui-bg);color:var(--ui-text);font-family:'Inter',sans-serif;min-height:100vh;}
+
+/* TOAST */
+#toast-container{position:fixed;top:62px;right:16px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;}
+.toast{pointer-events:all;display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:10px;font-size:13px;font-weight:500;color:#fff;box-shadow:0 6px 24px rgba(0,0,0,.22);transform:translateX(120%);transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .35s;opacity:0;min-width:240px;max-width:340px;line-height:1.4;}
+.toast.show{transform:translateX(0);opacity:1;}
+.toast.hide{transform:translateX(120%);opacity:0;}
+.toast-icon{font-size:18px;flex-shrink:0;}
+.toast-body{flex:1;}
+.toast-title{font-weight:700;font-size:13px;}
+.toast-msg{font-size:11.5px;opacity:.85;margin-top:2px;}
+.toast.success{background:linear-gradient(135deg,#16a34a,#0e7230);}
+.toast.error{background:linear-gradient(135deg,#dc2626,#991b1b);}
+.toast.info{background:linear-gradient(135deg,#2d54b8,#1a3880);}
+.toast.warning{background:linear-gradient(135deg,#d97706,#92400e);}
+.toast-close{background:none;border:none;color:rgba(255,255,255,.6);font-size:16px;cursor:pointer;line-height:1;padding:0 0 0 4px;flex-shrink:0;}
+
+/* HEADER */
+header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:300;box-shadow:0 2px 14px rgba(26,45,98,.22);gap:10px;}
+.header-left{display:flex;align-items:center;gap:10px;}
+.app-title{font-family:'Orbitron',sans-serif;font-weight:900;font-size:13px;letter-spacing:3px;color:#a8c0ff;white-space:nowrap;cursor:pointer;text-decoration:none;}
+.app-title span{color:#4ade80;}
+.app-subtitle{font-size:9px;color:rgba(255,255,255,.3);letter-spacing:1px;white-space:nowrap;}
+.template-badge{background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:1.5px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;}
+.back-btn{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:7px;padding:5px 12px;color:rgba(255,255,255,.8);font-family:'Inter',sans-serif;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;text-decoration:none;white-space:nowrap;}
+.back-btn:hover{background:rgba(255,255,255,.2);color:#fff;}
+.merge-nav-btn{display:flex;align-items:center;gap:5px;background:linear-gradient(130deg,#7c3aed,#4f46e5);border:none;border-radius:7px;padding:6px 14px;color:#fff;font-family:'Orbitron',sans-serif;font-size:8.5px;letter-spacing:1.5px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;box-shadow:0 2px 10px rgba(124,58,237,.35);}
+.merge-nav-btn:hover{opacity:.85;transform:translateY(-1px);}
+.dl-count-badge{display:flex;align-items:center;gap:5px;background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.3);border-radius:20px;padding:3px 10px 3px 7px;}
+.dl-count-val{font-family:'Orbitron',sans-serif;font-size:9px;color:#4ade80;letter-spacing:1px;font-weight:700;}
+
+/* MAIN LAYOUT */
+.app-layout{display:grid;grid-template-columns:370px 1fr;min-height:calc(100vh - 51px);}
+.app-layout.hidden{display:none;}
+.inp-panel{background:var(--ui-surface);border-right:1.5px solid var(--ui-border);padding:20px 18px 30px;overflow-y:auto;max-height:calc(100vh - 51px);}
+.inp-panel::-webkit-scrollbar{width:5px;}
+.inp-panel::-webkit-scrollbar-thumb{background:#c0ceeb;border-radius:10px;}
+.prev-panel{background:#3a3a3a;display:flex;flex-direction:column;align-items:center;padding:28px 20px 40px;overflow-y:auto;max-height:calc(100vh - 51px);}
+.prev-label{color:rgba(255,255,255,.38);font-size:9px;letter-spacing:2.5px;margin-bottom:14px;font-family:'Orbitron',sans-serif;}
+.bottom-label{margin-top:20px;opacity:.35;color:rgba(255,255,255,.8);}
+
+/* FORM */
+.sec-head{font-size:10px;font-weight:700;letter-spacing:2.5px;color:var(--ui-accent);text-transform:uppercase;padding:7px 10px;margin-bottom:11px;background:var(--ui-sec-bg);border-left:3px solid var(--ui-accent);border-radius:0 5px 5px 0;}
+.sgap{height:16px;}
+.fg{margin-bottom:12px;}
+.fg label{display:block;font-size:10.5px;font-weight:600;letter-spacing:1px;color:var(--ui-muted);margin-bottom:4px;text-transform:uppercase;}
+.fg input,.fg select{width:100%;background:#fff;border:1.5px solid var(--ui-input-b);border-radius:6px;color:var(--ui-text);font-family:'Inter',sans-serif;font-size:13.5px;font-weight:500;padding:8px 12px;outline:none;transition:border-color .15s,box-shadow .15s;}
+.fg input:focus,.fg select:focus{border-color:var(--ui-accent);box-shadow:0 0 0 3px rgba(45,84,184,.1);}
+.fg input::placeholder{color:var(--ui-ph);}
+.custom-dropdown-wrap{position:relative;}
+.custom-dropdown-wrap select{appearance:none;-webkit-appearance:none;cursor:pointer;padding-right:32px;}
+.custom-dropdown-arrow{position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--ui-muted);font-size:12px;}
+.date-hint{font-size:9.5px;margin-top:3px;}
+
+/* Rubric pills */
+#rubricPillsWrap{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;}
+.rubric-pill{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:10.5px;font-weight:600;cursor:pointer;border:1.5px solid;transition:all .15s;user-select:none;}
+.rubric-pill.on{border-color:var(--ui-accent);background:var(--ui-sec-bg);color:var(--ui-accent);}
+.rubric-pill.off{border-color:#d1d5db;background:#f9fafb;color:var(--ui-ph);}
+
+/* Buttons */
+.dl-btn{width:100%;padding:13px;background:linear-gradient(130deg,#2d54b8,#1a3880);border:none;border-radius:7px;color:#fff;font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2.5px;font-weight:700;cursor:pointer;transition:all .25s;box-shadow:0 4px 18px rgba(45,84,184,.3);position:relative;overflow:hidden;}
+.dl-btn::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);transition:left .4s;}
+.dl-btn:hover::after{left:100%;}
+.dl-btn:hover:not(:disabled){box-shadow:0 6px 26px rgba(45,84,184,.42);transform:translateY(-1px);}
+.dl-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;background:linear-gradient(130deg,#7a8fbc,#4a5f8a);}
+.dl-btn.generating{background:linear-gradient(130deg,#7c3aed,#4f46e5);animation:dlPulse 1.2s infinite;}
+.dl-btn.success{background:linear-gradient(130deg,#16a34a,#0e7230);}
+.dl-btn-wrap{position:relative;margin-bottom:0;}
+.dl-btn-tooltip{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#1a2540;color:#fff;font-family:'Inter',sans-serif;font-size:11px;padding:7px 12px;border-radius:6px;white-space:nowrap;pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,.25);z-index:10;}
+.dl-btn-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#1a2540;}
+.dl-btn-wrap:hover .dl-btn-tooltip{display:block;}
+.merge-queue-btn{width:100%;padding:11px;background:linear-gradient(130deg,#7c3aed,#4f46e5);border:none;border-radius:7px;color:#fff;font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:2px;font-weight:700;cursor:pointer;transition:all .25s;box-shadow:0 4px 18px rgba(124,58,237,.3);position:relative;overflow:hidden;margin-top:8px;}
+.merge-queue-btn::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);transition:left .4s;}
+.merge-queue-btn:hover::after{left:100%;}
+.merge-queue-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 24px rgba(124,58,237,.45);}
+.merge-queue-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.action-bar{display:flex;align-items:center;gap:8px;margin-top:10px;}
+.reset-btn{flex:1;padding:8px 12px;background:#fee2e2;border:1.5px solid #fca5a5;border-radius:6px;color:#dc2626;font-family:'Inter',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:5px;}
+.reset-btn:hover{background:#dc2626;color:#fff;}
+.undo-btn{flex:1;padding:8px 12px;background:#fef3c7;border:1.5px solid #fcd34d;border-radius:6px;color:#92400e;font-family:'Inter',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:5px;position:relative;overflow:hidden;}
+.undo-btn:hover:not(:disabled){background:#f59e0b;color:#fff;}
+.undo-btn:disabled{opacity:.35;cursor:not-allowed;}
+.undo-bar-progress{position:absolute;bottom:0;left:0;height:3px;background:#f59e0b;border-radius:0 0 0 4px;}
+
+/* Particle burst */
+.dl-particles{position:fixed;pointer-events:none;z-index:9999;top:0;left:0;width:100%;height:100%;}
+.dl-particle{position:absolute;border-radius:50%;animation:particleBurst .9s ease-out forwards;}
+@keyframes particleBurst{0%{opacity:1;transform:translate(0,0) scale(1);}100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0);}}
+@keyframes dlPulse{0%{box-shadow:0 0 0 0 rgba(124,58,237,.7);}50%{box-shadow:0 0 0 12px rgba(124,58,237,0);}100%{box-shadow:0 0 0 0 rgba(124,58,237,0);}}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+/* ═══ COVER PAGE ═══ */
+/* FIX #7: NO border */
+.cv-page{width:210mm;min-height:297mm;background:#fff;position:relative;}
+#cover-page{box-shadow:0 16px 60px rgba(0,0,0,.55);margin:0 auto;}
+/* FIX #9: watermark – logo image, lower opacity */
+.cv-wm{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:360px;height:360px;background-image:url('img/DIU-Logo.png');background-size:contain;background-repeat:no-repeat;background-position:center;opacity:.04;z-index:1;pointer-events:none;}
+.cv-body{position:relative;z-index:5;padding:36px 50px 40px 50px;min-height:1050px;display:flex;flex-direction:column;font-family:'Calibri','Carlito',Arial,sans-serif;color:#000;}
+
+/* Logo row – like OG, no text name */
+.cv-logo-row{display:flex;align-items:center;justify-content:center;margin-bottom:10px;padding-top:16px;}
+.cv-logo-row img{height:100px;width:auto;display:block;}
+
+/* Page title – same as OG */
+.cv-page-title{font-family:'Nirmala UI','Segoe UI',Arial,sans-serif;font-size:26px;font-weight:700;text-decoration:underline;text-align:center;color:#000;margin:0 0 16px 0;}
+
+/* ── RUBRIC TABLE FIX #1 #2 ── */
+.cv-rubric-wrap{margin-bottom:18px;}
+.cv-rubric-table{width:100%;border-collapse:collapse;font-family:'Calibri','Carlito',Arial,sans-serif;font-size:13px;}
+.cv-rubric-table th,.cv-rubric-table td{border:1.5px solid #000;padding:10px 8px;text-align:center;vertical-align:middle;}
+/* Taller rows FIX #2 */
+.cv-rubric-table tbody tr{height:36px;}
+.cv-rubric-table .comments-row td{height:60px;vertical-align:top;}
+/* Column widths – FIX #1: no double column, correct 7 cols */
+.cv-rubric-table .c-name{width:33%;}
+.cv-rubric-table .c-mark{width:7%;}
+.cv-rubric-table .c-ni{width:12%;}
+.cv-rubric-table .c-dev{width:10%;}
+.cv-rubric-table .c-suf{width:10%;}
+.cv-rubric-table .c-aa{width:12%;}
+.cv-rubric-table .c-total{width:10%;}
+.cv-rubric-table .only-teacher{font-weight:700;font-size:13.5px;text-align:center;padding:10px;}
+.cv-rubric-table .lbl-cell{text-align:left;font-weight:700;padding-left:10px;}
+.cv-rubric-table .mark-cell{font-weight:700;}
+.cv-rubric-table .comments-lbl{font-weight:700;text-align:center;vertical-align:middle;}
+
+/* FIX #5: info rows – same style/order as OG cover */
+.cv-row{display:block;margin-bottom:8px;line-height:1.6;}
+.cv-lbl{font-family:'Calibri','Carlito',Arial,sans-serif;font-size:19px;font-weight:700;color:#000;display:inline;}
+.cv-val{font-family:'Calibri','Carlito',Arial,sans-serif;font-size:19px;font-weight:400;color:#000;display:inline;}
+.cv-date-row{display:block;margin-top:14px;line-height:1.6;}
+.cv-date-row .cv-val{font-size:20px;}
+
+/* ═══ MERGE VIEW ═══ */
+.merge-view{display:none;width:100%;min-height:calc(100vh - 51px);background:var(--ui-bg);flex-direction:column;overflow-y:auto;}
+.merge-view.active{display:flex;}
+.merge-topbar{background:linear-gradient(135deg,#064e3b,#073935 50%,#14b8a6);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;border-bottom:2px solid rgba(20,184,166,.6);flex-shrink:0;box-shadow:0 2px 20px rgba(0,0,0,.4);}
+.merge-topbar-left{display:flex;flex-direction:column;}
+.merge-topbar-title{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:900;letter-spacing:3px;color:#c4b5fd;}
+.merge-topbar-title span{color:#a78bfa;}
+.merge-topbar-desc{font-size:11px;color:rgba(196,181,253,.45);margin-top:3px;letter-spacing:.5px;}
+.merge-steps{display:flex;align-items:center;background:rgba(255,255,255,.06);border:1px solid rgba(124,58,237,.3);border-radius:8px;overflow:hidden;}
+.merge-step{display:flex;align-items:center;gap:6px;padding:7px 14px;font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:1.5px;font-weight:700;color:rgba(196,181,253,.4);position:relative;}
+.merge-step:not(:last-child)::after{content:'›';position:absolute;right:-1px;color:rgba(196,181,253,.2);font-size:14px;}
+.merge-step .ms-num{width:18px;height:18px;border-radius:50%;border:1.5px solid rgba(196,181,253,.25);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;}
+.merge-step.done{color:#a78bfa;}.merge-step.done .ms-num{background:#7c3aed;border-color:#7c3aed;color:#fff;}
+.merge-step.active-step{color:#c4b5fd;}.merge-step.active-step .ms-num{background:linear-gradient(135deg,#7c3aed,#4f46e5);border-color:#7c3aed;color:#fff;}
+.merge-topbar-right{display:flex;align-items:center;gap:10px;}
+.merge-dropzone-wrap{padding:20px 28px 0;flex-shrink:0;}
+.merge-dropzone{border:2.5px dashed #b0c2e8;border-radius:14px;background:#f4f7fd;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 20px;cursor:pointer;transition:all .2s;text-align:center;position:relative;}
+.merge-dropzone.over{border-color:#7c3aed;background:#f3f0ff;box-shadow:0 0 0 4px rgba(124,58,237,.12);}
+.merge-dropzone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.dz-icon{font-size:34px;margin-bottom:8px;}
+.dz-text{font-size:13px;font-weight:600;color:var(--ui-muted);}
+.dz-sub{font-size:11px;color:var(--ui-ph);margin-top:3px;}
+.merge-cards-wrap{padding:20px 28px;flex:1;}
+.merge-cards-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:10px;flex-wrap:wrap;}
+.merge-cards-title{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--ui-accent);text-transform:uppercase;}
+.merge-cards-count{font-size:10px;color:var(--ui-muted);background:var(--ui-sec-bg);border:1px solid var(--ui-border);border-radius:20px;padding:2px 10px;}
+.clear-btn{padding:4px 10px;background:#fee2e2;border:1px solid #fca5a5;border-radius:5px;color:#dc2626;font-size:10px;font-weight:600;cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif;}
+.clear-btn:hover{background:#dc2626;color:#fff;}
+.drag-hint{font-size:10px;color:var(--ui-ph);display:flex;align-items:center;gap:5px;}
+.merge-cards{display:flex;flex-wrap:wrap;gap:16px;min-height:60px;align-content:flex-start;}
+.pdf-card{width:145px;background:#fff;border:2px solid var(--ui-border);border-radius:12px;overflow:hidden;cursor:grab;transition:box-shadow .2s,transform .2s,border-color .2s;position:relative;user-select:none;flex-shrink:0;}
+.pdf-card:hover{box-shadow:0 8px 28px rgba(45,84,184,.15);border-color:#93aee8;}
+.pdf-card.dragging{opacity:.45;transform:scale(.96);cursor:grabbing;}
+.pdf-card.drag-over{border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,237,.22);transform:scale(1.02);}
+.pdf-card.is-cover{border-color:#4ade80;}
+.card-badge{position:absolute;top:6px;left:6px;font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:var(--ui-accent);color:#fff;border-radius:4px;padding:2px 7px;z-index:5;}
+.pdf-card.is-cover .card-badge{background:#16a34a;}
+.card-remove{position:absolute;top:5px;right:5px;width:20px;height:20px;background:rgba(220,38,38,.85);border:none;border-radius:50%;color:#fff;font-size:13px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5;transition:background .15s;}
+.card-remove:hover{background:#dc2626;}
+.card-thumb{width:100%;height:112px;background:#f0f4fc;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.card-thumb-placeholder{font-size:30px;color:#b0c2e8;}
+.card-info{padding:8px 10px 4px;}
+.card-name{font-size:10px;font-weight:600;color:var(--ui-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.card-meta{display:flex;align-items:center;justify-content:space-between;margin-top:3px;}
+.card-pages{font-size:9px;color:var(--ui-muted);}
+.card-size{font-size:9px;color:var(--ui-ph);background:var(--ui-sec-bg);border-radius:3px;padding:1px 5px;font-weight:600;}
+.card-arrows{display:flex;justify-content:center;gap:5px;padding:4px 8px 8px;}
+.arr-btn{flex:1;padding:4px 0;background:var(--ui-sec-bg);border:1px solid var(--ui-border);border-radius:5px;font-size:10px;cursor:pointer;transition:background .15s;color:var(--ui-accent);font-weight:700;}
+.arr-btn:hover:not(:disabled){background:var(--ui-accent);color:#fff;border-color:var(--ui-accent);}
+.arr-btn:disabled{opacity:.28;cursor:default;}
+.merge-empty{text-align:center;padding:48px 20px;color:var(--ui-ph);width:100%;}
+.merge-empty-icon{font-size:50px;margin-bottom:12px;opacity:.35;}
+.merge-empty-text{font-size:13px;font-weight:600;}
+.merge-empty-sub{font-size:11px;margin-top:5px;}
+.cover-note{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1px solid #86efac;border-radius:8px;padding:10px 14px;font-size:11px;color:#166534;margin-bottom:14px;display:flex;align-items:flex-start;gap:8px;}
+.merge-bottombar{background:var(--ui-surface);border-top:1.5px solid var(--ui-border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;flex-shrink:0;}
+.merge-info{font-size:12px;color:var(--ui-muted);}
+.merge-info strong{color:var(--ui-accent);}
+.merge-dl-btn{padding:12px 26px;background:linear-gradient(130deg,#7c3aed,#4f46e5);border:none;border-radius:8px;color:#fff;font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:2px;font-weight:700;cursor:pointer;transition:all .25s;box-shadow:0 4px 18px rgba(124,58,237,.35);position:relative;overflow:hidden;white-space:nowrap;}
+.merge-dl-btn::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);transition:left .4s;}
+.merge-dl-btn:hover::after{left:100%;}
+.merge-dl-btn:hover:not(:disabled){box-shadow:0 6px 26px rgba(124,58,237,.5);transform:translateY(-1px);}
+.merge-dl-btn:disabled{opacity:.38;cursor:not-allowed;transform:none;}
+.merge-dl-btn.generating{animation:dlPulse 1.2s infinite;}
+.merge-dl-btn.success{background:linear-gradient(130deg,#16a34a,#0e7230);}
+.merge-progress-wrap{padding:0 28px 10px;flex-shrink:0;}
+.merge-progress{height:4px;background:rgba(124,58,237,.12);border-radius:4px;overflow:hidden;display:none;}
+.merge-progress.show{display:block;}
+.merge-progress-bar{height:100%;background:linear-gradient(90deg,#7c3aed,#4ade80);border-radius:4px;width:0%;transition:width .3s;}
+.add-cover-btn{padding:10px 18px;background:linear-gradient(130deg,#7c3aed,#4f46e5);border:none;border-radius:7px;color:#fff;font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:1.5px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 3px 12px rgba(124,58,237,.3);white-space:nowrap;}
+.add-cover-btn:hover:not(:disabled){transform:translateY(-1px);}
+.add-cover-btn:disabled{opacity:.5;cursor:not-allowed;}
+
+@media(max-width:940px){
+  .app-layout{grid-template-columns:1fr;}
+  .inp-panel{max-height:none;border-right:none;}
+  .prev-panel{max-height:none;padding:20px 10px 40px;}
+  #cover-page{width:100%;max-width:720px;min-height:0;}
+  #cover-page .cv-body{min-height:0;}
+}
+@media(max-width:700px){
+  header{padding:0 12px;gap:6px;}
+  .app-title{font-size:11px;letter-spacing:2px;}
+  .template-badge{display:none;}
+  .inp-panel{padding:14px 12px 30px;}
+  #cover-page .cv-body{padding:22px 22px;}
+  #cover-page .cv-page-title{font-size:20px;}
+  #cover-page .cv-logo-row img{height:70px;}
+  #cover-page .cv-lbl,#cover-page .cv-val{font-size:14px!important;}
+  #cover-page .cv-rubric-table{font-size:10px;}
+  .merge-topbar{flex-direction:column;align-items:flex-start;gap:10px;}
+  .merge-topbar-right{width:100%;}
+  .add-cover-btn{width:100%;text-align:center;}
+  .merge-bottombar{flex-direction:column;align-items:stretch;}
+  .merge-dl-btn{width:100%;text-align:center;}
+  .merge-steps{display:none;}
+  .merge-dropzone-wrap,.merge-cards-wrap,.merge-bottombar,.merge-progress-wrap{padding-left:14px;padding-right:14px;}
+}
+</style>
+</head>
+<body>
+
+<div id="toast-container"></div>
+
+<header>
+  <div class="header-left">
+    <div>
+      <a class="app-title" href="index.html">DIU <span>COVER</span> POINT</a>
+      <div class="app-subtitle">LAB ASSIGNMENT REPORT</div>
+    </div>
+    <span class="template-badge">✦ NEW TEMPLATE</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+    <div class="dl-count-badge">
+      <span style="font-size:12px;">⬇</span>
+      <span class="dl-count-val" id="dlCount">0</span>
+    </div>
+    <button class="merge-nav-btn" onclick="openMergeView()">⊕ MERGE PDF</button>
+    <a class="back-btn" href="index.html">← Back</a>
+  </div>
+</header>
+
+<!-- MAIN LAYOUT -->
+<div class="app-layout" id="mainLayout">
+  <div class="inp-panel">
+
+    <!-- Page Title Dropdown -->
+    <div class="sec-head">📋 Page Title</div>
+    <div class="fg">
+      <label>Page Title</label>
+      <div class="custom-dropdown-wrap">
+        <select id="f_pageTitle" onchange="render()">
+          <option value="Theory Assignment">Theory Assignment</option>
+          <option value="Lab Assignment Report" selected>Lab Assignment Report</option>
+          <option value="Lab Report">Lab Report</option>
+          <option value="Lab Final Report">Lab Final Report</option>
+        </select>
+        <span class="custom-dropdown-arrow">▾</span>
+      </div>
+    </div>
+    <div class="sgap"></div>
+
+    <!-- FIX #3: Rubric as dropdown -->
+    <div class="sec-head">📊 Rubric Table Rows</div>
+    <div class="fg">
+      <label>Toggle Rubric Row</label>
+      <div class="custom-dropdown-wrap">
+        <select id="rubricPicker" onchange="toggleRubricFromDrop()">
+          <option value="" disabled selected>— Select a row to toggle on/off —</option>
+          <option value="clarity">Clarity (Mark: 1)</option>
+          <option value="content">Content Quality (Mark: 2)</option>
+          <option value="spelling">Spelling &amp; Grammar (Mark: 1)</option>
+          <option value="organization">Organization and Formatting (Mark: 1)</option>
+        </select>
+        <span class="custom-dropdown-arrow">▾</span>
+      </div>
+    </div>
+    <div id="rubricPillsWrap"></div>
+    <div style="font-size:9px;color:var(--ui-ph);margin-bottom:4px;padding-left:2px;">⚡ Click a pill below to toggle. Total mark updates automatically.</div>
+    <div class="sgap"></div>
+
+    <!-- Student Info (FIX #5: order matches reference image) -->
+    <div class="sec-head">🎓 Student Info</div>
+    <div class="fg"><label>Student Name</label><input type="text" id="f_studentName" placeholder="e.g. Halla Farrell" oninput="render()"></div>
+    <div class="fg"><label>Student ID</label><input type="text" id="f_studentId" placeholder="e.g. 241-15-001" oninput="render()"></div>
+    <div class="fg"><label>Batch</label><input type="text" id="f_batch" placeholder="e.g. 66" oninput="render()"></div>
+    <div class="fg"><label>Section</label><input type="text" id="f_section" placeholder="e.g. 66_I" oninput="render()"></div>
+    <div class="sgap"></div>
+
+    <!-- Course Info -->
+    <div class="sec-head">📚 Course Info</div>
+    <div class="fg"><label>Course Code</label><input type="text" id="f_courseCode" placeholder="e.g. CSE311" oninput="render()"></div>
+    <div class="fg"><label>Course Name</label><input type="text" id="f_courseName" placeholder="e.g. Database Management System" oninput="render()"></div>
+    <div class="sgap"></div>
+
+    <!-- Teacher Info -->
+    <div class="sec-head">👨‍🏫 Teacher Info</div>
+    <div class="fg"><label>Course Teacher Name</label><input type="text" id="f_teacherName" placeholder="e.g. Rina Ayers" oninput="render()"></div>
+    <div class="fg"><label>Designation</label><input type="text" id="f_designation" placeholder="e.g. Lecturer, Asst. Professor" oninput="render()"></div>
+    <div class="sgap"></div>
+
+    <!-- Date & Semester -->
+    <div class="sec-head">📅 Date &amp; Semester</div>
+    <div class="fg"><label>Semester</label><input type="text" id="f_semester" placeholder="e.g. Spring 2025" oninput="render()"></div>
+    <!-- FIX #6: text input, DD-MM-YYYY, numeric month in preview -->
+    <div class="fg">
+      <label>Submission Date <span style="font-size:9px;color:var(--ui-ph);font-weight:400;text-transform:none;">(DD-MM-YYYY)</span></label>
+      <input type="text" id="f_subDate" placeholder="27-02-2026" maxlength="10" oninput="onDateInput(this);render()">
+      <div class="date-hint" id="dateHint"></div>
+    </div>
+    <div class="sgap"></div>
+
+    <!-- FIX #8: Download disabled until required fields filled -->
+    <div class="dl-btn-wrap">
+      <div class="dl-btn-tooltip" id="dlTooltip">Fill required fields to enable download</div>
+      <button class="dl-btn" id="dlBtn" onclick="downloadPDF()" disabled>⬇ &nbsp; DOWNLOAD PDF</button>
+    </div>
+    <!-- FIX #10: Add to merge queue button -->
+    <button class="merge-queue-btn" id="mergeQueueBtn" onclick="addToMergeAndGo()" disabled>⊕ &nbsp; ADD TO MERGE &amp; OPEN MERGE VIEW</button>
+    <div class="action-bar">
+      <button class="reset-btn" onclick="resetAll()">🗑 Reset</button>
+      <!-- FIX #8: Undo -->
+      <button class="undo-btn" id="undoBtn" onclick="doUndo()" disabled>
+        ↩ Undo <span id="undoTxt"></span>
+        <div class="undo-bar-progress" id="undoBar" style="width:0%"></div>
+      </button>
+    </div>
+  </div>
+
+  <!-- PREVIEW -->
+  <div class="prev-panel">
+    <div class="prev-label">LIVE PREVIEW</div>
+    <div id="cover-page" class="cv-page">
+      <!-- FIX #9: watermark CSS only, logo image, low opacity -->
+      <div class="cv-wm"></div>
+      <div class="cv-body" id="cv-body"></div>
+    </div>
+    <div class="prev-label bottom-label">Developed by <strong>Sifatur Rahman Imran</strong></div>
+  </div>
+</div>
+
+<!-- FIX #10: MERGE VIEW embedded in same page -->
+<div class="merge-view" id="mergeView">
+  <div class="merge-topbar">
+    <div class="merge-topbar-left">
+      <div class="merge-topbar-title">⊕ MERGE <span>PDF</span></div>
+      <div class="merge-topbar-desc">Combine cover with PDFs · Drag to reorder · One-click download</div>
+    </div>
+    <div class="merge-steps">
+      <div class="merge-step active-step" id="mstep1"><div class="ms-num">1</div><span>ADD FILES</span></div>
+      <div class="merge-step" id="mstep2"><div class="ms-num">2</div><span>REORDER</span></div>
+      <div class="merge-step" id="mstep3"><div class="ms-num">3</div><span>DOWNLOAD</span></div>
+    </div>
+    <div class="merge-topbar-right">
+      <button class="add-cover-btn" id="addCoverBtn" onclick="addCoverToPile()">＋ ADD MY COVER</button>
+      <button class="back-btn" onclick="closeMergeView()">← Back to Form</button>
+    </div>
+  </div>
+
+  <div class="merge-dropzone-wrap">
+    <div class="merge-dropzone" id="mergeDropzone">
+      <input type="file" id="mergeFileInput" accept="application/pdf" multiple onchange="handleMergeFiles(this.files)">
+      <div class="dz-icon">📂</div>
+      <div class="dz-text">Drop PDF files here, or click to browse</div>
+      <div class="dz-sub">Multiple files · Any PDF</div>
+    </div>
+  </div>
+
+  <div class="merge-cards-wrap">
+    <div id="coverNoteWrap" style="display:none">
+      <div class="cover-note">
+        <span style="font-size:15px;flex-shrink:0">🟢</span>
+        <span>Cover page added to queue. Drag to reorder, then download.</span>
+      </div>
+    </div>
+    <div class="merge-cards-header">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <span class="merge-cards-title">📑 PDF Queue</span>
+        <span class="merge-cards-count" id="cardCount">0 files</span>
+        <span class="drag-hint" id="dragHint" style="display:none">☰ Drag to reorder</span>
+      </div>
+      <button class="clear-btn" id="clearBtn" onclick="clearAll()" style="display:none">✕ Clear All</button>
+    </div>
+    <div class="merge-cards" id="mergeCards">
+      <div class="merge-empty" id="mergeEmpty">
+        <div class="merge-empty-icon">🗂️</div>
+        <div class="merge-empty-text">No PDFs yet</div>
+        <div class="merge-empty-sub">Drop files above or click "Add My Cover"</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="merge-progress-wrap">
+    <div class="merge-progress" id="mergeProgress"><div class="merge-progress-bar" id="mergeProgressBar"></div></div>
+  </div>
+  <div class="merge-bottombar">
+    <div class="merge-info" id="mergeInfo">Add at least 2 PDFs to merge</div>
+    <button class="merge-dl-btn" id="mergeDlBtn" onclick="doMerge()" disabled>⬇ &nbsp; DOWNLOAD MERGED PDF</button>
+  </div>
+</div>
+
+<script>
+if(window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+/* ── TOAST ── */
+function showToast(type,title,msg,dur=4000){
+  const icons={success:'✅',error:'❌',info:'ℹ️',warning:'⚠️'};
+  const c=document.getElementById('toast-container');
+  const t=document.createElement('div');t.className='toast '+type;
+  t.innerHTML=`<span class="toast-icon">${icons[type]}</span><div class="toast-body"><div class="toast-title">${title}</div>${msg?`<div class="toast-msg">${msg}</div>`:''}</div><button class="toast-close" onclick="dismissToast(this.parentElement)">×</button>`;
+  c.appendChild(t);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('show')));
+  t._p=setTimeout(()=>dismissToast(t),dur);
+}
+function dismissToast(t){if(!t||!t.parentElement)return;clearTimeout(t._p);t.classList.remove('show');t.classList.add('hide');setTimeout(()=>{if(t.parentElement)t.parentElement.removeChild(t);},400);}
+
+/* ── DL COUNTER ── */
+(function(){
+  try{const K='diu_cover_craft_downloads';let c=parseInt(localStorage.getItem(K)||'0',10);
+  const el=document.getElementById('dlCount');if(el){let s=Math.max(0,c-5);const f=()=>{if(s<=c){el.textContent=s++;setTimeout(f,70);}};f();}}catch(e){}
+})();
+function incDl(){try{const K='diu_cover_craft_downloads';let c=parseInt(localStorage.getItem(K)||'0',10);c++;localStorage.setItem(K,c);const el=document.getElementById('dlCount');if(el)el.textContent=c;}catch(e){}}
+
+/* ── FIX #3: Rubric dropdown + pills ── */
+const rubricState={clarity:true,content:true,spelling:true,organization:true};
+const rubricMarks={clarity:1,content:2,spelling:1,organization:1};
+const rubricLabels={clarity:'Clarity',content:'Content Quality',spelling:'Spelling & Grammar',organization:'Organization and Formatting'};
+
+function toggleRubricFromDrop(){
+  const sel=document.getElementById('rubricPicker');
+  const k=sel.value;if(!k)return;
+  rubricState[k]=!rubricState[k];
+  sel.value='';
+  renderPills();render();
+}
+function renderPills(){
+  const w=document.getElementById('rubricPillsWrap');w.innerHTML='';
+  Object.keys(rubricState).forEach(k=>{
+    const on=rubricState[k];
+    const p=document.createElement('div');
+    p.className='rubric-pill '+(on?'on':'off');
+    p.innerHTML=`<span>${on?'●':'○'}</span>${rubricLabels[k]}<span style="font-size:9px;opacity:.7;">(${rubricMarks[k]})</span>`;
+    p.onclick=()=>{rubricState[k]=!rubricState[k];renderPills();render();};
+    w.appendChild(p);
+  });
+}
+function rubricTotal(){return Object.keys(rubricState).filter(k=>rubricState[k]).reduce((s,k)=>s+rubricMarks[k],0);}
+
+/* ── FIX #6: Date input – DD-MM-YYYY text field, numeric month in preview ── */
+function onDateInput(inp){
+  let v=inp.value.replace(/\D/g,'');
+  if(v.length>2) v=v.slice(0,2)+'-'+v.slice(2);
+  if(v.length>5) v=v.slice(0,5)+'-'+v.slice(5);
+  if(v.length>10) v=v.slice(0,10);
+  inp.value=v;
+  const h=document.getElementById('dateHint');
+  const parsed=parseDate(v);
+  h.textContent=parsed?'✓ Preview: '+parsed:'';
+  h.style.color=parsed?'#16a34a':'var(--ui-ph)';
+}
+// Returns DD/MM/YYYY (numeric month) or ''
+function parseDate(s){
+  if(!s||s.length<10)return'';
+  const p=s.split('-');
+  if(p.length!==3||p[0].length!==2||p[1].length!==2||p[2].length!==4)return'';
+  const d=+p[0],m=+p[1],y=+p[2];
+  if(d<1||d>31||m<1||m>12||y<1900)return'';
+  return p[0]+'/'+p[1]+'/'+p[2]; // numeric month, not name
+}
+
+/* ── FIX #8: required field check → enable/disable download ── */
+const REQ=['f_studentName','f_studentId','f_courseCode','f_courseName','f_teacherName'];
+function checkFields(){
+  const empty=REQ.filter(id=>{const e=document.getElementById(id);return!e||!e.value.trim();}).length;
+  const ok=empty===0;
+  document.getElementById('dlBtn').disabled=!ok;
+  document.getElementById('mergeQueueBtn').disabled=!ok;
+  const tip=document.getElementById('dlTooltip');
+  tip.textContent=ok?'':('Fill '+empty+' more required field'+(empty>1?'s':'')+' to download');
+}
+
+/* ── FIX #8: Undo ── */
+const ALL_F=['f_studentName','f_studentId','f_batch','f_section','f_courseCode','f_courseName','f_teacherName','f_designation','f_semester','f_subDate'];
+let snap=null,undoT=null,undoI=null;
+const UNDO_S=15;
+
+function capSnap(){
+  const s={};ALL_F.forEach(id=>{const e=document.getElementById(id);if(e)s[id]=e.value;});
+  s._pt=document.getElementById('f_pageTitle').value;
+  s._rb={...rubricState};return s;
+}
+function resetAll(){
+  const hasData=ALL_F.some(id=>{const e=document.getElementById(id);return e&&e.value.trim();});
+  if(!hasData){showToast('warning','Nothing to reset','All fields already empty.');return;}
+  snap=capSnap();
+  ALL_F.forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  document.getElementById('f_pageTitle').value='Lab Assignment Report';
+  Object.keys(rubricState).forEach(k=>rubricState[k]=true);
+  document.getElementById('dateHint').textContent='';
+  renderPills();render();startUndo();
+  showToast('warning','Fields cleared','Press Undo within 15s to restore.');
+}
+function startUndo(){
+  const btn=document.getElementById('undoBtn'),txt=document.getElementById('undoTxt'),bar=document.getElementById('undoBar');
+  if(undoT)clearTimeout(undoT);if(undoI)clearInterval(undoI);
+  btn.disabled=false;let rem=UNDO_S;txt.textContent='('+rem+'s)';
+  bar.style.transition='none';bar.style.width='100%';bar.getBoundingClientRect();
+  bar.style.transition='width '+UNDO_S+'s linear';bar.style.width='0%';
+  undoI=setInterval(()=>{rem--;txt.textContent='('+rem+'s)';if(rem<=0){clearInterval(undoI);undoI=null;}},1000);
+  undoT=setTimeout(killUndo,UNDO_S*1000);
+}
+function killUndo(){
+  snap=null;if(undoI){clearInterval(undoI);undoI=null;}
+  const btn=document.getElementById('undoBtn'),txt=document.getElementById('undoTxt'),bar=document.getElementById('undoBar');
+  btn.disabled=true;txt.textContent='';bar.style.transition='none';bar.style.width='0%';
+}
+function doUndo(){
+  if(!snap)return;
+  const s=snap;
+  ALL_F.forEach(id=>{const e=document.getElementById(id);if(e)e.value=s[id]||'';});
+  document.getElementById('f_pageTitle').value=s._pt||'Lab Assignment Report';
+  Object.assign(rubricState,s._rb||{});
+  onDateInput(document.getElementById('f_subDate'));
+  renderPills();render();
+  if(undoT){clearTimeout(undoT);undoT=null;}
+  killUndo();
+  showToast('success','Restored!','Fields have been recovered.');
+}
+
+/* ── BUILD RUBRIC TABLE ── */
+function buildTable(){
+  const rows=[
+    {key:'clarity',label:'Clarity',mark:1},
+    {key:'content',label:'Content Quality',mark:2},
+    {key:'spelling',label:'Spelling &amp; Grammar',mark:1},
+    {key:'organization',label:'Organization and<br>Formatting',mark:1},
+  ];
+  const enabled=rows.filter(r=>rubricState[r.key]);
+  const tot=rubricTotal();
+  let trs='';
+  enabled.forEach(r=>{
+    trs+=`<tr><td class="lbl-cell">${r.label}</td><td class="mark-cell">${r.mark}</td><td></td><td></td><td></td><td></td><td></td></tr>`;
+  });
+  return `<table class="cv-rubric-table">
+    <colgroup><col class="c-name"><col class="c-mark"><col class="c-ni"><col class="c-dev"><col class="c-suf"><col class="c-aa"><col class="c-total"></colgroup>
+    <thead>
+      <tr><th colspan="7" class="only-teacher">Only for course Teacher</th></tr>
+      <tr>
+        <th colspan="2" style="text-align:left;padding-left:10px;"></th>
+        <th>Needs<br>Improvement</th><th>Developing</th><th>Sufficient</th>
+        <th>Above<br>Average</th><th>Total<br>Mark</th>
+      </tr>
+      <tr>
+        <td colspan="2" style="font-weight:700;text-align:left;padding-left:10px;">Allocate mark &amp; Percentage</td>
+        <td>25%</td><td>50%</td><td>75%</td><td>100%</td><td>${tot}</td>
+      </tr>
+    </thead>
+    <tbody>
+      ${trs}
+      <tr><td colspan="6" style="text-align:right;font-weight:700;padding-right:10px;">Total obtained mark</td><td></td></tr>
+      <tr class="comments-row"><td class="comments-lbl">Comments</td><td colspan="6"></td></tr>
+    </tbody>
+  </table>`;
+}
+
+/* ── FIX #4 #5: BUILD HTML – always show labels, OG order/style ── */
+function gv(id){const e=document.getElementById(id);return e?e.value.trim():'';}
+function buildHTML(){
+  const pt=gv('f_pageTitle')||'Lab Assignment Report';
+  const name=gv('f_studentName'),sid=gv('f_studentId'),batch=gv('f_batch'),sec=gv('f_section');
+  const cc=gv('f_courseCode'),cn=gv('f_courseName');
+  const teacher=gv('f_teacherName'),desig=gv('f_designation');
+  const sem=gv('f_semester'),rawDate=gv('f_subDate');
+  const subDate=parseDate(rawDate)||'';
+
+  // FIX #4: always show labels even when value empty
+  let h='';
+  // Logo only (fix #9: no university name text)
+  h+=`<div class="cv-logo-row"><img src="img/DIU-Logo.png" alt="DIU" onerror="this.style.display='none'"></div>`;
+  // Title
+  h+=`<div class="cv-page-title">${pt}</div>`;
+  // Rubric table
+  h+=`<div class="cv-rubric-wrap">${buildTable()}</div>`;
+
+  // FIX #5: same order as reference images
+  // Semester outside any box
+  h+=`<div class="cv-row"><span class="cv-lbl">Semester:</span><span class="cv-val">&nbsp;${sem}</span></div>`;
+  // Student Name
+  h+=`<div class="cv-row"><span class="cv-lbl">Student Name:</span><span class="cv-val">&nbsp;${name}</span></div>`;
+  // Student ID
+  h+=`<div class="cv-row"><span class="cv-lbl">Student ID:</span><span class="cv-val">&nbsp;${sid}</span></div>`;
+  // Batch + Section same line
+  h+=`<div class="cv-row"><span class="cv-lbl">Batch:</span><span class="cv-val">&nbsp;${batch}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cv-lbl">Section:</span><span class="cv-val">&nbsp;${sec}</span></div>`;
+  // Course Code + Course Name same line
+  h+=`<div class="cv-row"><span class="cv-lbl">Course Code:</span><span class="cv-val">&nbsp;${cc}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cv-lbl">Course Name:</span><span class="cv-val">&nbsp;${cn}</span></div>`;
+  // Teacher
+  h+=`<div class="cv-row" style="margin-top:6px;"><span class="cv-lbl">Course Teacher Name:</span><span class="cv-val">&nbsp;${teacher}</span></div>`;
+  // Designation
+  h+=`<div class="cv-row"><span class="cv-lbl">Designation:</span><span class="cv-val">&nbsp;${desig}</span></div>`;
+  // Date
+  h+=`<div class="cv-date-row"><span class="cv-lbl">Submission Date:</span><span class="cv-val">&nbsp;${subDate}</span></div>`;
+  return h;
+}
+
+function render(){
+  document.getElementById('cv-body').innerHTML=buildHTML();
+  checkFields();
+}
+
+/* ── DOWNLOAD ── */
+async function toDataURL(url){
+  try{const r=await fetch(url,{mode:'cors'});const b=await r.blob();return await new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>res(fr.result);fr.onerror=rej;fr.readAsDataURL(b);});}catch(e){return null;}
+}
+function uDl(blob,name){
+  try{
+    const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;a.style.display='none';
+    document.body.appendChild(a);a.click();setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},500);
+    setTimeout(()=>showToast('success','PDF Downloaded!','Check your downloads folder.',5000),800);
+  }catch(e){showToast('error','Download Failed','Try Chrome or Firefox.',5000);}
+}
+function burst(btn){
+  const rect=btn.getBoundingClientRect(),cx=rect.left+rect.width/2,cy=rect.top+rect.height/2;
+  const ov=document.createElement('div');ov.className='dl-particles';document.body.appendChild(ov);
+  const cols=['#4ade80','#2d54b8','#a8c0ff','#7c3aed','#fbbf24','#f472b6'];
+  for(let i=0;i<22;i++){
+    const p=document.createElement('div');p.className='dl-particle';
+    const angle=(Math.PI*2/22)*i,dist=50+Math.random()*100,size=6+Math.random()*8;
+    p.style.cssText=`left:${cx}px;top:${cy}px;width:${size}px;height:${size}px;background:${cols[i%cols.length]};--tx:${Math.cos(angle)*dist}px;--ty:${Math.sin(angle)*dist}px;animation-duration:${.5+Math.random()*.5}s;`;
+    ov.appendChild(p);
+  }
+  setTimeout(()=>{if(ov.parentNode)ov.parentNode.removeChild(ov);},1400);
+}
+
+async function buildBlob(){
+  const w=document.createElement('div');
+  w.style.cssText='position:absolute;top:0;left:0;width:794px;visibility:hidden;pointer-events:none;z-index:-9999;';
+  const clone=document.createElement('div');
+  clone.style.cssText='width:794px;min-height:1122px;background:#fff;position:relative;font-family:"Calibri","Carlito",Arial,sans-serif;color:#000;';
+  // Watermark (fix #9: use logo image at low opacity)
+  const wm=document.createElement('div');
+  wm.style.cssText='position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:360px;height:360px;background-size:contain;background-repeat:no-repeat;background-position:center;opacity:0.04;z-index:1;pointer-events:none;';
+  clone.appendChild(wm);
+  const inner=document.createElement('div');
+  inner.style.cssText='position:relative;z-index:5;padding:36px 55px 40px 55px;min-height:1050px;display:flex;flex-direction:column;font-family:"Calibri","Carlito",Arial,sans-serif;color:#000;';
+  inner.innerHTML=buildHTML();
+  clone.appendChild(inner);
+  w.appendChild(clone);document.body.appendChild(w);
+  try{
+    const lg=clone.querySelector('.cv-logo-row img');
+    if(lg&&lg.src&&!lg.src.startsWith('data:')){const d=await toDataURL(lg.src);if(d){lg.src=d;wm.style.backgroundImage=`url(${d})`;}}
+  }catch(e){}
+  await new Promise(r=>setTimeout(r,100));
+  const opt={margin:0,image:{type:'jpeg',quality:1},html2canvas:{scale:2.8,useCORS:true,allowTaint:true,logging:false,width:794,scrollX:0,scrollY:0},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}};
+  const blob=await html2pdf().set(opt).from(clone).outputPdf('blob');
+  document.body.removeChild(w);
+  return blob;
+}
+
+async function downloadPDF(){
+  const btn=document.getElementById('dlBtn');if(btn.disabled)return;
+  btn.classList.add('generating');
+  btn.innerHTML='<span style="display:inline-block;animation:spin 1s linear infinite;margin-right:8px">⏳</span> GENERATING...';
+  btn.disabled=true;
+  try{
+    const blob=await buildBlob();
+    btn.classList.remove('generating');btn.classList.add('success');
+    burst(btn);uDl(blob,'Lab_Assignment_Report_Cover-diucoverpoint.pdf');incDl();
+    btn.innerHTML='✅ DOWNLOADED!';
+    setTimeout(()=>{btn.classList.remove('success');btn.innerHTML='⬇ &nbsp; DOWNLOAD PDF';checkFields();},2500);
+  }catch(e){
+    btn.classList.remove('generating');btn.innerHTML='⬇ &nbsp; DOWNLOAD PDF';checkFields();
+    showToast('error','Generation Failed','Could not create PDF. Try again.',5000);
+  }
+}
+
+/* ══ FIX #10: MERGE VIEW (embedded, no conditions, auto-add) ══ */
+let mergeItems=[],dragSrcIdx=null;
+const mCardsEl=document.getElementById('mergeCards');
+const mEmptyEl=document.getElementById('mergeEmpty');
+
+function openMergeView(){
+  document.getElementById('mainLayout').classList.add('hidden');
+  document.getElementById('mergeView').classList.add('active');
+  updateMSteps();
+}
+function closeMergeView(){
+  document.getElementById('mergeView').classList.remove('active');
+  document.getElementById('mainLayout').classList.remove('hidden');
+}
+// FIX #10: auto-adds cover without any dialog then opens merge
+async function addToMergeAndGo(){
+  await addCoverToPile();
+  openMergeView();
+}
+
+const dz=document.getElementById('mergeDropzone');
+['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.add('over');}));
+dz.addEventListener('dragleave',()=>dz.classList.remove('over'));
+dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('over');const files=[...e.dataTransfer.files].filter(f=>f.type==='application/pdf');if(files.length)handleMergeFiles(files);});
+
+function fmtSz(b){if(b<1024)return b+'B';if(b<1048576)return(b/1024).toFixed(1)+'KB';return(b/1048576).toFixed(1)+'MB';}
+
+async function handleMergeFiles(files){
+  for(const f of files){
+    const bytes=new Uint8Array(await f.arrayBuffer());
+    const id='f'+Date.now()+Math.random();let pg=1,thumb=null;
+    try{const pdf=await pdfjsLib.getDocument({data:bytes.slice()}).promise;pg=pdf.numPages;const page=await pdf.getPage(1);const vp=page.getViewport({scale:.42});const canvas=document.createElement('canvas');canvas.width=vp.width;canvas.height=vp.height;await page.render({canvasContext:canvas.getContext('2d'),viewport:vp}).promise;thumb=canvas;}catch(e){}
+    mergeItems.push({id,name:f.name,bytes,pageCount:pg,isCover:false,thumb,size:f.size});
+  }
+  document.getElementById('mergeFileInput').value='';
+  renderCards();updateMSteps();
+  showToast('info','Files Added',`${files.length} PDF${files.length>1?'s':''} added.`,3000);
+}
+
+async function addCoverToPile(){
+  mergeItems=mergeItems.filter(x=>!x.isCover);
+  const btn=document.getElementById('addCoverBtn');const prev=btn.textContent;
+  btn.textContent='⏳ Generating...';btn.disabled=true;
+  try{
+    const blob=await buildBlob();
+    const bytes=new Uint8Array(await blob.arrayBuffer());let thumb=null;
+    try{const pdf=await pdfjsLib.getDocument({data:bytes.slice()}).promise;const page=await pdf.getPage(1);const vp=page.getViewport({scale:.42});const canvas=document.createElement('canvas');canvas.width=vp.width;canvas.height=vp.height;await page.render({canvasContext:canvas.getContext('2d'),viewport:vp}).promise;thumb=canvas;}catch(e){}
+    mergeItems.unshift({id:'cover',name:'Lab Assignment Cover (Generated)',bytes,pageCount:1,isCover:true,thumb,size:blob.size});
+    document.getElementById('coverNoteWrap').style.display='block';
+    renderCards();updateMSteps();
+    showToast('success','Cover Added','Cover page added to queue.',3000);
+  }catch(e){showToast('error','Failed','Fill required fields first.',5000);}
+  btn.textContent=prev;btn.disabled=false;
+}
+
+function renderCards(){
+  mCardsEl.innerHTML='';
+  const tot=mergeItems.reduce((a,x)=>a+x.pageCount,0);
+  const totSz=mergeItems.reduce((a,x)=>a+(x.size||0),0);
+  const has=mergeItems.length>0;
+  document.getElementById('cardCount').textContent=mergeItems.length+' file'+(mergeItems.length!==1?'s':'');
+  document.getElementById('mergeDlBtn').disabled=mergeItems.length<2;
+  document.getElementById('clearBtn').style.display=has?'':'none';
+  document.getElementById('dragHint').style.display=mergeItems.length>1?'flex':'none';
+  if(!has){mCardsEl.appendChild(mEmptyEl);document.getElementById('coverNoteWrap').style.display='none';document.getElementById('mergeInfo').textContent='Add at least 2 PDFs to merge';return;}
+  document.getElementById('mergeInfo').innerHTML=`<strong>${mergeItems.length} PDF${mergeItems.length!==1?'s':''}</strong> · ${tot} pg · ${fmtSz(totSz)}`;
+  mergeItems.forEach((item,idx)=>{
+    const card=document.createElement('div');card.className='pdf-card'+(item.isCover?' is-cover':'');card.draggable=true;
+    const badge=document.createElement('div');badge.className='card-badge';badge.textContent=item.isCover?'COVER':'#'+(idx+1);card.appendChild(badge);
+    const rm=document.createElement('button');rm.className='card-remove';rm.innerHTML='&times;';
+    rm.onclick=e=>{e.stopPropagation();mergeItems.splice(idx,1);if(item.isCover)document.getElementById('coverNoteWrap').style.display='none';renderCards();updateMSteps();};card.appendChild(rm);
+    const th=document.createElement('div');th.className='card-thumb';
+    if(item.thumb){const c=item.thumb.cloneNode(true);c.style.cssText='width:100%;height:100%;object-fit:contain;display:block;';th.appendChild(c);}else th.innerHTML='<div class="card-thumb-placeholder">📄</div>';
+    card.appendChild(th);
+    const info=document.createElement('div');info.className='card-info';
+    info.innerHTML=`<div class="card-name" title="${item.name}">${item.name}</div><div class="card-meta"><span class="card-pages">${item.pageCount}pg</span><span class="card-size">${fmtSz(item.size||0)}</span></div>`;
+    card.appendChild(info);
+    const ar=document.createElement('div');ar.className='card-arrows';
+    const lb=document.createElement('button');lb.className='arr-btn';lb.textContent='◀';lb.disabled=idx===0;lb.onclick=e=>{e.stopPropagation();[mergeItems[idx-1],mergeItems[idx]]=[mergeItems[idx],mergeItems[idx-1]];renderCards();updateMSteps();};
+    const rb=document.createElement('button');rb.className='arr-btn';rb.textContent='▶';rb.disabled=idx===mergeItems.length-1;rb.onclick=e=>{e.stopPropagation();[mergeItems[idx],mergeItems[idx+1]]=[mergeItems[idx+1],mergeItems[idx]];renderCards();updateMSteps();};
+    ar.appendChild(lb);ar.appendChild(rb);card.appendChild(ar);
+    card.addEventListener('dragstart',e=>{dragSrcIdx=idx;card.classList.add('dragging');e.dataTransfer.effectAllowed='move';});
+    card.addEventListener('dragend',()=>card.classList.remove('dragging'));
+    card.addEventListener('dragover',e=>{e.preventDefault();card.classList.add('drag-over');});
+    card.addEventListener('dragleave',()=>card.classList.remove('drag-over'));
+    card.addEventListener('drop',e=>{e.preventDefault();card.classList.remove('drag-over');if(dragSrcIdx===null||dragSrcIdx===idx)return;const m=mergeItems.splice(dragSrcIdx,1)[0];mergeItems.splice(idx,0,m);dragSrcIdx=null;renderCards();updateMSteps();});
+    mCardsEl.appendChild(card);
+  });
+}
+
+function clearAll(){mergeItems=[];renderCards();updateMSteps();showToast('info','Queue Cleared','',2000);}
+
+function updateMSteps(){
+  const has=mergeItems.length>0,can=mergeItems.length>=2;
+  document.getElementById('mstep1').className='merge-step'+(has?' done':' active-step');
+  document.getElementById('mstep2').className='merge-step'+(can?' done':has?' active-step':'');
+  document.getElementById('mstep3').className='merge-step'+(can?' active-step':'');
+}
+
+async function doMerge(){
+  if(mergeItems.length<2)return;
+  const btn=document.getElementById('mergeDlBtn');
+  btn.classList.add('generating');btn.innerHTML='<span style="display:inline-block;animation:spin 1s linear infinite;margin-right:6px">⏳</span> MERGING...';btn.disabled=true;
+  const prog=document.getElementById('mergeProgress'),bar=document.getElementById('mergeProgressBar');
+  prog.classList.add('show');bar.style.width='0%';
+  try{
+    const{PDFDocument}=PDFLib;const merged=await PDFDocument.create();
+    for(let i=0;i<mergeItems.length;i++){
+      bar.style.width=Math.round((i/mergeItems.length)*88)+'%';
+      const src=await PDFDocument.load(mergeItems[i].bytes);
+      const pages=await merged.copyPages(src,src.getPageIndices());
+      pages.forEach(p=>merged.addPage(p));
+    }
+    bar.style.width='96%';const out=await merged.save();bar.style.width='100%';
+    const blob=new Blob([out],{type:'application/pdf'});
+    btn.classList.remove('generating');btn.classList.add('success');
+    burst(btn);uDl(blob,'DIU_Merged_Document-diucoverpoint.pdf');incDl();
+    btn.innerHTML='✅ DOWNLOADED!';
+    setTimeout(()=>{btn.classList.remove('success');btn.innerHTML='⬇ &nbsp; DOWNLOAD MERGED PDF';btn.disabled=mergeItems.length<2;prog.classList.remove('show');bar.style.width='0%';},2500);
+  }catch(err){
+    btn.classList.remove('generating');
+    showToast('error','Merge Failed','Ensure PDFs are valid and not password-protected.',6000);
+    btn.innerHTML='⬇ &nbsp; DOWNLOAD MERGED PDF';btn.disabled=false;prog.classList.remove('show');
+  }
+}
+
+// ── INIT ──
+renderPills();
+render();
+</script>
+</body>
+</html>
