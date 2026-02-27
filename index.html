@@ -13,12 +13,50 @@
   --ui-bg:#eef2fb;--ui-surface:#ffffff;--ui-border:#c8d5ee;--ui-accent:#2d54b8;
   --ui-text:#1a2540;--ui-muted:#4e5f80;--ui-ph:#9aabc8;--ui-input-b:#c0ceeb;
   --ui-header:#1a2d62;--ui-sec-bg:#edf1fb;
-  /* FIX 3: Distinct merge navbar color */
   --merge-header:#1a1a2e;--merge-header-accent:#7c3aed;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{height:100%;}
 body{background:var(--ui-bg);color:var(--ui-text);font-family:'Inter',sans-serif;min-height:100vh;}
+
+/* ── TOAST SYSTEM ── */
+#toast-container{position:fixed;top:62px;right:16px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;}
+.toast{pointer-events:all;display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:10px;font-size:13px;font-weight:500;color:#fff;box-shadow:0 6px 24px rgba(0,0,0,0.22);transform:translateX(120%);transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .35s;opacity:0;min-width:240px;max-width:340px;line-height:1.4;}
+.toast.show{transform:translateX(0);opacity:1;}
+.toast.hide{transform:translateX(120%);opacity:0;}
+.toast-icon{font-size:18px;flex-shrink:0;}
+.toast-body{flex:1;}
+.toast-title{font-weight:700;font-size:13px;}
+.toast-msg{font-size:11.5px;opacity:.85;margin-top:2px;}
+.toast.success{background:linear-gradient(135deg,#16a34a,#0e7230);}
+.toast.error{background:linear-gradient(135deg,#dc2626,#991b1b);}
+.toast.info{background:linear-gradient(135deg,#2d54b8,#1a3880);}
+.toast.warning{background:linear-gradient(135deg,#d97706,#92400e);}
+.toast-close{background:none;border:none;color:rgba(255,255,255,0.6);font-size:16px;cursor:pointer;line-height:1;padding:0 0 0 4px;flex-shrink:0;}
+.toast-close:hover{color:#fff;}
+.toast-progress{position:absolute;bottom:0;left:0;height:3px;background:rgba(255,255,255,0.4);border-radius:0 0 10px 10px;transition:width linear;}
+
+/* ── WELCOME BANNER ── */
+#welcomeBanner{position:fixed;top:0px;left:0;right:0;z-index:600;background:linear-gradient(135deg,#0f172a 0%,#1e293b 50%,#0f2044 100%);border-bottom:2px solid rgba(168,192,255,0.2);box-shadow:0 4px 32px rgba(0,0,0,0.5);transform:translateY(calc(-100% - 60px));transition:transform .5s cubic-bezier(.34,1.2,.64,1);overflow:hidden;}
+#welcomeBanner.open{transform:translateY(0);}
+.wb-inner{padding:14px 24px 16px;max-width:1200px;margin:0 auto;position:relative;}
+.wb-close{position:absolute;top:12px;right:16px;background:rgba(255,255,255,0.1);border:none;color:rgba(255,255,255,0.6);font-size:18px;cursor:pointer;border-radius:6px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.wb-close:hover{background:rgba(255,255,255,0.2);color:#fff;}
+.wb-title{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:900;letter-spacing:3px;color:#a8c0ff;margin-bottom:8px;}
+.wb-title span{color:#4ade80;}
+.wb-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px;}
+@media(max-width:700px){.wb-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:440px){.wb-grid{grid-template-columns:1fr;}}
+.wb-feat{background:rgba(255,255,255,0.06);border:1px solid rgba(168,192,255,0.15);border-radius:8px;padding:9px 12px;display:flex;align-items:flex-start;gap:8px;}
+.wb-feat-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+.wb-feat-text{font-size:11px;color:rgba(255,255,255,0.75);line-height:1.5;}
+.wb-feat-text strong{color:#a8c0ff;display:block;font-size:10.5px;letter-spacing:.3px;}
+.wb-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.wb-hint{font-size:10.5px;color:rgba(255,255,255,0.4);display:flex;align-items:center;gap:5px;}
+.wb-hint a{color:#a8c0ff;text-decoration:underline;cursor:pointer;}
+.wb-timer{font-family:'Orbitron',sans-serif;font-size:9px;color:rgba(255,255,255,0.3);letter-spacing:1px;}
+.wb-progress{height:2px;background:rgba(255,255,255,0.08);border-radius:2px;margin-top:10px;overflow:hidden;}
+.wb-progress-bar{height:100%;background:linear-gradient(90deg,#4ade80,#2d54b8);border-radius:2px;width:100%;transition:width linear;}
 
 header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:300;box-shadow:0 2px 14px rgba(26,45,98,0.22);gap:10px;}
 .header-left{display:flex;align-items:center;gap:12px;}
@@ -115,8 +153,28 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 .fg input{width:100%;background:#fff;border:1.5px solid var(--ui-input-b);border-radius:6px;color:var(--ui-text);font-family:'Inter',sans-serif;font-size:13.5px;font-weight:500;padding:8px 12px;outline:none;transition:border-color .15s,box-shadow .15s;}
 .fg input:focus{border-color:var(--ui-accent);box-shadow:0 0 0 3px rgba(45,84,184,0.1);}
 .fg input::placeholder{color:var(--ui-ph);}
-.fg input[type="date"]{color-scheme:light;}
+/* FIX 2: Date input display as DD-MM-YYYY via direction trick */
+.fg input[type="date"]{color-scheme:light;direction:ltr;}
 .fg .readonly-field{background:#f0f4fc;color:var(--ui-muted);border-color:#d8e2f4;cursor:default;font-style:italic;}
+
+/* Optional/collapsible field toggle */
+.optional-toggle{display:flex;align-items:center;gap:7px;margin-bottom:10px;cursor:pointer;padding:6px 10px;border-radius:6px;background:var(--ui-sec-bg);border:1.5px dashed var(--ui-border);transition:all .2s;user-select:none;}
+.optional-toggle:hover{border-color:var(--ui-accent);background:#e8eeff;}
+.optional-toggle-icon{font-size:11px;color:var(--ui-accent);transition:transform .2s;}
+.optional-toggle-icon.open{transform:rotate(90deg);}
+.optional-toggle-text{font-size:10.5px;font-weight:600;color:var(--ui-muted);letter-spacing:.5px;flex:1;}
+.optional-toggle-badge{font-size:9px;background:var(--ui-accent);color:#fff;border-radius:10px;padding:1px 7px;font-weight:700;letter-spacing:.5px;}
+.optional-fields{display:none;padding:2px 0 4px 0;}
+.optional-fields.open{display:block;}
+/* Per-field enable toggle */
+.field-enable-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.field-enable-row .fg{flex:1;margin-bottom:0;}
+.field-toggle-btn{width:34px;height:20px;border-radius:10px;border:none;cursor:pointer;position:relative;background:#d1d5db;transition:background .2s;flex-shrink:0;margin-top:18px;}
+.field-toggle-btn.on{background:var(--ui-accent);}
+.field-toggle-btn::after{content:'';position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform .2s;}
+.field-toggle-btn.on::after{transform:translateX(14px);}
+.fg-optional{opacity:.45;pointer-events:none;filter:grayscale(.5);}
+.fg-optional.enabled{opacity:1;pointer-events:all;filter:none;}
 
 /* Download button */
 .dl-btn{width:100%;padding:13px;background:linear-gradient(130deg,#2d54b8,#1a3880);border:none;border-radius:7px;color:#fff;font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2.5px;font-weight:700;cursor:pointer;transition:all .25s;box-shadow:0 4px 18px rgba(45,84,184,0.3);position:relative;overflow:hidden;}
@@ -138,13 +196,11 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
   100%{transform:scale(1);}
 }
 
-/* FIX 4: Reset + Undo bar — MOVED BELOW DOWNLOAD */
 .dl-btn-wrap{margin-bottom:10px;}
 .dl-btn-tooltip{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#1a2540;color:#fff;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;padding:7px 12px;border-radius:6px;white-space:nowrap;letter-spacing:0;pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,0.25);z-index:10;}
 .dl-btn-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#1a2540;}
 .dl-btn-wrap:hover .dl-btn-tooltip{display:block;}
 
-/* FIX 4: Reset + Undo bar — now below download */
 .reset-bar{display:flex;align-items:center;gap:8px;margin-top:10px;}
 .reset-btn{flex:1;padding:8px 12px;background:#fee2e2;border:1.5px solid #fca5a5;border-radius:6px;color:#dc2626;font-family:'Inter',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.5px;display:flex;align-items:center;justify-content:center;gap:5px;}
 .reset-btn:hover{background:#dc2626;color:#fff;border-color:#dc2626;}
@@ -165,7 +221,10 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 .mode-panel.active{display:block;}
 .prev-panel{background:#3a3a3a;display:flex;flex-direction:column;align-items:center;padding:28px 20px 40px;overflow-y:auto;max-height:calc(100vh - 51px);}
 .prev-label{color:rgba(255,255,255,0.38);font-size:9px;letter-spacing:2.5px;margin-bottom:14px;font-family:'Orbitron',sans-serif;}
-
+.bottom-label{
+  margin-top:20px;
+  opacity:0.35;
+}
 /* COVER PAGE STYLES */
 .cv-page{width:210mm;min-height:296mm;background:#ffffff;position:relative;}
 #cover-page{box-shadow:0 16px 60px rgba(0,0,0,0.55);margin:0 auto;}
@@ -189,21 +248,10 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 .cv-date-row .cv-lbl u{text-decoration:underline;}
 .cv-date-row .cv-val{font-size:22px;}
 
-/* ═══════════════════════════════
-   FIX 3: MERGE PDF — DISTINCT DARK PURPLE NAVBAR
-═══════════════════════════════ */
+/* MERGE */
 .merge-view{display:none;width:100%;min-height:calc(100vh - 51px);background:var(--ui-bg);flex-direction:column;overflow-y:auto;}
 .merge-view.active{display:flex;}
-
-.merge-topbar{
-   background: linear-gradient(135deg, #064e3b 0%, #073935 50%, #14b8a6 100%);
-  border-bottom: 2px solid rgba(20, 184, 166, 0.6);
-  padding:14px 28px;
-  display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
-  border-bottom:2px solid rgba(124,58,237,0.5);
-  flex-shrink:0;
-  box-shadow:0 2px 20px rgba(0,0,0,0.4),0 0 40px rgba(124,58,237,0.08);
-}
+.merge-topbar{background:linear-gradient(135deg,#064e3b 0%,#073935 50%,#14b8a6 100%);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;border-bottom:2px solid rgba(20,184,166,0.6);flex-shrink:0;box-shadow:0 2px 20px rgba(0,0,0,0.4);}
 .merge-topbar-left{display:flex;flex-direction:column;}
 .merge-topbar-title{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:900;letter-spacing:3px;color:#c4b5fd;}
 .merge-topbar-title span{color:#a78bfa;}
@@ -217,7 +265,6 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 .merge-step.active-step{color:#c4b5fd;}
 .merge-step.active-step .ms-num{background:linear-gradient(135deg,#7c3aed,#4f46e5);border-color:#7c3aed;color:#fff;}
 .merge-topbar-right{display:flex;align-items:center;gap:10px;}
-
 .merge-dropzone-wrap{padding:20px 28px 0;flex-shrink:0;}
 .merge-dropzone{border:2.5px dashed #b0c2e8;border-radius:14px;background:#f4f7fd;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 20px;cursor:pointer;transition:all .2s;text-align:center;position:relative;}
 .merge-dropzone.over{border-color:#7c3aed;background:#f3f0ff;box-shadow:0 0 0 4px rgba(124,58,237,0.12);}
@@ -225,14 +272,12 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 .dz-icon{font-size:34px;margin-bottom:8px;}
 .dz-text{font-size:13px;font-weight:600;color:var(--ui-muted);}
 .dz-sub{font-size:11px;color:var(--ui-ph);margin-top:3px;}
-
 .merge-cards-wrap{padding:20px 28px;flex:1;}
 .merge-cards-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:10px;flex-wrap:wrap;}
 .merge-cards-title{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--ui-accent);text-transform:uppercase;}
 .merge-cards-count{font-size:10px;color:var(--ui-muted);background:var(--ui-sec-bg);border:1px solid var(--ui-border);border-radius:20px;padding:2px 10px;}
 .clear-btn{padding:4px 10px;background:#fee2e2;border:1px solid #fca5a5;border-radius:5px;color:#dc2626;font-size:10px;font-weight:600;cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif;}
 .clear-btn:hover{background:#dc2626;color:#fff;}
-
 .merge-cards{display:flex;flex-wrap:wrap;gap:16px;min-height:60px;align-content:flex-start;}
 .pdf-card{width:145px;background:#fff;border:2px solid var(--ui-border);border-radius:12px;overflow:hidden;cursor:grab;transition:box-shadow .2s,transform .2s,border-color .2s;position:relative;user-select:none;flex-shrink:0;}
 .pdf-card:hover{box-shadow:0 8px 28px rgba(45,84,184,0.15);border-color:#93aee8;}
@@ -255,11 +300,9 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 .arr-btn{flex:1;padding:4px 0;background:var(--ui-sec-bg);border:1px solid var(--ui-border);border-radius:5px;font-size:10px;cursor:pointer;transition:background .15s;color:var(--ui-accent);font-weight:700;}
 .arr-btn:hover:not(:disabled){background:var(--ui-accent);color:#fff;border-color:var(--ui-accent);}
 .arr-btn:disabled{opacity:.28;cursor:default;}
-
 .merge-bottombar{background:var(--ui-surface);border-top:1.5px solid var(--ui-border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;flex-shrink:0;}
 .merge-info{font-size:12px;color:var(--ui-muted);}
 .merge-info strong{color:var(--ui-accent);}
-
 .merge-dl-btn{padding:12px 26px;background:linear-gradient(130deg,#7c3aed,#4f46e5);border:none;border-radius:8px;color:#fff;font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:2px;font-weight:700;cursor:pointer;transition:all .25s;box-shadow:0 4px 18px rgba(124,58,237,0.35);position:relative;overflow:hidden;white-space:nowrap;}
 .merge-dl-btn::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);transition:left .4s;}
 .merge-dl-btn:hover::after{left:100%;}
@@ -267,12 +310,10 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 .merge-dl-btn:disabled{opacity:.38;cursor:not-allowed;transform:none;}
 .merge-dl-btn.generating{animation:dlPulse 1.2s ease-in-out infinite;}
 .merge-dl-btn.success{background:linear-gradient(130deg,#16a34a,#0e7230);animation:dlSuccess .4s ease forwards;}
-
 .merge-progress-wrap{padding:0 28px 10px;flex-shrink:0;}
 .merge-progress{height:4px;background:rgba(124,58,237,0.12);border-radius:4px;overflow:hidden;display:none;}
 .merge-progress.show{display:block;}
 .merge-progress-bar{height:100%;background:linear-gradient(90deg,#7c3aed,#4ade80);border-radius:4px;width:0%;transition:width .3s;}
-
 .cover-note{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1px solid #86efac;border-radius:8px;padding:10px 14px;font-size:11px;color:#166534;margin-bottom:14px;display:flex;align-items:flex-start;gap:8px;}
 .merge-empty{text-align:center;padding:48px 20px;color:var(--ui-ph);width:100%;}
 .merge-empty-icon{font-size:50px;margin-bottom:12px;opacity:.35;}
@@ -283,19 +324,17 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 .add-cover-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 5px 18px rgba(124,58,237,0.4);}
 .add-cover-btn:disabled{opacity:.5;cursor:not-allowed;}
 
-/* FIX 1: Mobile bottom tab bar — MERGE NOW VISIBLE */
+/* MOBILE */
 .mobile-tab-bar{display:none;position:fixed;bottom:0;left:0;right:0;background:#1a2d62;border-top:1.5px solid rgba(255,255,255,0.12);z-index:200;padding:0;box-shadow:0 -4px 20px rgba(0,0,0,0.3);}
 .mob-tabs{display:flex;width:100%;}
 .mob-tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 6px 12px;background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.4);font-family:'Orbitron',sans-serif;font-size:7px;letter-spacing:1px;font-weight:700;transition:all .2s;gap:4px;position:relative;}
 .mob-tab .mt-icon{font-size:18px;line-height:1;}
 .mob-tab.active{color:#fff;}
 .mob-tab.active::before{content:'';position:absolute;top:0;left:20%;right:20%;height:2px;background:var(--ui-accent);border-radius:0 0 3px 3px;}
-/* FIX 1: Merge tab always shown, distinct color */
 .mob-tab:nth-child(3).active::before{background:#7c3aed;}
 .mob-tab:nth-child(3){color:rgba(196,181,253,0.5);}
 .mob-tab:nth-child(3).active{color:#c4b5fd;}
 
-/* RESPONSIVE */
 @media(max-width:940px){
   .app-layout{grid-template-columns:1fr;}
   .inp-panel{max-height:none;border-right:none;border-bottom:1.5px solid var(--ui-border);}
@@ -334,7 +373,6 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
   .dropdown-menu{width:100%;}
   .pdf-card{width:128px;}
   .card-thumb{height:96px;}
-  /* Mobile merge layout adjustments */
   .merge-topbar{flex-direction:column;align-items:flex-start;gap:10px;}
   .merge-topbar-right{width:100%;}
   .add-cover-btn{width:100%;text-align:center;}
@@ -353,6 +391,30 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 </style>
 </head>
 <body>
+
+<!-- TOAST CONTAINER -->
+<div id="toast-container"></div>
+
+<!-- WELCOME BANNER -->
+<div id="welcomeBanner">
+  <div class="wb-inner">
+    <button class="wb-close" onclick="closeWelcome()" title="Close">×</button>
+    <div class="wb-title">Welcome to DIU <span>Cover</span> Point ✨</div>
+    <div class="wb-grid">
+      <div class="wb-feat"><span class="wb-feat-icon">📄</span><div class="wb-feat-text"><strong>Assignment & Lab Covers</strong>Fill in your info and get a professional DIU cover page PDF instantly.</div></div>
+      <div class="wb-feat"><span class="wb-feat-icon">⊕</span><div class="wb-feat-text"><strong>Merge PDF Tool</strong>Combine your cover page with any PDF — drag to reorder, one-click download.</div></div>
+      <div class="wb-feat"><span class="wb-feat-icon">✨</span><div class="wb-feat-text"><strong>Optional Fields</strong>Expand optional fields like Designation & Group No to add more detail.</div></div>
+      <div class="wb-feat"><span class="wb-feat-icon">⚡</span><div class="wb-feat-text"><strong>Copy from Assignment</strong>In Lab Report, instantly copy teacher & student info from your assignment.</div></div>
+      <div class="wb-feat"><span class="wb-feat-icon">↩</span><div class="wb-feat-text"><strong>Undo Reset</strong>Accidentally cleared fields? Undo within 15 seconds to restore everything.</div></div>
+      <div class="wb-feat"><span class="wb-feat-icon">🌐</span><div class="wb-feat-text"><strong>Download Issues?</strong>If PDF doesn't download, try Chrome or Firefox instead of Messenger browser.</div></div>
+    </div>
+    <div class="wb-footer">
+      <div class="wb-hint">⚠️ Problems? <a onclick="openModal('devModal');closeWelcome()">Contact the developer</a></div>
+      <div class="wb-timer" id="wbTimer">Auto-closing in <span id="wbSec">8</span>s</div>
+    </div>
+    <div class="wb-progress"><div class="wb-progress-bar" id="wbBar"></div></div>
+  </div>
+</div>
 
 <header>
   <div class="header-left">
@@ -377,7 +439,7 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
       <span class="visitor-icon">👁</span>
       <span class="visitor-count" id="visitorCount">0</span>
     </div>
-    <span class="v-badge">v2.0</span>
+    <span class="v-badge">v2.1</span>
     <button class="hamburger" id="hamburgerBtn" onclick="toggleMenu()" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
@@ -446,7 +508,7 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
   </div>
 </div>
 
-<!-- FIX 2: Choose cover modal (both covers filled) -->
+<!-- Choose cover modal -->
 <div class="modal-bg" id="chooseCoverModal" onclick="closeBg(event,'chooseCoverModal')">
   <div class="modal choose-cover-modal">
     <div class="modal-head"><h3>📋 Choose Cover Page</h3><button class="modal-close" onclick="closeModal('chooseCoverModal')">×</button></div>
@@ -476,17 +538,51 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 <!-- MAIN LAYOUT -->
 <div class="app-layout" id="mainLayout">
   <div class="inp-panel">
+    <!-- ASSIGNMENT PANEL -->
     <div class="mode-panel active" id="panel-assignment">
       <div class="sec-head">📄 Document Info</div>
       <div class="fg"><label>Topic Name</label><input type="text" id="a_topicName" placeholder="e.g. SQL SELECT, Query and Sub Query" oninput="render()"></div>
+      <!-- Optional: Assignment No -->
+      <div class="optional-toggle" onclick="toggleOptional('a_optional_doc')" id="opt-tog-a-doc">
+        <span class="optional-toggle-icon" id="opt-icon-a-doc">▶</span>
+        <span class="optional-toggle-text">Add Assignment No (optional)</span>
+        <span class="optional-toggle-badge">+1</span>
+      </div>
+      <div class="optional-fields" id="a_optional_doc">
+        <div class="field-enable-row">
+          <div class="fg fg-optional" id="fg-a_assignmentNo">
+            <label>Assignment No</label>
+            <input type="text" id="a_assignmentNo" placeholder="e.g. 01" oninput="render()" disabled>
+          </div>
+          <button class="field-toggle-btn" id="toggle-a_assignmentNo" onclick="toggleField('a_assignmentNo')" title="Enable/Disable"></button>
+        </div>
+      </div>
+
       <div class="fg"><label>Course Code</label><input type="text" id="a_courseCode" placeholder="e.g. CSE311" oninput="render()"></div>
       <div class="fg"><label>Course Title</label><input type="text" id="a_courseTitle" placeholder="e.g. Database Management System" oninput="render()"></div>
       <div class="sgap"></div>
+
       <div class="sec-head">👨‍🏫 Submitted To</div>
       <div class="fg"><label>Teacher Name</label><input type="text" id="a_tName" placeholder="e.g. Ada Lovelace, Alan Turing" oninput="render()"></div>
+      <!-- Optional: Teacher Designation -->
+      <div class="optional-toggle" onclick="toggleOptional('a_optional_teacher')" id="opt-tog-a-teacher">
+        <span class="optional-toggle-icon" id="opt-icon-a-teacher">▶</span>
+        <span class="optional-toggle-text">Add Teacher Designation (optional)</span>
+        <span class="optional-toggle-badge">+1</span>
+      </div>
+      <div class="optional-fields" id="a_optional_teacher">
+        <div class="field-enable-row">
+          <div class="fg fg-optional" id="fg-a_tDesignation">
+            <label>Teacher Designation</label>
+            <input type="text" id="a_tDesignation" placeholder="e.g. Lecturer, Asst. Professor" oninput="render()" disabled>
+          </div>
+          <button class="field-toggle-btn" id="toggle-a_tDesignation" onclick="toggleField('a_tDesignation')" title="Enable/Disable"></button>
+        </div>
+      </div>
       <div class="fg"><label>Department</label><input type="text" id="a_tDept" placeholder="e.g. CSE" oninput="render()"></div>
       <div class="fg"><label>University (Fixed)</label><input class="readonly-field" type="text" value="Daffodil International University." readonly></div>
       <div class="sgap"></div>
+
       <div class="sec-head">🎓 Submitted By</div>
       <div class="fg"><label>Your Name</label><input type="text" id="a_sName" placeholder="e.g. Imran Sifat" oninput="render()"></div>
       <div class="fg"><label>Student ID</label><input type="text" id="a_sId" placeholder="e.g. 241-15-001" oninput="render()"></div>
@@ -495,10 +591,12 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
       <div class="fg"><label>Department</label><input type="text" id="a_sDept" placeholder="e.g. CSE" oninput="render()"></div>
       <div class="fg"><label>University</label><input class="readonly-field" type="text" value="Daffodil International University." readonly></div>
       <div class="sgap"></div>
+
       <div class="sec-head">📅 Submission Date</div>
       <div class="fg"><label>Date</label><input type="date" id="a_subDate" oninput="render()"></div>
     </div>
 
+    <!-- LAB REPORT PANEL -->
     <div class="mode-panel" id="panel-lab">
       <div class="sec-head">📄 Document Info</div>
       <div class="fg"><label>Experiment Name</label><input type="text" id="l_expName" placeholder="e.g. Study of Basic Logic Gates" oninput="render()"></div>
@@ -506,32 +604,63 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
       <div class="fg"><label>Course Code</label><input type="text" id="l_courseCode" placeholder="e.g. CSE311" oninput="render()"></div>
       <div class="fg"><label>Course Title</label><input type="text" id="l_courseTitle" placeholder="e.g. Database Management System" oninput="render()"></div>
       <div class="sgap"></div>
+
       <div class="sec-head-row">
         <div class="sec-head">👨‍🏫 Submitted To</div>
         <button class="copy-btn" onclick="copyFromAssignment()">⚡ Copy from Assignment</button>
       </div>
       <div class="fg"><label>Teacher Name</label><input type="text" id="l_tName" placeholder="e.g. Grace Hopper, Tim Berners-Lee" oninput="render()"></div>
+      <!-- Optional: Teacher Designation -->
+      <div class="optional-toggle" onclick="toggleOptional('l_optional_teacher')" id="opt-tog-l-teacher">
+        <span class="optional-toggle-icon" id="opt-icon-l-teacher">▶</span>
+        <span class="optional-toggle-text">Teacher Designation (Optional)</span>
+        <span class="optional-toggle-badge">+1</span>
+      </div>
+      <div class="optional-fields" id="l_optional_teacher">
+        <div class="field-enable-row">
+          <div class="fg fg-optional" id="fg-l_tDesignation">
+            <label>Teacher Designation</label>
+            <input type="text" id="l_tDesignation" placeholder="e.g. Lecturer, Asst. Professor" oninput="render()" disabled>
+          </div>
+          <button class="field-toggle-btn" id="toggle-l_tDesignation" onclick="toggleField('l_tDesignation')" title="Enable/Disable"></button>
+        </div>
+      </div>
       <div class="fg"><label>Department</label><input type="text" id="l_tDept" placeholder="e.g. CSE" oninput="render()"></div>
       <div class="fg"><label>University (Fixed)</label><input class="readonly-field" type="text" value="Daffodil International University." readonly></div>
       <div class="sgap"></div>
+
       <div class="sec-head">🎓 Submitted By</div>
       <div class="fg"><label>Your Name</label><input type="text" id="l_sName" placeholder="e.g. Imran Sifat" oninput="render()"></div>
       <div class="fg"><label>Student ID</label><input type="text" id="l_sId" placeholder="e.g. 241-15-001" oninput="render()"></div>
+      <!-- Optional: Group No (after ID, lab only) -->
+      <div class="optional-toggle" onclick="toggleOptional('l_optional_student')" id="opt-tog-l-student">
+        <span class="optional-toggle-icon" id="opt-icon-l-student">▶</span>
+        <span class="optional-toggle-text">Add Group No (Optional)</span>
+        <span class="optional-toggle-badge">+1</span>
+      </div>
+      <div class="optional-fields" id="l_optional_student">
+        <div class="field-enable-row">
+          <div class="fg fg-optional" id="fg-l_groupNo">
+            <label>Group No</label>
+            <input type="text" id="l_groupNo" placeholder="e.g. Group 03" oninput="render()" disabled>
+          </div>
+          <button class="field-toggle-btn" id="toggle-l_groupNo" onclick="toggleField('l_groupNo')" title="Enable/Disable"></button>
+        </div>
+      </div>
       <div class="fg"><label>Section</label><input type="text" id="l_sSec" placeholder="e.g. 66_I" oninput="render()"></div>
       <div class="fg"><label>Semester</label><input type="text" id="l_sSem" placeholder="e.g. Spring 2026" oninput="render()"></div>
       <div class="fg"><label>Department</label><input type="text" id="l_sDept" placeholder="e.g. CSE" oninput="render()"></div>
       <div class="fg"><label>University</label><input class="readonly-field" type="text" value="Daffodil International University." readonly></div>
       <div class="sgap"></div>
+
       <div class="sec-head">📅 Submission Date</div>
       <div class="fg"><label>Date</label><input type="date" id="l_subDate" oninput="render()"></div>
     </div>
 
-    <!-- FIX 4: Download FIRST, then Reset+Undo below -->
     <div style="position:relative;" class="dl-btn-wrap">
       <div class="dl-btn-tooltip" id="dlTooltip">Fill at least all but 2 fields to download</div>
       <button class="dl-btn" id="dlBtn" onclick="downloadPDF()" disabled>⬇ &nbsp; DOWNLOAD PDF</button>
     </div>
-    <!-- FIX 4: Reset + Undo moved BELOW download button -->
     <div class="reset-bar" id="resetBarA" style="display:none">
       <button class="reset-btn" onclick="resetFields('assignment')">🗑 Reset</button>
       <button class="undo-btn" id="undo-btn-assignment" onclick="undoReset('assignment')" disabled>
@@ -555,12 +684,14 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
       <div class="cv-wm"></div>
       <div class="cv-body" id="cv-body"></div>
     </div>
+    <div class="prev-label bottom-label">
+  Developed by <strong>Sifatur Rahman Imran</strong> · <span class="contact-link" onclick="openModal('devModal')">Contact </span>
+</div>
   </div>
 </div>
 
-<!-- MERGE PDF VIEW — FIX 1: Now accessible on mobile, FIX 3: distinct purple topbar -->
+<!-- MERGE PDF VIEW -->
 <div class="merge-view" id="mergeView">
-
   <div class="merge-topbar">
     <div class="merge-topbar-left">
       <div class="merge-topbar-title">⊕ MERGE <span>PDF</span></div>
@@ -575,7 +706,6 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
       <button class="add-cover-btn" id="addCoverBtn" onclick="addCoverToPile()">＋ ADD MY COVER PAGE</button>
     </div>
   </div>
-
   <div class="merge-dropzone-wrap">
     <div class="merge-dropzone" id="mergeDropzone">
       <input type="file" id="mergeFileInput" accept="application/pdf" multiple onchange="handleMergeFiles(this.files)">
@@ -584,7 +714,6 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
       <div class="dz-sub">Multiple files supported · Any PDF works</div>
     </div>
   </div>
-
   <div class="merge-cards-wrap">
     <div id="coverNoteWrap" style="display:none">
       <div class="cover-note">
@@ -608,21 +737,18 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
       </div>
     </div>
   </div>
-
   <div class="merge-progress-wrap">
     <div class="merge-progress" id="mergeProgress">
       <div class="merge-progress-bar" id="mergeProgressBar"></div>
     </div>
   </div>
-
   <div class="merge-bottombar">
     <div class="merge-info" id="mergeInfo">Add at least 2 PDFs to merge</div>
     <button class="merge-dl-btn" id="mergeDlBtn" onclick="doMerge()" disabled>⬇ &nbsp; DOWNLOAD MERGED PDF</button>
   </div>
-
 </div>
 
-<!-- FIX 1: Mobile bottom tab bar — MERGE TAB ALWAYS VISIBLE (no more desktop-only block) -->
+<!-- MOBILE TAB BAR -->
 <div class="mobile-tab-bar" id="mobileTabBar">
   <div class="mob-tabs">
     <button class="mob-tab active" id="mobtab-a" onclick="setMode('assignment')">
@@ -645,7 +771,62 @@ let currentRating=0;
 let lastModeBeforeMerge='assignment';
 let coverChoiceSelected='assignment';
 
-/* ── FIX 4: UNDO STATE — properly rewritten ── */
+/* ── TOAST SYSTEM ── */
+function showToast(type,title,msg,duration=4000){
+  const icons={success:'✅',error:'❌',info:'ℹ️',warning:'⚠️'};
+  const container=document.getElementById('toast-container');
+  const t=document.createElement('div');
+  t.className=`toast ${type}`;
+  t.style.position='relative';
+  t.innerHTML=`<span class="toast-icon">${icons[type]||'💬'}</span>
+    <div class="toast-body"><div class="toast-title">${title}</div>${msg?`<div class="toast-msg">${msg}</div>`:''}
+    </div><button class="toast-close" onclick="dismissToast(this.parentElement)">×</button>`;
+  container.appendChild(t);
+  requestAnimationFrame(()=>{requestAnimationFrame(()=>{t.classList.add('show');});});
+  const pid=setTimeout(()=>dismissToast(t),duration);
+  t._pid=pid;
+  return t;
+}
+function dismissToast(t){
+  if(!t||!t.parentElement)return;
+  clearTimeout(t._pid);
+  t.classList.remove('show');
+  t.classList.add('hide');
+  setTimeout(()=>{if(t.parentElement)t.parentElement.removeChild(t);},400);
+}
+
+/* ── WELCOME BANNER ── */
+const WELCOME_DURATION=8000;
+let wbTimer=null,wbInterval=null;
+function showWelcome(){
+  const already=localStorage.getItem('diu_welcome_shown_v21');
+  // Show every time (comment next line to show once per session):
+  // if(already) return;
+  setTimeout(()=>{
+    const b=document.getElementById('welcomeBanner');
+    b.classList.add('open');
+    const bar=document.getElementById('wbBar');
+    const secEl=document.getElementById('wbSec');
+    bar.style.transition='none';bar.style.width='100%';
+    bar.getBoundingClientRect();
+    bar.style.transition='width '+WELCOME_DURATION+'ms linear';
+    bar.style.width='0%';
+    let rem=Math.floor(WELCOME_DURATION/1000);
+    if(secEl) secEl.textContent=rem;
+    wbInterval=setInterval(()=>{rem--;if(secEl)secEl.textContent=Math.max(0,rem);if(rem<=0){clearInterval(wbInterval);}},1000);
+    wbTimer=setTimeout(closeWelcome,WELCOME_DURATION);
+    localStorage.setItem('diu_welcome_shown_v21','1');
+  },700);
+}
+function closeWelcome(){
+  clearTimeout(wbTimer);clearInterval(wbInterval);
+  const b=document.getElementById('welcomeBanner');
+  b.style.transition='transform .4s cubic-bezier(.4,0,.2,1)';
+  b.classList.remove('open');
+}
+showWelcome();
+
+/* ── UNDO STATE ── */
 const undoState={assignment:null,lab:null};
 let undoTimerHandle={assignment:null,lab:null};
 let undoIntervalHandle={assignment:null,lab:null};
@@ -655,8 +836,7 @@ const UNDO_SECONDS=15;
 (function(){
   try{
     const KEY='diu_cover_craft_visitors';
-    let c=parseInt(localStorage.getItem(KEY)||'0',10);
-    c++;localStorage.setItem(KEY,c);
+    let c=parseInt(localStorage.getItem(KEY)||'0',10);c++;localStorage.setItem(KEY,c);
     const el=document.getElementById('visitorCount');
     if(el){let s=Math.max(0,c-8);const t=()=>{if(s<=c){el.textContent=s;s++;setTimeout(t,60);}};t();}
   }catch(e){try{document.getElementById('visitorCount').textContent='—';}catch(_){}}
@@ -674,11 +854,44 @@ const UNDO_SECONDS=15;
 function incrementDownloadCount(){
   try{
     const KEY='diu_cover_craft_downloads';
-    let c=parseInt(localStorage.getItem(KEY)||'0',10);
-    c++;localStorage.setItem(KEY,c);
-    const el=document.getElementById('dlCount');
-    if(el)el.textContent=c;
+    let c=parseInt(localStorage.getItem(KEY)||'0',10);c++;localStorage.setItem(KEY,c);
+    const el=document.getElementById('dlCount');if(el)el.textContent=c;
   }catch(e){}
+}
+
+/* ── OPTIONAL FIELDS TOGGLE ── */
+function toggleOptional(groupId){
+  const el=document.getElementById(groupId);
+  const isOpen=el.classList.contains('open');
+  // derive icon id
+  const iconMap={
+    'a_optional_doc':'opt-icon-a-doc',
+    'a_optional_teacher':'opt-icon-a-teacher',
+    'l_optional_teacher':'opt-icon-l-teacher',
+    'l_optional_student':'opt-icon-l-student'
+  };
+  const iconEl=document.getElementById(iconMap[groupId]);
+  if(isOpen){
+    el.classList.remove('open');
+    if(iconEl)iconEl.classList.remove('open');
+  }else{
+    el.classList.add('open');
+    if(iconEl)iconEl.classList.add('open');
+  }
+}
+
+function toggleField(fieldId){
+  const inp=document.getElementById(fieldId);
+  const fg=document.getElementById('fg-'+fieldId);
+  const btn=document.getElementById('toggle-'+fieldId);
+  if(!inp||!fg||!btn)return;
+  const enabling=inp.disabled;
+  inp.disabled=!enabling;
+  fg.classList.toggle('fg-optional',!enabling);
+  fg.classList.toggle('enabled',enabling);
+  btn.classList.toggle('on',enabling);
+  if(enabling) inp.focus();
+  render();
 }
 
 /* FIELD VALIDATION */
@@ -694,116 +907,69 @@ function checkFields(){
   const btn=document.getElementById('dlBtn'),tip=document.getElementById('dlTooltip');
   const ok=empty<=2;btn.disabled=!ok;
   tip.textContent=ok?'':`Fill ${Math.max(0,empty-2)} more field${(empty-2)>1?'s':''} to enable download`;
-  // Show reset bar only for current mode when in that mode
   updateResetBarVisibility();
 }
-
 function updateResetBarVisibility(){
-  const modeKey=mode==='merge'?lastModeBeforeMerge:mode;
   document.getElementById('resetBarA').style.display=(mode==='assignment')?'flex':'none';
   document.getElementById('resetBarL').style.display=(mode==='lab')?'flex':'none';
 }
-
 function countFilledFields(modeKey){
   return REQUIRED_FIELDS[modeKey].filter(id=>{const el=document.getElementById(id);return el&&el.value.trim();}).length;
 }
 
-/* FIX 4: Reset + Undo — completely rewritten and fixed */
+/* RESET + UNDO */
 function captureSnapshot(modeKey){
   const snap={};
-  REQUIRED_FIELDS[modeKey].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el)snap[id]=el.value;
-  });
+  REQUIRED_FIELDS[modeKey].forEach(id=>{const el=document.getElementById(id);if(el)snap[id]=el.value;});
   return snap;
 }
-
 function hasAnyData(modeKey){
-  return REQUIRED_FIELDS[modeKey].some(id=>{
-    const el=document.getElementById(id);
-    return el&&el.value.trim();
-  });
+  return REQUIRED_FIELDS[modeKey].some(id=>{const el=document.getElementById(id);return el&&el.value.trim();});
 }
-
 function resetFields(modeKey){
-  if(!hasAnyData(modeKey))return;
-  // Capture BEFORE clearing
+  if(!hasAnyData(modeKey)){showToast('warning','Nothing to reset','All fields are already empty.');return;}
   undoState[modeKey]=captureSnapshot(modeKey);
-  // Clear all fields
-  REQUIRED_FIELDS[modeKey].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el)el.value='';
-  });
-  render();
-  startUndoTimer(modeKey);
+  REQUIRED_FIELDS[modeKey].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  render();startUndoTimer(modeKey);
+  showToast('warning','Fields cleared','Press Undo within 15s to restore.','3000');
 }
-
 function startUndoTimer(modeKey){
   const btn=document.getElementById('undo-btn-'+modeKey);
   const timerSpan=document.getElementById('undo-timer-'+modeKey);
   const bar=document.getElementById('undo-bar-'+modeKey);
-
-  // Clear any existing timers
   if(undoTimerHandle[modeKey])clearTimeout(undoTimerHandle[modeKey]);
   if(undoIntervalHandle[modeKey])clearInterval(undoIntervalHandle[modeKey]);
-
   btn.disabled=false;
   let remaining=UNDO_SECONDS;
   timerSpan.textContent='('+remaining+'s)';
-
-  // Animate the bar from 100% to 0% over UNDO_SECONDS
-  bar.style.transition='none';
-  bar.style.width='100%';
-  // Force reflow then start transition
+  bar.style.transition='none';bar.style.width='100%';
   bar.getBoundingClientRect();
-  bar.style.transition='width '+UNDO_SECONDS+'s linear';
-  bar.style.width='0%';
-
-  undoIntervalHandle[modeKey]=setInterval(()=>{
-    remaining--;
-    if(timerSpan) timerSpan.textContent='('+remaining+'s)';
-    if(remaining<=0){
-      clearInterval(undoIntervalHandle[modeKey]);
-      undoIntervalHandle[modeKey]=null;
-    }
-  },1000);
-
-  undoTimerHandle[modeKey]=setTimeout(()=>{
-    expireUndo(modeKey);
-  },UNDO_SECONDS*1000);
+  bar.style.transition='width '+UNDO_SECONDS+'s linear';bar.style.width='0%';
+  undoIntervalHandle[modeKey]=setInterval(()=>{remaining--;if(timerSpan)timerSpan.textContent='('+remaining+'s)';if(remaining<=0){clearInterval(undoIntervalHandle[modeKey]);undoIntervalHandle[modeKey]=null;}},1000);
+  undoTimerHandle[modeKey]=setTimeout(()=>expireUndo(modeKey),UNDO_SECONDS*1000);
 }
-
 function expireUndo(modeKey){
   undoState[modeKey]=null;
   if(undoIntervalHandle[modeKey]){clearInterval(undoIntervalHandle[modeKey]);undoIntervalHandle[modeKey]=null;}
   const btn=document.getElementById('undo-btn-'+modeKey);
   const timerSpan=document.getElementById('undo-timer-'+modeKey);
   const bar=document.getElementById('undo-bar-'+modeKey);
-  if(btn)btn.disabled=true;
-  if(timerSpan)timerSpan.textContent='';
-  if(bar){bar.style.transition='none';bar.style.width='0%';}
+  if(btn)btn.disabled=true;if(timerSpan)timerSpan.textContent='';if(bar){bar.style.transition='none';bar.style.width='0%';}
 }
-
 function undoReset(modeKey){
-  if(!undoState[modeKey]){return;}
+  if(!undoState[modeKey])return;
   const snap=undoState[modeKey];
-  // Restore all field values
-  Object.keys(snap).forEach(id=>{
-    const el=document.getElementById(id);
-    if(el)el.value=snap[id];
-  });
+  Object.keys(snap).forEach(id=>{const el=document.getElementById(id);if(el)el.value=snap[id];});
   render();
-  // Clear the undo state and stop timers
   if(undoTimerHandle[modeKey]){clearTimeout(undoTimerHandle[modeKey]);undoTimerHandle[modeKey]=null;}
   expireUndo(modeKey);
+  showToast('success','Restored!','Your fields have been recovered.');
 }
 
-/* MODE SWITCHER — FIX 1: No more mobile blocking for merge */
+/* MODE SWITCHER */
 function setMode(m){
-  // FIX 1: Removed the mobile merge block entirely — merge works on all screen sizes
   if(m!=='merge')lastModeBeforeMerge=m;
   mode=m;
-
   document.getElementById('btn-a').className='tbtn'+(m==='assignment'?' active':'');
   document.getElementById('btn-l').className='tbtn'+(m==='lab'?' active':'');
   document.getElementById('btn-m').className='tbtn merge-tab'+(m==='merge'?' active':'');
@@ -811,30 +977,20 @@ function setMode(m){
   document.getElementById('panel-lab').className='mode-panel'+(m==='lab'?' active':'');
   document.getElementById('mainLayout').style.display=m==='merge'?'none':'grid';
   document.getElementById('mergeView').className='merge-view'+(m==='merge'?' active':'');
-
-  // Mobile tabs
   document.querySelectorAll('.mob-tab').forEach(t=>t.classList.remove('active'));
   if(m==='assignment')document.getElementById('mobtab-a').classList.add('active');
   else if(m==='lab')document.getElementById('mobtab-l').classList.add('active');
   else if(m==='merge')document.getElementById('mobtab-m').classList.add('active');
-
-  if(m!=='merge'){
-    document.getElementById('mobileToggleLabel').textContent=m==='assignment'?'Switch to Lab Report':'Switch to Assignment';
-    render();
-  }
-  updateResetBarVisibility();
-  updateMergeSteps();
+  if(m!=='merge'){document.getElementById('mobileToggleLabel').textContent=m==='assignment'?'Switch to Lab Report':'Switch to Assignment';render();}
+  updateResetBarVisibility();updateMergeSteps();
 }
-
 function updateMergeSteps(){
   if(mode!=='merge')return;
-  const hasFiles=mergeItems.length>0;
-  const canDl=mergeItems.length>=2;
+  const hasFiles=mergeItems.length>0;const canDl=mergeItems.length>=2;
   document.getElementById('mstep1').className='merge-step'+(hasFiles?' done':' active-step');
   document.getElementById('mstep2').className='merge-step'+(canDl?' done':hasFiles?' active-step':'');
   document.getElementById('mstep3').className='merge-step'+(canDl?' active-step':'');
 }
-
 function toggleMenu(){
   const btn=document.getElementById('hamburgerBtn'),menu=document.getElementById('dropdownMenu');
   const o=menu.classList.contains('open');
@@ -862,43 +1018,75 @@ function setRating(v){
 function submitRating(){
   if(!currentRating){document.getElementById('ratingLabel').textContent='⚠️ Please select a rating first';return;}
   document.getElementById('submitSuccess').style.display='block';
+  showToast('success','Thanks for your feedback!','Your rating has been submitted.');
   setTimeout(()=>{closeModal('ratingModal');document.getElementById('submitSuccess').style.display='none';document.getElementById('commentBox').value='';currentRating=0;setRating(0);},2000);
 }
 function copyFromAssignment(){
   ['courseCode','courseTitle','tName','tDept','sName','sId','sSec','sSem','sDept','subDate'].forEach(f=>{
-    const src=document.getElementById('a_'+f),dst=document.getElementById('l_'+f);
-    if(src&&dst)dst.value=src.value;
-  });render();
+    const src=document.getElementById('a_'+f),dst=document.getElementById('l_'+f);if(src&&dst)dst.value=src.value;
+  });
+  render();
+  showToast('success','Copied!','Assignment fields copied to Lab Report.');
 }
 
 function g(id){const e=document.getElementById(id);return e?e.value.trim():'';}
 function gmFor(modeKey,f){return g((modeKey==='assignment'?'a_':'l_')+f);}
+
+/* FIX 2: Format date from YYYY-MM-DD input to DD/MM/YYYY for display */
 function fd(s){
   if(!s)return'';
   const d=new Date(s+'T12:00:00');
   return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();
 }
+
+/* FIX 2: Format the date INPUT label so it shows DD-MM-YYYY style hint */
+function formatDateDisplay(input){
+  // Browsers use YYYY-MM-DD internally for date inputs - this is unavoidable.
+  // We style the placeholder and handle display via fd() for the preview/PDF.
+  // For the actual input display order, we use a custom overlay approach.
+}
+
+function isFieldEnabled(id){
+  const el=document.getElementById(id);
+  return el && !el.disabled && el.value.trim();
+}
+
 function row(l,v){return`<div class="cv-row"><span class="cv-lbl">${l} </span><span class="cv-val">${v||''}</span></div>`;}
 function irow(l,v,b=false){return`<div class="cv-ir"><span class="cv-il">${l} </span><span class="cv-iv${b?' cv-iv-name':''}">${v||''}</span></div>`;}
 
 function buildHTMLForMode(modeKey){
   const isLab=modeKey==='lab';
   const get=(f)=>gmFor(modeKey,f);
+  const getOptional=(f)=>{
+    const id=(isLab?'l_':'a_')+f;
+    const el=document.getElementById(id);
+    return(el&&!el.disabled)?el.value.trim():'';
+  };
   let h='';
   h+=`<div class="cv-logo"><img src="img/DIU-Logo.png" alt="DIU" onerror="this.style.display='none'"></div>`;
   h+=`<div class="cv-title">${isLab?'LAB REPORT':'Assignment'}</div>`;
-  if(!isLab)h+=row('Topic Name:',get('topicName'));
-  else{h+=row('Experiment Name:',get('expName'));h+=row('Experiment No:',get('expNo'));}
+  if(!isLab){
+    const assignNo=getOptional('assignmentNo');
+    if(assignNo) h+=row('Assignment No:',assignNo);
+    h+=row('Topic Name:',get('topicName'));
+  }else{
+    h+=row('Experiment Name:',get('expName'));
+    h+=row('Experiment No:',get('expNo'));
+  }
   h+=row('Course Code:',get('courseCode'));
   h+=row('Course Title:',get('courseTitle'));
+  const tDesig=getOptional('tDesignation');
   h+=`<div class="cv-sec"><u>Submitted To</u>:</div><div class="cv-ib">
     ${irow('Teacher Name:',get('tName'),true)}
+    ${tDesig?irow('Designation:',tDesig):''}
     ${irow('Department:',get('tDept'))}
     <div class="cv-uline">Daffodil International University.</div>
   </div>`;
+  const groupNo=isLab?getOptional('groupNo'):'';
   h+=`<div class="cv-sec"><u>Submitted By</u>:</div><div class="cv-ib">
     ${irow('Name:',get('sName'),true)}
     ${irow('ID:',get('sId'))}
+    ${isLab&&groupNo?irow('Group No:',groupNo):''}
     ${irow('Section:',get('sSec'))}
     ${irow('Semester:',get('sSem'))}
     ${irow('Department:',get('sDept'))}
@@ -908,58 +1096,76 @@ function buildHTMLForMode(modeKey){
   h+=`<div class="cv-date-row"><span class="cv-lbl"><u>Submission Date</u>: </span><span class="cv-val">${fd(get('subDate'))}</span></div>`;
   return h;
 }
-function buildHTML(){
-  return buildHTMLForMode(mode==='merge'?lastModeBeforeMerge:mode);
-}
-function render(){
-  document.getElementById('cv-body').innerHTML=buildHTML();
-  checkFields();
-}
+function buildHTML(){return buildHTMLForMode(mode==='merge'?lastModeBeforeMerge:mode);}
+function render(){document.getElementById('cv-body').innerHTML=buildHTML();checkFields();}
 
-/* Particle burst animation */
+/* Particle burst */
 function triggerParticleBurst(btn){
-  const rect=btn.getBoundingClientRect();
-  const cx=rect.left+rect.width/2;
-  const cy=rect.top+rect.height/2;
-  const overlay=document.createElement('div');
-  overlay.className='dl-particles';
-  document.body.appendChild(overlay);
+  const rect=btn.getBoundingClientRect();const cx=rect.left+rect.width/2;const cy=rect.top+rect.height/2;
+  const overlay=document.createElement('div');overlay.className='dl-particles';document.body.appendChild(overlay);
   const colors=['#4ade80','#2d54b8','#a8c0ff','#7c3aed','#fbbf24','#f472b6','#38bdf8','#fb923c'];
   for(let i=0;i<22;i++){
-    const p=document.createElement('div');
-    p.className='dl-particle';
-    const angle=(Math.PI*2/22)*i;
-    const dist=50+Math.random()*100;
-    const size=6+Math.random()*8;
-    const tx=Math.cos(angle)*dist;
-    const ty=Math.sin(angle)*dist;
-    p.style.cssText=`left:${cx}px;top:${cy}px;width:${size}px;height:${size}px;background:${colors[i%colors.length]};--tx:${tx}px;--ty:${ty}px;animation-duration:${0.5+Math.random()*0.5}s;`;
+    const p=document.createElement('div');p.className='dl-particle';
+    const angle=(Math.PI*2/22)*i;const dist=50+Math.random()*100;const size=6+Math.random()*8;
+    p.style.cssText=`left:${cx}px;top:${cy}px;width:${size}px;height:${size}px;background:${colors[i%colors.length]};--tx:${Math.cos(angle)*dist}px;--ty:${Math.sin(angle)*dist}px;animation-duration:${0.5+Math.random()*0.5}s;`;
     overlay.appendChild(p);
   }
   setTimeout(()=>{if(overlay.parentNode)overlay.parentNode.removeChild(overlay);},1400);
 }
 
-/* Universal download */
+/* FIX 1: Universal download — works in Messenger/WebView browsers */
 function universalDownload(blob,filename){
+  // Method 1: Standard anchor download
   try{
     if(window.navigator&&window.navigator.msSaveOrOpenBlob){window.navigator.msSaveOrOpenBlob(blob,filename);return;}
     const url=URL.createObjectURL(blob);
-    const a=document.createElement('a');
-    a.href=url;a.download=filename;a.style.display='none';
+    const a=document.createElement('a');a.href=url;a.download=filename;a.style.display='none';
     document.body.appendChild(a);a.click();
-    setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},300);
+    setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},500);
+    // Check if actually downloaded (heuristic) — show fallback toast after delay
+    setTimeout(()=>{
+      showToast('success','PDF Downloaded!','Check your downloads folder.',5000);
+    },800);
     return;
-  }catch(e1){}
-  try{const url=URL.createObjectURL(blob);window.open(url,'_blank');setTimeout(()=>URL.revokeObjectURL(url),10000);return;}catch(e2){}
-  try{const r=new FileReader();r.onload=function(){const a=document.createElement('a');a.href=r.result;a.download=filename;a.click();};r.readAsDataURL(blob);}catch(e3){}
+  }catch(e1){console.warn('Download method 1 failed',e1);}
+  // Method 2: window.open blob URL
+  try{
+    const url=URL.createObjectURL(blob);
+    const opened=window.open(url,'_blank');
+    setTimeout(()=>URL.revokeObjectURL(url),15000);
+    if(!opened||opened.closed){
+      // Popup blocked or in-app browser — offer data URI
+      blobToDataURIDownload(blob,filename);
+    }else{
+      showToast('info','PDF Opened','Save it from the new tab/window.',5000);
+    }
+    return;
+  }catch(e2){console.warn('Download method 2 failed',e2);}
+  // Method 3: Data URI (always works, even in Messenger)
+  blobToDataURIDownload(blob,filename);
+}
+
+function blobToDataURIDownload(blob,filename){
+  const r=new FileReader();
+  r.onload=function(){
+    const dataURI=r.result;
+    // Try anchor with data URI
+    try{
+      const a=document.createElement('a');a.href=dataURI;a.download=filename;a.style.display='none';
+      document.body.appendChild(a);a.click();document.body.removeChild(a);
+      showToast('success','PDF Ready','If it didn\'t save, open in Chrome or Firefox.',6000);
+      return;
+    }catch(e){}
+    // Last resort: open in new tab
+    try{window.open(dataURI,'_blank');}catch(e){}
+    showToast('warning','Download Issue','Please open this page in Chrome or Firefox for best results.',8000);
+  };
+  r.onerror=()=>{showToast('error','Download Failed','Please open in Chrome or Firefox.',8000);};
+  r.readAsDataURL(blob);
 }
 
 async function toDataURL(url){
-  try{
-    const res=await fetch(url,{mode:'cors'});
-    const blob=await res.blob();
-    return await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(blob);});
-  }catch(e){return null;}
+  try{const res=await fetch(url,{mode:'cors'});const blob=await res.blob();return await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(blob);});}catch(e){return null;}
 }
 
 async function buildCoverPDFBlobForMode(modeKey){
@@ -994,8 +1200,7 @@ async function downloadPDF(){
   try{
     const modeKey=mode==='merge'?lastModeBeforeMerge:mode;
     const blob=await buildCoverPDFBlobForMode(modeKey);
-    btn.classList.remove('generating');
-    btn.classList.add('success');
+    btn.classList.remove('generating');btn.classList.add('success');
     const fname=(modeKey==='lab'?'Lab_Report_Cover-diucoverpoint':'Assignment_Cover_Page-diucoverpoint')+'.pdf';
     triggerParticleBurst(btn);
     universalDownload(blob,fname);
@@ -1003,18 +1208,15 @@ async function downloadPDF(){
     btn.innerHTML='✅ DOWNLOADED!';
     setTimeout(()=>{btn.classList.remove('success');btn.innerHTML='⬇ &nbsp; DOWNLOAD PDF';checkFields();},2500);
   }catch(e){
-    btn.classList.remove('generating');
-    btn.innerHTML='⬇ &nbsp; DOWNLOAD PDF';
-    checkFields();
+    btn.classList.remove('generating');btn.innerHTML='⬇ &nbsp; DOWNLOAD PDF';checkFields();
+    showToast('error','Generation Failed','Could not create PDF. Try again or switch browser.',5000);
   }
 }
 
 /* ═══ MERGE LOGIC ═══ */
-let mergeItems=[];
-let dragSrcIdx=null;
+let mergeItems=[];let dragSrcIdx=null;
 const mergeCardsEl=document.getElementById('mergeCards');
 const mergeEmptyEl=document.getElementById('mergeEmpty');
-
 const dz=document.getElementById('mergeDropzone');
 ['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.add('over');}));
 dz.addEventListener('dragleave',()=>dz.classList.remove('over'));
@@ -1023,124 +1225,73 @@ dz.addEventListener('drop',e=>{
   const files=[...e.dataTransfer.files].filter(f=>f.type==='application/pdf');
   if(files.length)handleMergeFiles(files);
 });
-
-function fmtSize(bytes){
-  if(bytes<1024)return bytes+'B';
-  if(bytes<1024*1024)return(bytes/1024).toFixed(1)+'KB';
-  return(bytes/(1024*1024)).toFixed(1)+'MB';
-}
+function fmtSize(bytes){if(bytes<1024)return bytes+'B';if(bytes<1024*1024)return(bytes/1024).toFixed(1)+'KB';return(bytes/(1024*1024)).toFixed(1)+'MB';}
 
 async function handleMergeFiles(files){
   for(const f of files){
     const bytes=new Uint8Array(await f.arrayBuffer());
-    const id='f'+Date.now()+Math.random();
-    let pageCount=1,thumb=null;
+    const id='f'+Date.now()+Math.random();let pageCount=1,thumb=null;
     try{
-      const pdf=await pdfjsLib.getDocument({data:bytes.slice()}).promise;
-      pageCount=pdf.numPages;
-      const page=await pdf.getPage(1);
-      const vp=page.getViewport({scale:0.42});
-      const canvas=document.createElement('canvas');
-      canvas.width=vp.width;canvas.height=vp.height;
-      await page.render({canvasContext:canvas.getContext('2d'),viewport:vp}).promise;
-      thumb=canvas;
+      const pdf=await pdfjsLib.getDocument({data:bytes.slice()}).promise;pageCount=pdf.numPages;
+      const page=await pdf.getPage(1);const vp=page.getViewport({scale:0.42});
+      const canvas=document.createElement('canvas');canvas.width=vp.width;canvas.height=vp.height;
+      await page.render({canvasContext:canvas.getContext('2d'),viewport:vp}).promise;thumb=canvas;
     }catch(e){}
     mergeItems.push({id,name:f.name,bytes,pageCount,isCover:false,thumb,size:f.size});
   }
   document.getElementById('mergeFileInput').value='';
-  renderMergeCards();
-  updateMergeSteps();
+  renderMergeCards();updateMergeSteps();
+  showToast('info','Files Added',`${files.length} PDF${files.length>1?'s':''} added to queue.`,3000);
 }
 
-/* FIX 2: Smart cover selection — auto-select if one has more fields, ask if equal */
 function getCoverModeDecision(){
-  const aTotal = REQUIRED_FIELDS['assignment'].length;
-  const lTotal = REQUIRED_FIELDS['lab'].length;
-
-  const aC = countFilledFields('assignment');
-  const lC = countFilledFields('lab');
-
-  const aPercent = aC / aTotal;
-  const lPercent = lC / lTotal;
-
-  if(aC === 0 && lC === 0) return null;
-  if(aC > 0 && lC === 0) return 'assignment';
-  if(lC > 0 && aC === 0) return 'lab';
-
-  if(aPercent > lPercent) return 'assignment';
-  if(lPercent > aPercent) return 'lab';
-
-  return 'equal';
+  const aC=countFilledFields('assignment');const lC=countFilledFields('lab');
+  const aT=REQUIRED_FIELDS['assignment'].length;const lT=REQUIRED_FIELDS['lab'].length;
+  if(aC===0&&lC===0)return null;if(aC>0&&lC===0)return'assignment';if(lC>0&&aC===0)return'lab';
+  if(aC/aT>lC/lT)return'assignment';if(lC/lT>aC/aT)return'lab';return'equal';
 }
-
 function selectCoverChoice(choice){
   coverChoiceSelected=choice;
   document.getElementById('cco-assignment').classList.toggle('selected',choice==='assignment');
   document.getElementById('cco-lab').classList.toggle('selected',choice==='lab');
 }
-
-async function confirmCoverChoice(){
-  closeModal('chooseCoverModal');
-  await addCoverWithMode(coverChoiceSelected);
-}
-
+async function confirmCoverChoice(){closeModal('chooseCoverModal');await addCoverWithMode(coverChoiceSelected);}
 async function addCoverToPile(){
   const decision=getCoverModeDecision();
-  if(decision===null){
-    alert('Please fill in at least some fields in the Assignment or Lab Report tab first.');
-    return;
-  }
+  if(decision===null){showToast('warning','No Cover Data','Please fill in fields in the Assignment or Lab Report tab first.',5000);return;}
   if(decision==='equal'){
-    // Both covers have same number of fields — show chooser modal
-    const aC=countFilledFields('assignment');
-    const lC=countFilledFields('lab');
+    const aC=countFilledFields('assignment');const lC=countFilledFields('lab');
     document.getElementById('cco-a-count').textContent=aC+' field'+(aC!==1?'s':'')+' filled';
     document.getElementById('cco-l-count').textContent=lC+' field'+(lC!==1?'s':'')+' filled';
-    const aFields=REQUIRED_FIELDS['assignment']
-      .filter(id=>{const e=document.getElementById(id);return e&&e.value.trim();})
-      .map(id=>{
-        const labels={a_topicName:'Topic',a_courseCode:'Code',a_courseTitle:'Title',a_tName:'Teacher',a_tDept:'Dept',a_sName:'Name',a_sId:'ID',a_sSec:'Section',a_sSem:'Semester',a_sDept:'S.Dept',a_subDate:'Date'};
-        return labels[id]||id;
-      }).join(', ');
-    const lFields=REQUIRED_FIELDS['lab']
-      .filter(id=>{const e=document.getElementById(id);return e&&e.value.trim();})
-      .map(id=>{
-        const labels={l_expName:'Exp Name',l_expNo:'Exp No',l_courseCode:'Code',l_courseTitle:'Title',l_tName:'Teacher',l_tDept:'Dept',l_sName:'Name',l_sId:'ID',l_sSec:'Section',l_sSem:'Semester',l_sDept:'S.Dept',l_subDate:'Date'};
-        return labels[id]||id;
-      }).join(', ');
-    document.getElementById('cco-a-fields').textContent=aFields?aFields:'';
-    document.getElementById('cco-l-fields').textContent=lFields?lFields:'';
-    selectCoverChoice('assignment');
-    openModal('chooseCoverModal');
-    return;
+    const aFields=REQUIRED_FIELDS['assignment'].filter(id=>{const e=document.getElementById(id);return e&&e.value.trim();}).map(id=>({a_topicName:'Topic',a_courseCode:'Code',a_courseTitle:'Title',a_tName:'Teacher',a_tDept:'Dept',a_sName:'Name',a_sId:'ID',a_sSec:'Section',a_sSem:'Semester',a_sDept:'S.Dept',a_subDate:'Date'}[id]||id)).join(', ');
+    const lFields=REQUIRED_FIELDS['lab'].filter(id=>{const e=document.getElementById(id);return e&&e.value.trim();}).map(id=>({l_expName:'Exp Name',l_expNo:'Exp No',l_courseCode:'Code',l_courseTitle:'Title',l_tName:'Teacher',l_tDept:'Dept',l_sName:'Name',l_sId:'ID',l_sSec:'Section',l_sSem:'Semester',l_sDept:'S.Dept',l_subDate:'Date'}[id]||id)).join(', ');
+    document.getElementById('cco-a-fields').textContent=aFields||'';
+    document.getElementById('cco-l-fields').textContent=lFields||'';
+    selectCoverChoice('assignment');openModal('chooseCoverModal');return;
   }
-  // Auto-select the one with more data
   await addCoverWithMode(decision);
 }
-
 async function addCoverWithMode(modeKey){
   mergeItems=mergeItems.filter(x=>!x.isCover);
   const btn=document.getElementById('addCoverBtn');
   btn.textContent='⏳ Generating...';btn.disabled=true;
   try{
     const blob=await buildCoverPDFBlobForMode(modeKey);
-    const bytes=new Uint8Array(await blob.arrayBuffer());
-    let thumb=null;
+    const bytes=new Uint8Array(await blob.arrayBuffer());let thumb=null;
     try{
-      const pdf=await pdfjsLib.getDocument({data:bytes.slice()}).promise;
-      const page=await pdf.getPage(1);
-      const vp=page.getViewport({scale:0.42});
-      const canvas=document.createElement('canvas');
+      const pdf=await pdfjsLib.getDocument({data:bytes.slice()}).promise;const page=await pdf.getPage(1);
+      const vp=page.getViewport({scale:0.42});const canvas=document.createElement('canvas');
       canvas.width=vp.width;canvas.height=vp.height;
-      await page.render({canvasContext:canvas.getContext('2d'),viewport:vp}).promise;
-      thumb=canvas;
+      await page.render({canvasContext:canvas.getContext('2d'),viewport:vp}).promise;thumb=canvas;
     }catch(e){}
     const label=modeKey==='lab'?'Lab Cover (Generated)':'Assignment Cover (Generated)';
     mergeItems.unshift({id:'cover',name:label,bytes,pageCount:1,isCover:true,thumb,size:blob.size});
     document.getElementById('coverNoteWrap').style.display='block';
-    renderMergeCards();
-    updateMergeSteps();
-  }catch(e){alert('Could not generate cover. Please fill in cover details first.');}
+    renderMergeCards();updateMergeSteps();
+    showToast('success','Cover Added','Your cover page is ready in the queue.',3000);
+  }catch(e){
+    showToast('error','Cover Generation Failed','Fill in cover details first then try again.',5000);
+  }
   btn.textContent='＋ ADD MY COVER PAGE';btn.disabled=false;
 }
 
@@ -1149,86 +1300,44 @@ function renderMergeCards(){
   const total=mergeItems.reduce((a,x)=>a+x.pageCount,0);
   const totalSize=mergeItems.reduce((a,x)=>a+(x.size||0),0);
   const hasItems=mergeItems.length>0;
-
   document.getElementById('cardCount').textContent=mergeItems.length+' file'+(mergeItems.length!==1?'s':'');
   document.getElementById('mergeDlBtn').disabled=mergeItems.length<2;
   document.getElementById('clearBtn').style.display=hasItems?'':'none';
   document.getElementById('dragHint').style.display=mergeItems.length>1?'flex':'none';
-
-  if(!hasItems){
-    mergeCardsEl.appendChild(mergeEmptyEl);
-    document.getElementById('coverNoteWrap').style.display='none';
-    document.getElementById('mergeInfo').textContent='Add at least 2 PDFs to merge';
-    return;
-  }
-
+  if(!hasItems){mergeCardsEl.appendChild(mergeEmptyEl);document.getElementById('coverNoteWrap').style.display='none';document.getElementById('mergeInfo').textContent='Add at least 2 PDFs to merge';return;}
   document.getElementById('mergeInfo').innerHTML=`<strong>${mergeItems.length} PDF${mergeItems.length!==1?'s':''}</strong> · ${total} page${total!==1?'s':''} · ${fmtSize(totalSize)}`;
-
   mergeItems.forEach((item,idx)=>{
-    const card=document.createElement('div');
-    card.className='pdf-card'+(item.isCover?' is-cover':'');
-    card.draggable=true;
-    card.dataset.idx=idx;
-
-    const badge=document.createElement('div');
-    badge.className='card-badge';
-    badge.textContent=item.isCover?'COVER':'#'+(idx+1);
-    card.appendChild(badge);
-
-    const rm=document.createElement('button');
-    rm.className='card-remove';rm.innerHTML='&times;';rm.title='Remove';
+    const card=document.createElement('div');card.className='pdf-card'+(item.isCover?' is-cover':'');card.draggable=true;card.dataset.idx=idx;
+    const badge=document.createElement('div');badge.className='card-badge';badge.textContent=item.isCover?'COVER':'#'+(idx+1);card.appendChild(badge);
+    const rm=document.createElement('button');rm.className='card-remove';rm.innerHTML='&times;';rm.title='Remove';
     rm.onclick=e=>{e.stopPropagation();mergeItems.splice(idx,1);if(item.isCover)document.getElementById('coverNoteWrap').style.display='none';renderMergeCards();updateMergeSteps();};
     card.appendChild(rm);
-
-    const thumb=document.createElement('div');
-    thumb.className='card-thumb';
-    if(item.thumb){
-      const c=item.thumb.cloneNode(true);
-      c.style.cssText='width:100%;height:100%;object-fit:contain;display:block;';
-      thumb.appendChild(c);
-    }else{
-      thumb.innerHTML='<div class="card-thumb-placeholder">📄</div>';
-    }
+    const thumb=document.createElement('div');thumb.className='card-thumb';
+    if(item.thumb){const c=item.thumb.cloneNode(true);c.style.cssText='width:100%;height:100%;object-fit:contain;display:block;';thumb.appendChild(c);}
+    else{thumb.innerHTML='<div class="card-thumb-placeholder">📄</div>';}
     card.appendChild(thumb);
-
-    const info=document.createElement('div');
-    info.className='card-info';
-    info.innerHTML=`<div class="card-name" title="${item.name}">${item.name}</div>
-      <div class="card-meta">
-        <span class="card-pages">${item.pageCount} pg${item.pageCount!==1?'s':''}</span>
-        <span class="card-size">${fmtSize(item.size||0)}</span>
-      </div>`;
+    const info=document.createElement('div');info.className='card-info';
+    info.innerHTML=`<div class="card-name" title="${item.name}">${item.name}</div><div class="card-meta"><span class="card-pages">${item.pageCount} pg${item.pageCount!==1?'s':''}</span><span class="card-size">${fmtSize(item.size||0)}</span></div>`;
     card.appendChild(info);
-
-    const arrows=document.createElement('div');
-    arrows.className='card-arrows';
-    const lb=document.createElement('button');
-    lb.className='arr-btn';lb.textContent='◀';lb.title='Move left';lb.disabled=idx===0;
+    const arrows=document.createElement('div');arrows.className='card-arrows';
+    const lb=document.createElement('button');lb.className='arr-btn';lb.textContent='◀';lb.title='Move left';lb.disabled=idx===0;
     lb.onclick=e=>{e.stopPropagation();[mergeItems[idx-1],mergeItems[idx]]=[mergeItems[idx],mergeItems[idx-1]];renderMergeCards();updateMergeSteps();};
-    const rb=document.createElement('button');
-    rb.className='arr-btn';rb.textContent='▶';rb.title='Move right';rb.disabled=idx===mergeItems.length-1;
+    const rb=document.createElement('button');rb.className='arr-btn';rb.textContent='▶';rb.title='Move right';rb.disabled=idx===mergeItems.length-1;
     rb.onclick=e=>{e.stopPropagation();[mergeItems[idx],mergeItems[idx+1]]=[mergeItems[idx+1],mergeItems[idx]];renderMergeCards();updateMergeSteps();};
-    arrows.appendChild(lb);arrows.appendChild(rb);
-    card.appendChild(arrows);
-
+    arrows.appendChild(lb);arrows.appendChild(rb);card.appendChild(arrows);
     card.addEventListener('dragstart',e=>{dragSrcIdx=idx;card.classList.add('dragging');e.dataTransfer.effectAllowed='move';});
     card.addEventListener('dragend',()=>card.classList.remove('dragging'));
     card.addEventListener('dragover',e=>{e.preventDefault();card.classList.add('drag-over');});
     card.addEventListener('dragleave',()=>card.classList.remove('drag-over'));
-    card.addEventListener('drop',e=>{
-      e.preventDefault();card.classList.remove('drag-over');
-      if(dragSrcIdx===null||dragSrcIdx===idx)return;
-      const moved=mergeItems.splice(dragSrcIdx,1)[0];
-      mergeItems.splice(idx,0,moved);
-      dragSrcIdx=null;
-      renderMergeCards();updateMergeSteps();
-    });
-
+    card.addEventListener('drop',e=>{e.preventDefault();card.classList.remove('drag-over');if(dragSrcIdx===null||dragSrcIdx===idx)return;const moved=mergeItems.splice(dragSrcIdx,1)[0];mergeItems.splice(idx,0,moved);dragSrcIdx=null;renderMergeCards();updateMergeSteps();});
     mergeCardsEl.appendChild(card);
   });
 }
 
-function clearAll(){mergeItems=[];renderMergeCards();updateMergeSteps();}
+function clearAll(){
+  mergeItems=[];renderMergeCards();updateMergeSteps();
+  showToast('info','Queue Cleared','All PDFs removed from the merge queue.',3000);
+}
 
 async function doMerge(){
   if(mergeItems.length<2)return;
@@ -1236,26 +1345,19 @@ async function doMerge(){
   btn.classList.add('generating');
   btn.innerHTML='<span style="display:inline-block;animation:spin 1s linear infinite;margin-right:6px">⏳</span> MERGING...';
   btn.disabled=true;
-
-  const prog=document.getElementById('mergeProgress');
-  const bar=document.getElementById('mergeProgressBar');
+  const prog=document.getElementById('mergeProgress');const bar=document.getElementById('mergeProgressBar');
   prog.classList.add('show');bar.style.width='0%';
-
   try{
-    const {PDFDocument}=PDFLib;
-    const merged=await PDFDocument.create();
+    const{PDFDocument}=PDFLib;const merged=await PDFDocument.create();
     for(let i=0;i<mergeItems.length;i++){
       bar.style.width=Math.round((i/mergeItems.length)*88)+'%';
       const src=await PDFDocument.load(mergeItems[i].bytes);
       const pages=await merged.copyPages(src,src.getPageIndices());
       pages.forEach(p=>merged.addPage(p));
     }
-    bar.style.width='96%';
-    const out=await merged.save();
-    bar.style.width='100%';
+    bar.style.width='96%';const out=await merged.save();bar.style.width='100%';
     const blob=new Blob([out],{type:'application/pdf'});
-    btn.classList.remove('generating');
-    btn.classList.add('success');
+    btn.classList.remove('generating');btn.classList.add('success');
     triggerParticleBurst(btn);
     universalDownload(blob,'DIU_Merged_Document-diucoverpoint.pdf');
     incrementDownloadCount();
@@ -1263,9 +1365,8 @@ async function doMerge(){
     setTimeout(()=>{btn.classList.remove('success');btn.innerHTML='⬇ &nbsp; DOWNLOAD MERGED PDF';btn.disabled=mergeItems.length<2;prog.classList.remove('show');bar.style.width='0%';},2500);
   }catch(err){
     btn.classList.remove('generating');
-    alert('Merge failed. Make sure PDFs are valid and not password-protected.');
-    btn.innerHTML='⬇ &nbsp; DOWNLOAD MERGED PDF';btn.disabled=false;
-    prog.classList.remove('show');
+    showToast('error','Merge Failed','Make sure PDFs are valid and not password-protected.',6000);
+    btn.innerHTML='⬇ &nbsp; DOWNLOAD MERGED PDF';btn.disabled=false;prog.classList.remove('show');
   }
 }
 
