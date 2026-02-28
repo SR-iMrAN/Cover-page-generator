@@ -70,7 +70,18 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 .custom-dropdown-arrow{position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--ui-muted);font-size:12px;}
 .date-hint{font-size:9.5px;margin-top:3px;}
 
-/* Rubric pills */
+/* Rubric sliders */
+.rubric-slider-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;padding:8px 12px;background:var(--ui-sec-bg);border-radius:6px;border:1.5px solid var(--ui-border);transition:all .15s;}
+.rubric-slider-row.enabled{background:#eef8ff;border-color:#93c5fd;}
+.rs-label{flex:1;font-size:12px;font-weight:600;color:var(--ui-text);}
+.rs-mark{font-size:10px;color:var(--ui-ph);background:var(--ui-border);border-radius:3px;padding:1px 6px;margin-right:4px;}
+/* Toggle button (rt-toggle) */
+.rt-toggle{width:36px;height:20px;border-radius:10px;border:none;cursor:pointer;position:relative;background:#d1d5db;transition:background .2s;flex-shrink:0;}
+.rt-toggle.on{background:var(--ui-accent);}
+.rt-toggle::after{content:'';position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+.rt-toggle.on::after{transform:translateX(16px);}
+
+/* Rubric pills (kept for backward compat) */
 #rubricPillsWrap{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;}
 .rubric-pill{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:10.5px;font-weight:600;cursor:pointer;border:1.5px solid;transition:all .15s;user-select:none;}
 .rubric-pill.on{border-color:var(--ui-accent);background:var(--ui-sec-bg);color:var(--ui-accent);}
@@ -125,7 +136,7 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 
 /* ── RUBRIC TABLE FIX #1 #2 ── */
 .cv-rubric-wrap{margin-bottom:18px;}
-.cv-rubric-table{width:100%;border-collapse:collapse;font-family:'Calibri','Carlito',Arial,sans-serif;font-size:13px;}
+.cv-rubric-table{width:100%;border-collapse:collapse;font-family:'Calibri','Carlito',Arial,sans-serif;font-size:14px;}
 .cv-rubric-table th,.cv-rubric-table td{border:1.5px solid #000;padding:10px 8px;text-align:center;vertical-align:middle;}
 /* Taller rows FIX #2 */
 .cv-rubric-table tbody tr{height:36px;}
@@ -138,7 +149,7 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 .cv-rubric-table .c-suf{width:10%;}
 .cv-rubric-table .c-aa{width:12%;}
 .cv-rubric-table .c-total{width:10%;}
-.cv-rubric-table .only-teacher{font-weight:700;font-size:13.5px;text-align:center;padding:10px;}
+.cv-rubric-table .only-teacher{font-weight:700;font-size:14.5px;text-align:center;padding:10px;}
 .cv-rubric-table .lbl-cell{text-align:left;font-weight:700;padding-left:10px;}
 .cv-rubric-table .mark-cell{font-weight:700;}
 .cv-rubric-table .comments-lbl{font-weight:700;text-align:center;vertical-align:middle;}
@@ -149,6 +160,13 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 .cv-val{font-family:'Calibri','Carlito',Arial,sans-serif;font-size:19px;font-weight:400;color:#000;display:inline;}
 .cv-date-row{display:block;margin-top:14px;line-height:1.6;}
 .cv-date-row .cv-val{font-size:20px;}
+/* Dual-column rows: Batch+Section, CourseCode+CourseName */
+.cv-dual-row{display:grid;grid-template-columns:1fr 1fr;margin-bottom:8px;line-height:1.6;align-items:baseline;}
+.cv-dual-left{font-family:'Calibri','Carlito',Arial,sans-serif;font-size:19px;color:#000;}
+.cv-dual-right{font-family:'Calibri','Carlito',Arial,sans-serif;font-size:19px;color:#000;padding-left:8px;}
+/* Section title headers (Submitted To / Submitted By style) */
+.cv-section-title{display:block;margin:10px 0 6px 0;font-family:'Calibri','Carlito',Arial,sans-serif;font-size:19px;font-weight:700;color:#000;text-decoration:underline;}
+.cv-section-title.hidden-title{display:none;}
 
 /* ═══ MERGE VIEW ═══ */
 .merge-view{display:none;width:100%;min-height:calc(100vh - 51px);background:var(--ui-bg);flex-direction:column;overflow-y:auto;}
@@ -292,27 +310,28 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
     </div>
     <div class="sgap"></div>
 
-    <!-- FIX #3: Rubric as dropdown -->
-    <div class="sec-head">📊 Rubric Table Rows</div>
-    <div class="fg">
-      <label>Toggle Rubric Row</label>
-      <div class="custom-dropdown-wrap">
-        <select id="rubricPicker" onchange="toggleRubricFromDrop()">
-          <option value="" disabled selected>— Select a row to toggle on/off —</option>
-          <option value="clarity">Clarity (Mark: 1)</option>
-          <option value="content">Content Quality (Mark: 2)</option>
-          <option value="spelling">Spelling &amp; Grammar (Mark: 1)</option>
-          <option value="organization">Organization and Formatting (Mark: 1)</option>
-        </select>
-        <span class="custom-dropdown-arrow">▾</span>
-      </div>
+    <!-- FIX: Rubric rows – master toggle in header, all ENABLED by default, rows hidden until expanded -->
+    <div class="sec-head" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;">
+      <span>📊 RUBRIC TABLE ROWS</span>
+      <button class="rt-toggle on" id="rt-rubricMaster" onclick="toggleRubricMaster()" style="flex-shrink:0;margin-left:8px;"></button>
     </div>
-    <div id="rubricPillsWrap"></div>
-    <div style="font-size:9px;color:var(--ui-ph);margin-bottom:4px;padding-left:2px;">⚡ Click a pill below to toggle. Total mark updates automatically.</div>
+    <div id="rubricSlidersWrap" style="display:none;"></div>
     <div class="sgap"></div>
 
-    <!-- Student Info (FIX #5: order matches reference image) -->
+    <!-- FIX #7: Section titles toggle (Submitted To / Submitted By) -->
+    <div class="sec-head">🏷️ Cover Sections</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding:8px 12px;background:var(--ui-sec-bg);border-radius:6px;border:1.5px solid var(--ui-border);">
+      <div>
+        <div style="font-size:11.5px;font-weight:700;color:var(--ui-text);">Show "Submitted To / By" headers</div>
+        <div style="font-size:9.5px;color:var(--ui-ph);margin-top:2px;">Underlined section titles like OG cover</div>
+      </div>
+      <button class="rt-toggle on" id="rt-sectionTitles" onclick="toggleSectionTitles()" style="flex-shrink:0;"></button>
+    </div>
+    <div class="sgap"></div>
+
+    <!-- FIX #3: Semester moved into Student Info -->
     <div class="sec-head">🎓 Student Info</div>
+    <div class="fg"><label>Semester</label><input type="text" id="f_semester" placeholder="e.g. Spring 2025" oninput="render()"></div>
     <div class="fg"><label>Student Name</label><input type="text" id="f_studentName" placeholder="e.g. Halla Farrell" oninput="render()"></div>
     <div class="fg"><label>Student ID</label><input type="text" id="f_studentId" placeholder="e.g. 241-15-001" oninput="render()"></div>
     <div class="fg"><label>Batch</label><input type="text" id="f_batch" placeholder="e.g. 66" oninput="render()"></div>
@@ -331,14 +350,11 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
     <div class="fg"><label>Designation</label><input type="text" id="f_designation" placeholder="e.g. Lecturer, Asst. Professor" oninput="render()"></div>
     <div class="sgap"></div>
 
-    <!-- Date & Semester -->
-    <div class="sec-head">📅 Date &amp; Semester</div>
-    <div class="fg"><label>Semester</label><input type="text" id="f_semester" placeholder="e.g. Spring 2025" oninput="render()"></div>
-    <!-- FIX #6: text input, DD-MM-YYYY, numeric month in preview -->
+    <!-- FIX #4: Calendar date input restored -->
+    <div class="sec-head">📅 Submission Date</div>
     <div class="fg">
-      <label>Submission Date <span style="font-size:9px;color:var(--ui-ph);font-weight:400;text-transform:none;">(DD-MM-YYYY)</span></label>
-      <input type="text" id="f_subDate" placeholder="27-02-2026" maxlength="10" oninput="onDateInput(this);render()">
-      <div class="date-hint" id="dateHint"></div>
+      <label>Submission Date</label>
+      <input type="date" id="f_subDate" oninput="render()">
     </div>
     <div class="sgap"></div>
 
@@ -453,54 +469,53 @@ function dismissToast(t){if(!t||!t.parentElement)return;clearTimeout(t._p);t.cla
 })();
 function incDl(){try{const K='diu_cover_craft_downloads';let c=parseInt(localStorage.getItem(K)||'0',10);c++;localStorage.setItem(K,c);const el=document.getElementById('dlCount');if(el)el.textContent=c;}catch(e){}}
 
-/* ── FIX #3: Rubric dropdown + pills ── */
+/* ── Rubric – ALL ENABLED by default, master toggle shows/hides individual controls ── */
 const rubricState={clarity:true,content:true,spelling:true,organization:true};
 const rubricMarks={clarity:1,content:2,spelling:1,organization:1};
 const rubricLabels={clarity:'Clarity',content:'Content Quality',spelling:'Spelling & Grammar',organization:'Organization and Formatting'};
+let rubricExpanded=false;
 
-function toggleRubricFromDrop(){
-  const sel=document.getElementById('rubricPicker');
-  const k=sel.value;if(!k)return;
-  rubricState[k]=!rubricState[k];
-  sel.value='';
-  renderPills();render();
+function toggleRubricMaster(){
+  rubricExpanded=!rubricExpanded;
+  document.getElementById('rubricSlidersWrap').style.display=rubricExpanded?'block':'none';
+  const btn=document.getElementById('rt-rubricMaster');
+  btn.classList.toggle('on',rubricExpanded);
 }
-function renderPills(){
-  const w=document.getElementById('rubricPillsWrap');w.innerHTML='';
+
+function renderRubricSliders(){
+  const w=document.getElementById('rubricSlidersWrap');w.innerHTML='';
   Object.keys(rubricState).forEach(k=>{
     const on=rubricState[k];
-    const p=document.createElement('div');
-    p.className='rubric-pill '+(on?'on':'off');
-    p.innerHTML=`<span>${on?'●':'○'}</span>${rubricLabels[k]}<span style="font-size:9px;opacity:.7;">(${rubricMarks[k]})</span>`;
-    p.onclick=()=>{rubricState[k]=!rubricState[k];renderPills();render();};
-    w.appendChild(p);
+    const row=document.createElement('div');
+    row.className='rubric-slider-row'+(on?' enabled':'');
+    row.innerHTML=`<span class="rs-label">${rubricLabels[k]}</span><span class="rs-mark">${rubricMarks[k]} mark</span><button class="rt-toggle${on?' on':''}" onclick="toggleRubricSlider('${k}')"></button>`;
+    w.appendChild(row);
   });
+}
+function toggleRubricSlider(k){
+  rubricState[k]=!rubricState[k];
+  renderRubricSliders();render();
 }
 function rubricTotal(){return Object.keys(rubricState).filter(k=>rubricState[k]).reduce((s,k)=>s+rubricMarks[k],0);}
 
-/* ── FIX #6: Date input – DD-MM-YYYY text field, numeric month in preview ── */
-function onDateInput(inp){
-  let v=inp.value.replace(/\D/g,'');
-  if(v.length>2) v=v.slice(0,2)+'-'+v.slice(2);
-  if(v.length>5) v=v.slice(0,5)+'-'+v.slice(5);
-  if(v.length>10) v=v.slice(0,10);
-  inp.value=v;
-  const h=document.getElementById('dateHint');
-  const parsed=parseDate(v);
-  h.textContent=parsed?'✓ Preview: '+parsed:'';
-  h.style.color=parsed?'#16a34a':'var(--ui-ph)';
-}
-// Returns DD/MM/YYYY (numeric month) or ''
-function parseDate(s){
-  if(!s||s.length<10)return'';
-  const p=s.split('-');
-  if(p.length!==3||p[0].length!==2||p[1].length!==2||p[2].length!==4)return'';
-  const d=+p[0],m=+p[1],y=+p[2];
-  if(d<1||d>31||m<1||m>12||y<1900)return'';
-  return p[0]+'/'+p[1]+'/'+p[2]; // numeric month, not name
+/* ── FIX #7: Section titles toggle ── */
+let showSectionTitles=true;
+function toggleSectionTitles(){
+  showSectionTitles=!showSectionTitles;
+  const btn=document.getElementById('rt-sectionTitles');
+  btn.classList.toggle('on',showSectionTitles);
+  render();
 }
 
-/* ── FIX #8: required field check → enable/disable download ── */
+/* ── FIX #4: Calendar date formatting (YYYY-MM-DD → DD/MM/YYYY) ── */
+function formatCalendarDate(s){
+  if(!s)return'';
+  const parts=s.split('-');
+  if(parts.length!==3)return'';
+  return parts[2]+'/'+parts[1]+'/'+parts[0];
+}
+
+/* ── Required field check ── */
 const REQ=['f_studentName','f_studentId','f_courseCode','f_courseName','f_teacherName'];
 function checkFields(){
   const empty=REQ.filter(id=>{const e=document.getElementById(id);return!e||!e.value.trim();}).length;
@@ -511,7 +526,7 @@ function checkFields(){
   tip.textContent=ok?'':('Fill '+empty+' more required field'+(empty>1?'s':'')+' to download');
 }
 
-/* ── FIX #8: Undo ── */
+/* ── Undo ── */
 const ALL_F=['f_studentName','f_studentId','f_batch','f_section','f_courseCode','f_courseName','f_teacherName','f_designation','f_semester','f_subDate'];
 let snap=null,undoT=null,undoI=null;
 const UNDO_S=15;
@@ -519,7 +534,10 @@ const UNDO_S=15;
 function capSnap(){
   const s={};ALL_F.forEach(id=>{const e=document.getElementById(id);if(e)s[id]=e.value;});
   s._pt=document.getElementById('f_pageTitle').value;
-  s._rb={...rubricState};return s;
+  s._rb={...rubricState};
+  s._re=rubricExpanded;
+  s._st=showSectionTitles;
+  return s;
 }
 function resetAll(){
   const hasData=ALL_F.some(id=>{const e=document.getElementById(id);return e&&e.value.trim();});
@@ -528,8 +546,12 @@ function resetAll(){
   ALL_F.forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
   document.getElementById('f_pageTitle').value='Lab Assignment Report';
   Object.keys(rubricState).forEach(k=>rubricState[k]=true);
-  document.getElementById('dateHint').textContent='';
-  renderPills();render();startUndo();
+  rubricExpanded=false;
+  document.getElementById('rubricSlidersWrap').style.display='none';
+  const rm=document.getElementById('rt-rubricMaster');if(rm)rm.classList.remove('on');
+  showSectionTitles=true;
+  document.getElementById('rt-sectionTitles').classList.add('on');
+  renderRubricSliders();render();startUndo();
   showToast('warning','Fields cleared','Press Undo within 15s to restore.');
 }
 function startUndo(){
@@ -552,8 +574,9 @@ function doUndo(){
   ALL_F.forEach(id=>{const e=document.getElementById(id);if(e)e.value=s[id]||'';});
   document.getElementById('f_pageTitle').value=s._pt||'Lab Assignment Report';
   Object.assign(rubricState,s._rb||{});
-  onDateInput(document.getElementById('f_subDate'));
-  renderPills();render();
+  showSectionTitles=s._st!==undefined?s._st:true;
+  document.getElementById('rt-sectionTitles').classList.toggle('on',showSectionTitles);
+  renderRubricSliders();render();
   if(undoT){clearTimeout(undoT);undoT=null;}
   killUndo();
   showToast('success','Restored!','Fields have been recovered.');
@@ -595,42 +618,36 @@ function buildTable(){
   </table>`;
 }
 
-/* ── FIX #4 #5: BUILD HTML – always show labels, OG order/style ── */
+/* ── BUILD HTML ── */
 function gv(id){const e=document.getElementById(id);return e?e.value.trim():'';}
 function buildHTML(){
   const pt=gv('f_pageTitle')||'Lab Assignment Report';
   const name=gv('f_studentName'),sid=gv('f_studentId'),batch=gv('f_batch'),sec=gv('f_section');
   const cc=gv('f_courseCode'),cn=gv('f_courseName');
   const teacher=gv('f_teacherName'),desig=gv('f_designation');
-  const sem=gv('f_semester'),rawDate=gv('f_subDate');
-  const subDate=parseDate(rawDate)||'';
+  const sem=gv('f_semester');
+  const subDate=formatCalendarDate(gv('f_subDate'));
 
-  // FIX #4: always show labels even when value empty
   let h='';
-  // Logo only (fix #9: no university name text)
   h+=`<div class="cv-logo-row"><img src="img/DIU-Logo.png" alt="DIU" onerror="this.style.display='none'"></div>`;
-  // Title
   h+=`<div class="cv-page-title">${pt}</div>`;
-  // Rubric table
   h+=`<div class="cv-rubric-wrap">${buildTable()}</div>`;
 
-  // FIX #5: same order as reference images
-  // Semester outside any box
+  // Submitted By FIRST (student info on top)
+  if(showSectionTitles) h+=`<div class="cv-section-title">Submitted By:</div>`;
   h+=`<div class="cv-row"><span class="cv-lbl">Semester:</span><span class="cv-val">&nbsp;${sem}</span></div>`;
-  // Student Name
   h+=`<div class="cv-row"><span class="cv-lbl">Student Name:</span><span class="cv-val">&nbsp;${name}</span></div>`;
-  // Student ID
   h+=`<div class="cv-row"><span class="cv-lbl">Student ID:</span><span class="cv-val">&nbsp;${sid}</span></div>`;
-  // Batch + Section same line
-  h+=`<div class="cv-row"><span class="cv-lbl">Batch:</span><span class="cv-val">&nbsp;${batch}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cv-lbl">Section:</span><span class="cv-val">&nbsp;${sec}</span></div>`;
-  // Course Code + Course Name same line
-  h+=`<div class="cv-row"><span class="cv-lbl">Course Code:</span><span class="cv-val">&nbsp;${cc}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cv-lbl">Course Name:</span><span class="cv-val">&nbsp;${cn}</span></div>`;
-  // Teacher
-  h+=`<div class="cv-row" style="margin-top:6px;"><span class="cv-lbl">Course Teacher Name:</span><span class="cv-val">&nbsp;${teacher}</span></div>`;
-  // Designation
+  h+=`<div class="cv-dual-row"><div class="cv-dual-left"><span class="cv-lbl">Batch:</span><span class="cv-val">&nbsp;${batch}</span></div><div class="cv-dual-right"><span class="cv-lbl">Section:</span><span class="cv-val">&nbsp;${sec}</span></div></div>`;
+  h+=`<div class="cv-dual-row"><div class="cv-dual-left"><span class="cv-lbl">Course Code:</span><span class="cv-val">&nbsp;${cc}</span></div><div class="cv-dual-right"><span class="cv-lbl">Course Name:</span><span class="cv-val">&nbsp;${cn}</span></div></div>`;
+
+  // Submitted To SECOND (teacher info below)
+  if(showSectionTitles) h+=`<div class="cv-section-title" style="margin-top:14px;">Submitted To:</div>`;
+  else h+=`<div style="margin-top:10px;"></div>`;
+  h+=`<div class="cv-row"><span class="cv-lbl">Course Teacher Name:</span><span class="cv-val">&nbsp;${teacher}</span></div>`;
   h+=`<div class="cv-row"><span class="cv-lbl">Designation:</span><span class="cv-val">&nbsp;${desig}</span></div>`;
-  // Date
-  h+=`<div class="cv-date-row"><span class="cv-lbl">Submission Date:</span><span class="cv-val">&nbsp;${subDate}</span></div>`;
+
+  h+=`<div class="cv-date-row" style="margin-top:30px;"><span class="cv-lbl">Submission Date:</span><span class="cv-val">&nbsp;${subDate}</span></div>`;
   return h;
 }
 
@@ -639,7 +656,7 @@ function render(){
   checkFields();
 }
 
-/* ── DOWNLOAD ── */
+/* ── FIX #5: Download filename = pageTitle + sitename ── */
 async function toDataURL(url){
   try{const r=await fetch(url,{mode:'cors'});const b=await r.blob();return await new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>res(fr.result);fr.onerror=rej;fr.readAsDataURL(b);});}catch(e){return null;}
 }
@@ -662,15 +679,18 @@ function burst(btn){
   }
   setTimeout(()=>{if(ov.parentNode)ov.parentNode.removeChild(ov);},1400);
 }
+function buildFilename(){
+  const pt=gv('f_pageTitle')||'Lab-Assignment-Report';
+  return pt.replace(/\s+/g,'-').replace(/[^a-zA-Z0-9\-]/g,'')+'-diucoverpoint.pdf';
+}
 
 async function buildBlob(){
   const w=document.createElement('div');
   w.style.cssText='position:absolute;top:0;left:0;width:794px;visibility:hidden;pointer-events:none;z-index:-9999;';
   const clone=document.createElement('div');
   clone.style.cssText='width:794px;min-height:1122px;background:#fff;position:relative;font-family:"Calibri","Carlito",Arial,sans-serif;color:#000;';
-  // Watermark (fix #9: use logo image at low opacity)
   const wm=document.createElement('div');
-  wm.style.cssText='position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:360px;height:360px;background-size:contain;background-repeat:no-repeat;background-position:center;opacity:0.04;z-index:1;pointer-events:none;';
+  wm.style.cssText='position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:360px;height:360px;background-size:contain;background-repeat:no-repeat;background-position:center;opacity:0.06;z-index:1;pointer-events:none;';
   clone.appendChild(wm);
   const inner=document.createElement('div');
   inner.style.cssText='position:relative;z-index:5;padding:36px 55px 40px 55px;min-height:1050px;display:flex;flex-direction:column;font-family:"Calibri","Carlito",Arial,sans-serif;color:#000;';
@@ -678,10 +698,17 @@ async function buildBlob(){
   clone.appendChild(inner);
   w.appendChild(clone);document.body.appendChild(w);
   try{
+    // Load logo
     const lg=clone.querySelector('.cv-logo-row img');
-    if(lg&&lg.src&&!lg.src.startsWith('data:')){const d=await toDataURL(lg.src);if(d){lg.src=d;wm.style.backgroundImage=`url(${d})`;}}
+    if(lg&&lg.src&&!lg.src.startsWith('data:')){
+      const d=await toDataURL(lg.src);
+      if(d) lg.src=d;
+    }
+    // Load watermark separately (same image as logo)
+    const wmData=await toDataURL('img/DIU-Logo.png');
+    if(wmData) wm.style.backgroundImage=`url(${wmData})`;
   }catch(e){}
-  await new Promise(r=>setTimeout(r,100));
+  await new Promise(r=>setTimeout(r,150));
   const opt={margin:0,image:{type:'jpeg',quality:1},html2canvas:{scale:2.8,useCORS:true,allowTaint:true,logging:false,width:794,scrollX:0,scrollY:0},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}};
   const blob=await html2pdf().set(opt).from(clone).outputPdf('blob');
   document.body.removeChild(w);
@@ -696,7 +723,7 @@ async function downloadPDF(){
   try{
     const blob=await buildBlob();
     btn.classList.remove('generating');btn.classList.add('success');
-    burst(btn);uDl(blob,'Lab_Assignment_Report_Cover-diucoverpoint.pdf');incDl();
+    burst(btn);uDl(blob,buildFilename());incDl();
     btn.innerHTML='✅ DOWNLOADED!';
     setTimeout(()=>{btn.classList.remove('success');btn.innerHTML='⬇ &nbsp; DOWNLOAD PDF';checkFields();},2500);
   }catch(e){
@@ -705,25 +732,14 @@ async function downloadPDF(){
   }
 }
 
-/* ══ FIX #10: MERGE VIEW (embedded, no conditions, auto-add) ══ */
+/* ══ MERGE VIEW ══ */
 let mergeItems=[],dragSrcIdx=null;
 const mCardsEl=document.getElementById('mergeCards');
 const mEmptyEl=document.getElementById('mergeEmpty');
 
-function openMergeView(){
-  document.getElementById('mainLayout').classList.add('hidden');
-  document.getElementById('mergeView').classList.add('active');
-  updateMSteps();
-}
-function closeMergeView(){
-  document.getElementById('mergeView').classList.remove('active');
-  document.getElementById('mainLayout').classList.remove('hidden');
-}
-// FIX #10: auto-adds cover without any dialog then opens merge
-async function addToMergeAndGo(){
-  await addCoverToPile();
-  openMergeView();
-}
+function openMergeView(){document.getElementById('mainLayout').classList.add('hidden');document.getElementById('mergeView').classList.add('active');updateMSteps();}
+function closeMergeView(){document.getElementById('mergeView').classList.remove('active');document.getElementById('mainLayout').classList.remove('hidden');}
+async function addToMergeAndGo(){await addCoverToPile();openMergeView();}
 
 const dz=document.getElementById('mergeDropzone');
 ['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.add('over');}));
@@ -832,8 +848,9 @@ async function doMerge(){
 }
 
 // ── INIT ──
-renderPills();
+renderRubricSliders();
 render();
+
 </script>
 </body>
 </html>
