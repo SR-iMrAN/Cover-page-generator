@@ -124,7 +124,7 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 .cv-page{width:210mm;min-height:297mm;background:#fff;position:relative;}
 #cover-page{box-shadow:0 16px 60px rgba(0,0,0,.55);margin:0 auto;}
 /* FIX #9: watermark – logo image, lower opacity */
-.cv-wm{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:360px;height:360px;background-image:url('img/DIU-Logo.png');background-size:contain;background-repeat:no-repeat;background-position:center;opacity:.04;z-index:1;pointer-events:none;}
+.cv-wm{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:360px;height:360px;background-image:url('img/watermark.jpg');background-size:contain;background-repeat:no-repeat;background-position:center;opacity:.06;z-index:1;pointer-events:none;}
 .cv-body{position:relative;z-index:5;padding:36px 50px 40px 50px;min-height:1050px;display:flex;flex-direction:column;font-family:'Calibri','Carlito',Arial,sans-serif;color:#000;}
 
 /* Logo row – like OG, no text name */
@@ -705,7 +705,7 @@ async function buildBlob(){
       if(d) lg.src=d;
     }
     // Load watermark separately (same image as logo)
-    const wmData=await toDataURL('img/DIU-Logo.png');
+    const wmData=await toDataURL('img/watermark.jpg');
     if(wmData) wm.style.backgroundImage=`url(${wmData})`;
   }catch(e){}
   await new Promise(r=>setTimeout(r,150));
