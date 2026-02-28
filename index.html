@@ -40,7 +40,7 @@ body{background:var(--ui-bg);color:var(--ui-text);font-family:'Inter',sans-serif
 #welcomeBanner{position:fixed;top:0px;left:0;right:0;z-index:600;background:linear-gradient(135deg,#0f172a 0%,#1e293b 50%,#0f2044 100%);border-bottom:2px solid rgba(168,192,255,0.2);box-shadow:0 4px 32px rgba(0,0,0,0.5);transform:translateY(calc(-100% - 60px));transition:transform .5s cubic-bezier(.34,1.2,.64,1);overflow:hidden;}
 #welcomeBanner.open{transform:translateY(0);}
 .wb-inner{padding:14px 24px 16px;max-width:1200px;margin:0 auto;position:relative;}
-.wb-close{position:absolute;top:12px;right:16px;background:rgba(255,255,255,0.1);border:none;color:rgba(255,255,255,0.6);font-size:18px;cursor:pointer;border-radius:6px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.wb-close{position:absolute;top:12px;right:16px;background:rgba(255, 0, 0, 0.853);border:none;color:rgba(255, 255, 255, 0.786);font-size:18px;cursor:pointer;border-radius:6px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
 .wb-close:hover{background:rgba(255,255,255,0.2);color:#fff;}
 .wb-title{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:900;letter-spacing:3px;color:#a8c0ff;margin-bottom:8px;}
 .wb-title span{color:#4ade80;}
@@ -63,7 +63,7 @@ body{background:var(--ui-bg);color:var(--ui-text);font-family:'Inter',sans-serif
 
 /* ── CHANGE TEMPLATE BUTTON ── */
 .change-template-btn{
-  display:flex;align-items:center;gap:6px;
+  display:flex;align-items:center;gap:6px;padding: 10px;
   background:linear-gradient(130deg,#7c3aed,#4f46e5);
   border:none;border-radius:7px;padding:6px 12px;
   color:#fff;font-family:'Orbitron',sans-serif;font-size:9px;
@@ -77,7 +77,7 @@ body{background:var(--ui-bg);color:var(--ui-text);font-family:'Inter',sans-serif
 .change-template-btn:hover::after{left:100%;}
 .change-template-btn:hover{box-shadow:0 4px 18px rgba(124,58,237,0.55);transform:translateY(-1px);}
 .change-template-btn .ct-icon{font-size:13px;}
-.change-template-btn .ct-new{position:absolute;top:-5px;right:-5px;background:#4ade80;color:#000;font-family:'Inter',sans-serif;font-size:7px;font-weight:800;border-radius:6px;padding:1px 4px;letter-spacing:.5px;}
+.change-template-btn .ct-new{position:absolute;top:-5px;left:-5px;background:#4ade80;color:#000;font-family:'Inter',sans-serif;font-size:7px;font-weight:800;border-radius:6px;padding:7px 4px;margin-left: 7px;letter-spacing:.5px;}
 
 /* TEMPLATE PICKER MODAL */
 .tpl-modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:700;align-items:center;justify-content:center;padding:20px;}
@@ -437,7 +437,7 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
     <div class="wb-title">Welcome to DIU <span>Cover</span> Point ✨</div>
     <div class="wb-grid">
       <div class="wb-feat"><span class="wb-feat-icon">📄</span><div class="wb-feat-text"><strong>Assignment & Lab Covers</strong>Fill in your info and get a professional DIU cover page PDF instantly.</div></div>
-      <div class="wb-feat wb-new"><span class="wb-feat-icon">🆕</span><div class="wb-feat-text"><strong>Lab Assignment Report Template</strong>New! Full rubric table template for other depts. Click "Change Template" in the header to access it.</div></div>
+      <div class="wb-feat wb-new"><span class="wb-feat-icon">🆕</span><div class="wb-feat-text"><strong>New Template: Cover Page With Mark Table</strong>New update! Full rubric mark table cover for other depts. Click "Change Template" in the header to access it.</div></div>
       <div class="wb-feat"><span class="wb-feat-icon">⊕</span><div class="wb-feat-text"><strong>Merge PDF Tool</strong>Combine your cover page with any PDF — drag to reorder, one-click download.</div></div>
       <div class="wb-feat"><span class="wb-feat-icon">✨</span><div class="wb-feat-text"><strong>Optional Fields</strong>Expand optional fields like Designation & Group No to add more detail.</div></div>
       <div class="wb-feat"><span class="wb-feat-icon">⚡</span><div class="wb-feat-text"><strong>Copy from Assignment</strong>In Lab Report, instantly copy teacher & student info from your assignment.</div></div>
@@ -481,10 +481,10 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
         <div class="tpl-card-icon">📊</div>
         <div class="tpl-card-info">
           <div class="tpl-card-title">
-            Lab Assignment Report
+            Cover Page With Mark Table
             <span class="tpl-badge new">✦ NEW</span>
           </div>
-          <div class="tpl-card-desc">Full rubric table (Clarity, Content Quality, Spelling, Organization) with customizable page title dropdown. Designed to match the official DIU Lab Assignment Report format exactly.</div>
+          <div class="tpl-card-desc">Full rubric mark table (Clarity, Content Quality, Spelling, Organization) with customizable page title dropdown. New update — designed to match the official DIU Lab Assignment Report format exactly.</div>
         </div>
         <div class="tpl-go-btn">→</div>
       </a>
@@ -535,7 +535,7 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
   <div class="dm-section">Navigation</div>
   <button class="dm-item" onclick="openModal('tplModal');closeMenu()">
     <span class="dm-icon">🎨</span>
-    <div><div>Change Template <span style="font-size:9px;background:linear-gradient(130deg,#7c3aed,#4f46e5);color:#fff;border-radius:4px;padding:1px 5px;margin-left:4px;font-weight:700;">NEW</span></div><span class="dm-desc">Switch to Lab Assignment Report template</span></div>
+    <div><div>Change Template <span style="font-size:9px;background:linear-gradient(130deg,#7c3aed,#4f46e5);color:#fff;border-radius:4px;padding:1px 5px;margin-left:4px;font-weight:700;">NEW</span></div><span class="dm-desc">Switch to Cover Page With Mark Table (new update)</span></div>
   </button>
   <div class="dm-divider"></div>
   <button class="dm-item" onclick="openModal('devModal')">
@@ -568,16 +568,16 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
         <a class="dev-link" href="https://sr-imran.github.io/sri/" target="_blank"><span class="dl-icon">🌐</span> Portfolio Website</a>
         <a class="dev-link" href="https://github.com/SR-iMrAN?tab=repositories" target="_blank"><span class="dl-icon">🐙</span> GitHub Profile</a>
         <a class="dev-link" href="https://www.linkedin.com/in/s-r-imran/" target="_blank"><span class="dl-icon">💼</span> LinkedIn</a>
-        <a class="dev-link" href="mailto:srimran423@gmail.com"><span class="dl-icon">✉️</span> Contact via Email</a>
+        <a class="dev-link" href="/cdn-cgi/l/email-protection#c6b5b4afabb4a7a8f2f4f586a1aba7afaae8a5a9ab"><span class="dl-icon">✉️</span> Contact via Email</a>
       </div>
     </div>
   </div>
 </div>
 
 <div class="modal-bg" id="ratingModal" onclick="closeBg(event,'ratingModal')">
-  <div class="modal">
+  <div class="modal" style="max-width:460px;">
     <div class="modal-head"><h3>⭐ Comment &amp; Rating</h3><button class="modal-close" onclick="closeModal('ratingModal')">×</button></div>
-    <div class="modal-body">
+    <div class="modal-body" id="ratingStep1">
       <div class="rating-wrap">
         <div style="font-size:14px;font-weight:600;color:var(--ui-text);">How would you rate DIU Cover Point?</div>
         <div class="stars" id="stars">
@@ -591,8 +591,25 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
       </div>
       <label class="comment-label">Your Comment</label>
       <textarea class="comment-box" id="commentBox" placeholder="Share your thoughts, suggestions, or feedback..."></textarea>
-      <button class="submit-btn" onclick="submitRating()">Submit Feedback</button>
-      <div class="submit-success" id="submitSuccess">✅ Thank you for your feedback!</div>
+      <button class="submit-btn" onclick="goToRatingStep2()">Next →</button>
+    </div>
+    <!-- STEP 2: Name -->
+    <div class="modal-body" id="ratingStep2" style="display:none;">
+      <div style="text-align:center;margin-bottom:18px;">
+        <div style="font-size:36px;margin-bottom:8px;">🙏</div>
+        <div style="font-size:15px;font-weight:700;color:var(--ui-text);">Almost done!</div>
+        <div style="font-size:12px;color:var(--ui-muted);margin-top:4px;">Please enter your name so we know who to thank.</div>
+      </div>
+      <div style="background:var(--ui-sec-bg);border:1px solid var(--ui-border);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:11px;color:var(--ui-muted);">
+        <div style="font-weight:700;color:var(--ui-text);margin-bottom:4px;font-size:12px;">📋 Your Feedback Summary</div>
+        <div>⭐ Rating: <strong id="ratingPreview" style="color:var(--ui-accent);">— stars</strong></div>
+        <div style="margin-top:3px;">💬 Comment: <em id="commentPreview" style="color:var(--ui-text);">No comment</em></div>
+      </div>
+      <label class="comment-label">Your Name <span style="color:var(--ui-ph);font-weight:400;text-transform:none;">(optional — or stay anonymous)</span></label>
+      <input type="text" id="ratingName" style="width:100%;background:#fff;border:1.5px solid var(--ui-input-b);border-radius:6px;color:var(--ui-text);font-family:'Inter',sans-serif;font-size:14px;font-weight:500;padding:10px 12px;outline:none;transition:border-color .15s;" placeholder="e.g. Imran Sifat" onkeydown="if(event.key==='Enter')submitRatingFinal()">
+      <button class="submit-btn" onclick="submitRatingFinal()" id="submitFinalBtn" style="margin-top:12px;">✅ Submit Feedback</button>
+      <button onclick="backToRatingStep1()" style="width:100%;margin-top:8px;padding:9px;background:none;border:1.5px solid var(--ui-border);border-radius:7px;color:var(--ui-muted);font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;">← Back &amp; Edit</button>
+      <div class="submit-success" id="submitSuccess" style="margin-top:12px;">✅ Thank you for your feedback!</div>
     </div>
   </div>
 </div>
@@ -841,7 +858,7 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 if(window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
 let mode='assignment';
@@ -1077,12 +1094,98 @@ function setRating(v){
   document.querySelectorAll('.star').forEach(s=>s.classList.toggle('active',parseInt(s.dataset.v)<=v));
   document.getElementById('ratingLabel').textContent=ratingLabels[v];
 }
-function submitRating(){
+function goToRatingStep2(){
   if(!currentRating){document.getElementById('ratingLabel').textContent='⚠️ Please select a rating first';return;}
-  document.getElementById('submitSuccess').style.display='block';
-  showToast('success','Thanks for your feedback!','Your rating has been submitted.');
-  setTimeout(()=>{closeModal('ratingModal');document.getElementById('submitSuccess').style.display='none';document.getElementById('commentBox').value='';currentRating=0;setRating(0);},2000);
+  const comment=document.getElementById('commentBox').value.trim();
+  document.getElementById('ratingPreview').textContent=ratingLabels[currentRating]+' ('+currentRating+'/5)';
+  document.getElementById('commentPreview').textContent=comment||'No comment';
+  document.getElementById('ratingStep1').style.display='none';
+  document.getElementById('ratingStep2').style.display='block';
+  document.getElementById('ratingName').focus();
 }
+function backToRatingStep1(){
+  document.getElementById('ratingStep2').style.display='none';
+  document.getElementById('ratingStep1').style.display='block';
+}
+async function submitRatingFinal(){
+  const name=document.getElementById('ratingName').value.trim()||'Anonymous';
+  const comment=document.getElementById('commentBox').value.trim()||'(no comment)';
+  const ratingText=ratingLabels[currentRating]||'—';
+  const btn=document.getElementById('submitFinalBtn');
+  btn.disabled=true;btn.innerHTML='<span style="display:inline-block;animation:spin .8s linear infinite;margin-right:6px">⏳</span> Submitting...';
+
+  // ── Google Form silent submit ──
+  // HOW TO SET UP:
+  // 1. Create a Google Form with 3 Short Answer fields: Name, Rating, Comment
+  // 2. Right-click "Submit" → Inspect → find the form action URL and entry.XXXXXXXXX IDs
+  // 3. Replace FORM_ACTION and the 3 entry IDs below
+  const FORM_ACTION='https://docs.google.com/forms/u/0/d/e/1FAIpQLSfoFHpaBqMIm0jV-OIzAfAcyrosfodkknnm1w027T8AG2XxrA/formResponse';
+  const ENTRY_NAME   ='entry.1386726769';   // ←  field entry ID
+  const ENTRY_RATING ='entry.1233291528';   // ←  Rating field entry ID
+  const ENTRY_COMMENT='entry.1004794290';   // ← Comment field entry ID
+
+  try{
+    const iframe=document.createElement('iframe');
+    iframe.name='gf_'+Date.now();
+    iframe.style.cssText='display:none;position:absolute;width:0;height:0;border:0;';
+    document.body.appendChild(iframe);
+    const form=document.createElement('form');
+    form.method='POST';
+    form.action=FORM_ACTION;
+    form.target=iframe.name;
+    form.style.display='none';
+    [[ENTRY_NAME, name],[ENTRY_RATING, currentRating+' ★ — '+ratingText],[ENTRY_COMMENT, comment]].forEach(([k,v])=>{
+      const inp=document.createElement('input');
+      inp.type='hidden';inp.name=k;inp.value=v;
+      form.appendChild(inp);
+    });
+    document.body.appendChild(form);
+    form.submit();
+    setTimeout(()=>{[form,iframe].forEach(el=>{if(el.parentNode)el.parentNode.removeChild(el);});},4000);
+  }catch(e){}
+
+  // Show thank-you in modal
+  document.getElementById('ratingStep2').innerHTML=`
+    <div style="text-align:center;padding:20px 0 10px;">
+      <div style="font-size:52px;margin-bottom:12px;animation:dlSuccess .4s ease;">🎉</div>
+      <div style="font-size:17px;font-weight:700;color:var(--ui-text);margin-bottom:6px;">Thank you, ${name.split(' ')[0]}!</div>
+      <div style="font-size:13px;color:var(--ui-muted);line-height:1.6;">Your ${currentRating}★ rating and feedback<br>have been submitted successfully.</div>
+      <div style="margin-top:18px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+        <span style="background:#fef9c3;border:1px solid #fde047;border-radius:20px;padding:4px 14px;font-size:12px;font-weight:600;color:#713f12;">${ratingText}</span>
+        <span style="background:#f0fdf4;border:1px solid #86efac;border-radius:20px;padding:4px 14px;font-size:12px;color:#166534;">${comment.slice(0,40)}${comment.length>40?'…':''}</span>
+      </div>
+    </div>`;
+  showToast('success','Thank you, '+name.split(' ')[0]+'! ⭐','Your feedback has been recorded.');
+  setTimeout(()=>{
+    closeModal('ratingModal');
+    // Reset for next time
+    setTimeout(()=>{
+      document.getElementById('ratingStep1').style.display='block';
+      document.getElementById('ratingStep2').style.display='none';
+      // Restore step 2 HTML
+      document.getElementById('ratingStep2').innerHTML=`
+      <div style="text-align:center;margin-bottom:18px;">
+        <div style="font-size:36px;margin-bottom:8px;">🙏</div>
+        <div style="font-size:15px;font-weight:700;color:var(--ui-text);">Almost done!</div>
+        <div style="font-size:12px;color:var(--ui-muted);margin-top:4px;">Please enter your name so we know who to thank.</div>
+      </div>
+      <div style="background:var(--ui-sec-bg);border:1px solid var(--ui-border);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:11px;color:var(--ui-muted);">
+        <div style="font-weight:700;color:var(--ui-text);margin-bottom:4px;font-size:12px;">📋 Your Feedback Summary</div>
+        <div>⭐ Rating: <strong id="ratingPreview" style="color:var(--ui-accent);">— stars</strong></div>
+        <div style="margin-top:3px;">💬 Comment: <em id="commentPreview" style="color:var(--ui-text);">No comment</em></div>
+      </div>
+      <label class="comment-label">Your Name <span style="color:var(--ui-ph);font-weight:400;text-transform:none;">(optional — or stay anonymous)</span></label>
+      <input type="text" id="ratingName" style="width:100%;background:#fff;border:1.5px solid var(--ui-input-b);border-radius:6px;color:var(--ui-text);font-family:'Inter',sans-serif;font-size:14px;font-weight:500;padding:10px 12px;outline:none;transition:border-color .15s;" placeholder="e.g. Imran Sifat" onkeydown="if(event.key==='Enter')submitRatingFinal()">
+      <button class="submit-btn" onclick="submitRatingFinal()" id="submitFinalBtn" style="margin-top:12px;">✅ Submit Feedback</button>
+      <button onclick="backToRatingStep1()" style="width:100%;margin-top:8px;padding:9px;background:none;border:1.5px solid var(--ui-border);border-radius:7px;color:var(--ui-muted);font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;">← Back &amp; Edit</button>
+      <div class="submit-success" id="submitSuccess" style="margin-top:12px;">✅ Thank you for your feedback!</div>`;
+      document.getElementById('commentBox').value='';
+      currentRating=0;setRating(0);
+    },400);
+  },2800);
+}
+// Legacy alias kept for any stray calls
+function submitRating(){goToRatingStep2();}
 function copyFromAssignment(){
   ['courseCode','courseTitle','tName','tDept','sName','sId','sSec','sSem','sDept','subDate'].forEach(f=>{
     const src=document.getElementById('a_'+f),dst=document.getElementById('l_'+f);if(src&&dst)dst.value=src.value;
