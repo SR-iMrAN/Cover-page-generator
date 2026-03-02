@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DIU Cover Point</title>
+<!-- CHANGE 1: Favicon using logo.png -->
+<link rel="icon" type="image/png" href="img/logo.png">
+<link rel="shortcut icon" type="image/png" href="img/logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
@@ -11,8 +14,8 @@
 <style>
 :root{
   --ui-bg:#eef2fb;--ui-surface:#ffffff;--ui-border:#c8d5ee;--ui-accent:#2d54b8;
-  --ui-text:#1a2540;--ui-muted:#4e5f80;--ui-ph:#9aabc8;--ui-input-b:#c0ceeb;
-  --ui-header:#1a2d62;--ui-sec-bg:#edf1fb;
+  --ui-text:#6484d5;--ui-muted:#4e5f80;--ui-ph:#9aabc8;--ui-input-b:#c0ceeb;
+  --ui-header:#131415;--ui-sec-bg:#edf1fb;
   --merge-header:#1a1a2e;--merge-header-accent:#7c3aed;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -51,7 +54,6 @@ body{background:var(--ui-bg);color:var(--ui-text);font-family:'Inter',sans-serif
 .wb-feat-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
 .wb-feat-text{font-size:11px;color:rgba(255,255,255,0.75);line-height:1.5;}
 .wb-feat-text strong{color:#a8c0ff;display:block;font-size:10.5px;letter-spacing:.3px;}
-/* NEW template feature highlight */
 .wb-feat.wb-new{border-color:rgba(124,58,237,0.5);background:rgba(124,58,237,0.12);}
 .wb-feat.wb-new .wb-feat-text strong{color:#c4b5fd;}
 .wb-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
@@ -108,11 +110,63 @@ body{background:var(--ui-bg);color:var(--ui-text);font-family:'Inter',sans-serif
 .tpl-card.tpl-new .tpl-go-btn{background:linear-gradient(130deg,#7c3aed,#4f46e5);}
 .tpl-card.tpl-current .tpl-go-btn{background:#16a34a;}
 
-header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:300;box-shadow:0 2px 14px rgba(26,45,98,0.22);gap:10px;}
+header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:300;box-shadow:0 2px 14px rgba(26,45,98,0.22);gap:10px;}
 .header-left{display:flex;align-items:center;gap:12px;}
+
+/* CHANGE 2: Title logo image in navbar */
+.logo-wrap{
+  position:relative;
+  display:flex;
+  align-items:center;
+}
+.logo-mobile{
+  height:68px;
+  display:none;   /* hidden on desktop */
+}
+.app-logo-wrap{
+  display:flex;
+  /* flex-direction:column;   STACK vertically */
+  align-items:center;      /* CENTER horizontally */
+  justify-content:center;
+  text-align:center;
+}
+/* .app-logo-img{
+  margin-top: 20px;
+  height:90px;
+  width:190px;  
+  max-width:100%;
+  display:block;
+  object-fit:contain;
+
+} */
+.app-logo-main{
+  height:60px;
+  width:auto;
+}
+.app-logo-left{
+    z-index: 2;
+ margin-right: -14px;
+ 
+ margin-top: 8px;
+}
+.logo-badge{
+  background:#fcfcfc;        /* dark soft bg */
+  padding:4px 10px;
+  border-radius:16px;
+  display:flex;
+  align-items:center;
+}
+.app-logo-img{
+  height:40px;
+  width:auto;
+}
+.app-logo-text-wrap{display:flex;flex-direction:column;}
 .app-title{font-family:'Orbitron',sans-serif;font-weight:900;font-size:13px;letter-spacing:3px;color:#a8c0ff;white-space:nowrap;}
 .app-title span{color:#4ade80;}
-.app-subtitle{font-size:9px;color:rgba(255,255,255,0.3);letter-spacing:1px;white-space:nowrap;}
+.app-subtitle{font-size:9px;color:rgba(255,255,255,0.3);letter-spacing:1px;white-space:nowrap; margin-left:22px;}
+/* Mobile: show only logo icon */
+/* .app-logo-mobile{display:none;height:32px;width:auto;} */
+
 .header-center{display:flex;align-items:center;}
 .toggle-wrap{display:flex;border-radius:7px;overflow:hidden;border:1.5px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.07);}
 .tbtn{font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:2px;font-weight:700;padding:8px 18px;background:none;border:none;color:rgba(255,255,255,0.45);cursor:pointer;transition:all .2s;}
@@ -187,8 +241,8 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 .choose-cover-btn:hover{opacity:.9;transform:translateY(-1px);}
 
 /* MAIN LAYOUT */
-.app-layout{display:grid;grid-template-columns:350px 1fr;min-height:calc(100vh - 51px);}
-.inp-panel{background:var(--ui-surface);border-right:1.5px solid var(--ui-border);padding:20px 18px 30px;overflow-y:auto;max-height:calc(100vh - 51px);}
+.app-layout{display:grid;grid-template-columns:350px 1fr;min-height:calc(100vh -70px);}
+.inp-panel{background:var(--ui-surface);border-right:1.5px solid var(--ui-border);padding:20px 18px 30px;overflow-y:auto;max-height:calc(100vh - 70px);}
 .inp-panel::-webkit-scrollbar{width:5px;}
 .inp-panel::-webkit-scrollbar-thumb{background:#c0ceeb;border-radius:10px;}
 .sec-head{font-size:10px;font-weight:700;letter-spacing:2.5px;color:var(--ui-accent);text-transform:uppercase;padding:7px 10px;margin-bottom:11px;background:var(--ui-sec-bg);border-left:3px solid var(--ui-accent);border-radius:0 5px 5px 0;}
@@ -255,7 +309,7 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 
 .mode-panel{display:none;}
 .mode-panel.active{display:block;}
-.prev-panel{background:#3a3a3a;display:flex;flex-direction:column;align-items:center;padding:28px 20px 40px;overflow-y:auto;max-height:calc(100vh - 51px);}
+.prev-panel{background:#3a3a3a;display:flex;flex-direction:column;align-items:center;padding:28px 20px 40px;overflow-y:auto;max-height:calc(100vh - 70px);}
 .prev-label{color:rgba(255,255,255,0.38);font-size:9px;letter-spacing:2.5px;margin-bottom:14px;font-family:'Orbitron',sans-serif;}
 .bottom-label{margin-top:20px;opacity:0.35;}
 
@@ -282,8 +336,36 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 .cv-date-row .cv-lbl u{text-decoration:underline;}
 .cv-date-row .cv-val{font-size:22px;}
 
+/* CHANGE 3: Invisible watermark link at bottom-right of cover */
+.cv-watermark-link{
+  position:absolute;
+  bottom:24px;
+  right:28px;
+  z-index:20;
+  display:block;
+  width:160px;
+  height:32px;
+  text-decoration:none;
+  cursor:pointer;
+  /* White text - invisible to eye but clickable in PDF */
+  color:rgba(255,255,255,0.01);
+  font-size:8px;
+  font-family:Arial,sans-serif;
+  line-height:32px;
+  text-align:center;
+  white-space:nowrap;
+  overflow:hidden;
+  /* Very subtle so it doesn't appear visually but renders as white text */
+  background:rgba(255,255,255,0);
+  border:none;
+}
+.cv-watermark-link:hover{
+  /* Still invisible but tooltip shows on hover */
+  color:rgba(255,255,255,0.01);
+}
+
 /* MERGE */
-.merge-view{display:none;width:100%;min-height:calc(100vh - 51px);background:var(--ui-bg);flex-direction:column;overflow-y:auto;}
+.merge-view{display:none;width:100%;min-height:calc(100vh - 70px);background:var(--ui-bg);flex-direction:column;overflow-y:auto;}
 .merge-view.active{display:flex;}
 .merge-topbar{background:linear-gradient(135deg,#064e3b 0%,#073935 50%,#14b8a6 100%);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;border-bottom:2px solid rgba(20,184,166,0.6);flex-shrink:0;box-shadow:0 2px 20px rgba(0,0,0,0.4);}
 .merge-topbar-left{display:flex;flex-direction:column;}
@@ -382,8 +464,20 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
   .app-layout{padding-bottom:64px;}
   .merge-view.active{padding-bottom:64px;}
   .app-subtitle{display:none;}
-  .change-template-btn .ct-text{display:none;}
-  .change-template-btn{padding:6px 10px;}
+  /* CHANGE 2 mobile: hide title_logo, show logo only */
+  .logo-badge{
+  display:none;
+}
+
+.app-logo-left{
+  margin-right:0;  
+  display: none; /* remove negative overlap on mobile */
+}
+  .app-logo-text-wrap{display:none;}
+  .app-logo-img{display:none;}
+  .logo-mobile{display:block;}
+  .change-template-btn .ct-text{display:flex;  white-space: normal;text-align: center;}
+  .change-template-btn{padding:12px 20px;}
   .visitor-badge{padding:2px 6px;border-radius:12px;}
   .visitor-icon{font-size:10px;}
   .visitor-count{font-size:8px;letter-spacing:.5px;}
@@ -461,8 +555,6 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
     </div>
     <div class="modal-body" style="padding:22px;">
       <div class="tpl-modal-sub">Choose the cover page format that matches your department or assignment type.</div>
-
-      <!-- Current template (DIU standard) -->
       <div class="tpl-card tpl-current">
         <div class="tpl-card-icon">📄</div>
         <div class="tpl-card-info">
@@ -475,8 +567,6 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
         </div>
         <div class="tpl-go-btn">✓</div>
       </div>
-
-      <!-- New template -->
       <a class="tpl-card tpl-new" href="template-lab-assignment.html">
         <div class="tpl-card-icon">📊</div>
         <div class="tpl-card-info">
@@ -488,7 +578,6 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
         </div>
         <div class="tpl-go-btn">→</div>
       </a>
-
       <div style="font-size:10px;color:var(--ui-ph);text-align:center;margin-top:4px;">More templates coming soon · <span style="color:var(--ui-accent);cursor:pointer;" onclick="openModal('ratingModal');closeModal('tplModal')">Suggest a template →</span></div>
     </div>
   </div>
@@ -496,11 +585,35 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
 
 <header>
   <div class="header-left">
-    <div>
-      <div class="app-title">DIU <span>COVER</span> POINT</div>
-      <div class="app-subtitle">COVER PAGE GENERATOR</div>
-    </div>
-    <!-- CHANGE TEMPLATE BUTTON -->
+    <!-- CHANGE 2: Title logo image replaces text in navbar; mobile shows logo.png only -->
+    <div class="app-logo-wrap">
+
+  <!-- Left Logo -->
+ <div class="logo-wrap">
+  <div class="app-logo-left">
+   <img class="app-logo-main" 
+       src="img/titlelogo.png" 
+       alt="Logo">
+
+ </div>
+
+  <!-- Right Logo -->
+  
+<div class="logo-badge">
+ <img class="app-logo-img" 
+       src="img/title+logo.png" 
+       alt="DIU Cover Point"
+       onerror="this.style.display='none'">
+</div></div>
+  <!-- Mobile Logo -->
+  <img src="img/logo.png" class="logo-mobile" alt="CoverPoint Mobile">
+</div>
+  <!-- Subtitle -->
+  <div class="app-logo-text-wrap">
+    <!-- <div class="app-subtitle">COVER PAGE GENERATOR</div> -->
+  </div>
+
+</div>
     <button class="change-template-btn" onclick="openModal('tplModal')" title="Switch to another cover template">
       <span class="ct-icon">🎨</span>
       <span class="ct-text">CHANGE TEMPLATE</span>
@@ -512,7 +625,9 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
       <button class="tbtn active" id="btn-a" onclick="setMode('assignment')">ASSIGNMENT</button>
       <button class="tbtn" id="btn-l" onclick="setMode('lab')">LAB REPORT</button>
       <button class="tbtn merge-tab" id="btn-m" onclick="setMode('merge')">⊕ MERGE PDF</button>
+      
     </div>
+  <div class="app-subtitle">COVER PAGE GENERATOR</div>
   </div>
   <div class="header-right">
     <div class="dl-count-badge" title="Total downloads">
@@ -568,9 +683,7 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
         <a class="dev-link" href="https://sr-imran.github.io/sri/" target="_blank"><span class="dl-icon">🌐</span> Portfolio Website</a>
         <a class="dev-link" href="https://github.com/SR-iMrAN?tab=repositories" target="_blank"><span class="dl-icon">🐙</span> GitHub Profile</a>
         <a class="dev-link" href="https://www.linkedin.com/in/s-r-imran/" target="_blank"><span class="dl-icon">💼</span> LinkedIn</a>
-       <a class="dev-link" href="mailto:diucover.point@gmail.com" target="_blank">
-  <span class="dl-icon">✉️</span> Contact via Email
-</a>
+        <a class="dev-link" href="mailto:diucover.point@gmail.com" target="_blank"><span class="dl-icon">✉️</span> Contact via Email</a>
       </div>
     </div>
   </div>
@@ -595,7 +708,6 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
       <textarea class="comment-box" id="commentBox" placeholder="Share your thoughts, suggestions, or feedback..."></textarea>
       <button class="submit-btn" onclick="goToRatingStep2()">Next →</button>
     </div>
-    <!-- STEP 2: Name -->
     <div class="modal-body" id="ratingStep2" style="display:none;">
       <div style="text-align:center;margin-bottom:18px;">
         <div style="font-size:36px;margin-bottom:8px;">🙏</div>
@@ -780,6 +892,8 @@ header{background:var(--ui-header);padding:0 20px;height:51px;display:flex;align
       <div class="cv-border"></div>
       <div class="cv-wm"></div>
       <div class="cv-body" id="cv-body"></div>
+      <!-- CHANGE 3: Invisible watermark link - white text, only visible on hover/click in PDF -->
+      <a class="cv-watermark-link" href="https://coverpoint.netlify.app" target="_blank" title="Visit coverpoint.netlify.app">coverpoint.netlify.app</a>
     </div>
     <div class="prev-label bottom-label">
       Developed by <strong>Sifatur Rahman Imran</strong> · <span style="cursor:pointer;color:#a8c0ff;" onclick="openModal('devModal')">Contact</span>
@@ -891,10 +1005,34 @@ function dismissToast(t){
   setTimeout(()=>{if(t.parentElement)t.parentElement.removeChild(t);},400);
 }
 
-/* ── WELCOME BANNER ── */
+/* ── WELCOME BANNER ── 
+   CHANGE 4: Only show welcome banner on FIRST EVER visit using localStorage.
+   Uses a session flag too so navigating back from another template page won't re-show it.
+*/
 const WELCOME_DURATION=8000;
+const WELCOME_KEY='diu_cover_craft_welcome_shown';
 let wbTimer=null,wbInterval=null;
+
+function shouldShowWelcome(){
+  try{
+    // Check if already shown in this browser (persistent)
+    if(localStorage.getItem(WELCOME_KEY)==='1') return false;
+    // Check session storage - if set, means we navigated back from another page this session
+    if(sessionStorage.getItem(WELCOME_KEY)==='1') return false;
+    return true;
+  }catch(e){return false;}
+}
+
+function markWelcomeShown(){
+  try{
+    localStorage.setItem(WELCOME_KEY,'1');
+    sessionStorage.setItem(WELCOME_KEY,'1');
+  }catch(e){}
+}
+
 function showWelcome(){
+  if(!shouldShowWelcome()) return;
+  markWelcomeShown();
   setTimeout(()=>{
     const b=document.getElementById('welcomeBanner');
     b.classList.add('open');
@@ -1115,38 +1253,23 @@ async function submitRatingFinal(){
   const ratingText=ratingLabels[currentRating]||'—';
   const btn=document.getElementById('submitFinalBtn');
   btn.disabled=true;btn.innerHTML='<span style="display:inline-block;animation:spin .8s linear infinite;margin-right:6px">⏳</span> Submitting...';
-
-  // ── Google Form silent submit ──
-  // HOW TO SET UP:
-  // 1. Create a Google Form with 3 Short Answer fields: Name, Rating, Comment
-  // 2. Right-click "Submit" → Inspect → find the form action URL and entry.XXXXXXXXX IDs
-  // 3. Replace FORM_ACTION and the 3 entry IDs below
   const FORM_ACTION='https://docs.google.com/forms/u/0/d/e/1FAIpQLSfoFHpaBqMIm0jV-OIzAfAcyrosfodkknnm1w027T8AG2XxrA/formResponse';
-  const ENTRY_NAME   ='entry.1386726769';   // ←  field entry ID
-  const ENTRY_RATING ='entry.1233291528';   // ←  Rating field entry ID
-  const ENTRY_COMMENT='entry.1004794290';   // ← Comment field entry ID
-
+  const ENTRY_NAME   ='entry.1386726769';
+  const ENTRY_RATING ='entry.1233291528';
+  const ENTRY_COMMENT='entry.1004794290';
   try{
     const iframe=document.createElement('iframe');
     iframe.name='gf_'+Date.now();
     iframe.style.cssText='display:none;position:absolute;width:0;height:0;border:0;';
     document.body.appendChild(iframe);
     const form=document.createElement('form');
-    form.method='POST';
-    form.action=FORM_ACTION;
-    form.target=iframe.name;
-    form.style.display='none';
+    form.method='POST';form.action=FORM_ACTION;form.target=iframe.name;form.style.display='none';
     [[ENTRY_NAME, name],[ENTRY_RATING, currentRating+' ★ — '+ratingText],[ENTRY_COMMENT, comment]].forEach(([k,v])=>{
-      const inp=document.createElement('input');
-      inp.type='hidden';inp.name=k;inp.value=v;
-      form.appendChild(inp);
+      const inp=document.createElement('input');inp.type='hidden';inp.name=k;inp.value=v;form.appendChild(inp);
     });
-    document.body.appendChild(form);
-    form.submit();
+    document.body.appendChild(form);form.submit();
     setTimeout(()=>{[form,iframe].forEach(el=>{if(el.parentNode)el.parentNode.removeChild(el);});},4000);
   }catch(e){}
-
-  // Show thank-you in modal
   document.getElementById('ratingStep2').innerHTML=`
     <div style="text-align:center;padding:20px 0 10px;">
       <div style="font-size:52px;margin-bottom:12px;animation:dlSuccess .4s ease;">🎉</div>
@@ -1160,11 +1283,9 @@ async function submitRatingFinal(){
   showToast('success','Thank you, '+name.split(' ')[0]+'! ⭐','Your feedback has been recorded.');
   setTimeout(()=>{
     closeModal('ratingModal');
-    // Reset for next time
     setTimeout(()=>{
       document.getElementById('ratingStep1').style.display='block';
       document.getElementById('ratingStep2').style.display='none';
-      // Restore step 2 HTML
       document.getElementById('ratingStep2').innerHTML=`
       <div style="text-align:center;margin-bottom:18px;">
         <div style="font-size:36px;margin-bottom:8px;">🙏</div>
@@ -1186,7 +1307,6 @@ async function submitRatingFinal(){
     },400);
   },2800);
 }
-// Legacy alias kept for any stray calls
 function submitRating(){goToRatingStep2();}
 function copyFromAssignment(){
   ['courseCode','courseTitle','tName','tDept','sName','sId','sSec','sSem','sDept','subDate'].forEach(f=>{
@@ -1302,6 +1422,7 @@ async function toDataURL(url){
 }
 
 async function buildCoverPDFBlobForMode(modeKey){
+  const SITE_URL='https://coverpoint.netlify.app';
   const wrapper=document.createElement('div');
   wrapper.style.cssText='position:absolute;top:0;left:0;width:793px;height:1122px;overflow:hidden;visibility:hidden;pointer-events:none;z-index:-9999;';
   wrapper.innerHTML=`
@@ -1309,6 +1430,8 @@ async function buildCoverPDFBlobForMode(modeKey){
       <div style="position:absolute;top:16px;left:22px;right:22px;bottom:16px;border:1.5px solid #444;z-index:10;margin-right:2px;"></div>
       <div id="pwm" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:420px;height:420px;background-image:url('img/watermark.jpg');background-size:contain;background-repeat:no-repeat;background-position:center;opacity:0.075;z-index:1;"></div>
       <div style="position:relative;z-index:5;padding:36px 55px 40px 55px;display:flex;flex-direction:column;">${buildHTMLForMode(modeKey)}</div>
+      <!-- CHANGE 3: Invisible URL watermark in PDF - white text on white background, hyperlinked -->
+      <a id="pdf-wm-link" href="${SITE_URL}" style="position:absolute;bottom:24px;right:28px;z-index:20;display:block;width:160px;height:28px;color:rgba(255,255,255,0.01);font-size:7px;font-family:Arial,sans-serif;line-height:28px;text-align:center;text-decoration:none;background:transparent;white-space:nowrap;overflow:hidden;">${SITE_URL}</a>
     </div>`;
   document.body.appendChild(wrapper);
   const cl=wrapper.querySelector('#pci');
