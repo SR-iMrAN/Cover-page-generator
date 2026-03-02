@@ -1,118 +1,102 @@
-**🛡️ CoverPoint – Smart Academic Cover & PDF Merge Tool**
 
-Welcome to CoverPoint, a modern web-based academic utility designed to generate professional assignment & lab report cover pages instantly — with an integrated PDF merge system for complete submission workflow.
 
-🌐 Live Site: (coverpoint.netlify.app)
+# 🛡️ Cover Point – Client
 
-          
-                               ░                                                    
-**🚀 Features**
-📄 Cover Page Generator
+Welcome to **Cover Point**, a modern academic cover page generator and PDF merge platform built with clean UI, smooth interactions, and client-side PDF processing.
 
-Generate assignment cover pages instantly
+It allows students to instantly generate professional Assignment & Lab Report cover pages and merge multiple PDFs in seconds.
 
-Generate lab report cover pages
+🌐 Live Site: [Visit Cover Point](https://coverpoint.netlify.app)
+📦 GitHub Repo: [https://github.com/SR-iMrAN/Cover-page-generator/](https://github.com/SR-iMrAN/Cover-page-generator/)
 
-Real-time live preview
+---
 
-Optional field enable/disable system
+## 🚀 Features
 
-Clean academic formatting
+* 📄 Instant Assignment & Lab Report Cover Page Generator
+* 👁️ Live Preview Before Download
+* 📥 One-Click PDF Export
+* 📎 Merge Multiple PDFs with Drag & Drop
+* 🔄 Reorder Files Before Merge
+* 🗑️ Remove Unwanted PDFs Easily
+* 📊 Rubric Table System (Toggle-based marking)
+* ⚙️ Optional Field Enable / Disable
+* 🔔 Toast Notification System
+* 📱 Fully Responsive Modern UI
+* 🎨 Smooth UI animations & interactive buttons
 
-Watermark integration
+---
 
-One-click PDF export
+## 🧰 Technologies Used
 
-📊 Rubric Table System
+* HTML5
+* CSS3 (Custom UI System + Variables)
+* JavaScript (Vanilla JS)
+* html2pdf.js
+* pdf-lib
+* pdf.js
+* Google Fonts (Inter + Orbitron)
 
-Structured evaluation table
+---
 
-Toggle-based marking system
+## 📦 Dependencies
 
-Adjustable rubric categories
+* html2pdf.js
+* pdf-lib
+* pdf.js
 
-Teacher comment section
+(Client-side CDN based — no backend required)
 
-Academic-style layout
+---
 
-**📎 PDF Merge System**
+## 🛠️ How to Run Locally
 
-Drag & Drop multiple PDFs
+1. **Clone the repository:**
 
-Reorder pages easily
+```bash
+git clone https://github.com/SR-iMrAN/Cover-page-generator.git
+```
 
-Remove unwanted files
+Navigate into the project directory:
 
-Set cover page as first file
+```bash
+cd Cover-page-generator
+```
 
-Page preview thumbnails
+No installation required (Pure Frontend Project).
 
-Combined PDF download
+Simply open:
 
-**🎨 Modern UI/UX**
+```bash
+index.html
+```
 
-Fully responsive design
+Or use Live Server extension for better experience.
 
-Smooth animations
+---
 
-Toast notification system
+## 📁
 
-Download progress states
+```
+   ██████╗  ██████╗ ██╗   ██╗███████╗██████╗ ██████╗  ██████╗ ██╗███╗   ██╗████████╗
+  ██╔════╝ ██╔═══██╗██║   ██║██╔════╝██╔══██╗██╔══██╗██╔═══██╗██║████╗  ██║╚══██╔══╝
+  ██║      ██║   ██║██║   ██║█████╗  ██████╔╝██████╔╝██║   ██║██║██╔██╗ ██║   ██║   
+  ██║      ██║   ██║╚██╗ ██╔╝██╔══╝  ██╔══██╗██╔═══╝ ██║   ██║██║██║╚██╗██║   ██║   
+  ╚██████╗ ╚██████╔╝ ╚████╔╝ ███████╗██║  ██║██║     ╚██████╔╝██║██║ ╚████║   ██║   
+   ╚═════╝  ╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═╝╚═╝      ╚═════╝ ╚═╝╚═╝  ╚═══╝   ╚═╝     
+```
 
-Clean dashboard layout
+---
 
-**🧰 Technologies Used**
+## 🎯 Project Purpose
 
-HTML5
+Cover Point was created to:
 
-CSS3 (Custom UI System + Variables)
+* Eliminate manual formatting hassle
+* Save time for students
+* Provide professional academic formatting
+* Allow fast PDF merging without external tools
+* Deliver a smooth and modern user experience
 
-Vanilla JavaScript
+---
 
-html2pdf.js
-
-pdf-lib
-
-pdf.js
-
-Google Fonts (Inter + Orbitron)
-
-**📦 Dependencies (CDN Based)**__
-html2pdf.js
-pdf-lib
-pdf.js
-Google Fonts
-🛠️ How to Run Locally
-1️⃣ Clone Repository
-git clone https://github.com/Sr-iMrAN/Cover-page-generator.git
-2️⃣ Open Project Folder
-cd coverpoint
-3️⃣ Run with Live Server
-
-You can open index.html directly
-or use VS Code Live Server extension.
-
-No backend required — fully client-side project.
-
-🎯 Purpose of the Project
-
-CoverPoint was built to:
-
-Eliminate manual formatting hassle
-
-Save student time
-
-Ensure professional academic submission
-
-Combine multiple PDFs into a single final file
-
-Provide a clean, modern submission experience
-
-📁 Project Structure
-/index.html
-/template-lab-assignment.html
-/img
-/assets
-🔥 Why CoverPoint?
-
-Because academic submission should be smart, fast, and professional — not repetitive and frustrating.
