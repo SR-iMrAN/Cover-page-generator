@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DIU Cover Point</title>
-<!-- CHANGE 1: Favicon using logo.png -->
 <link rel="icon" type="image/png" href="img/logo.png">
 <link rel="shortcut icon" type="image/png" href="img/logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
@@ -63,6 +62,119 @@ body{background:var(--ui-bg);color:var(--ui-text);font-family:'Inter',sans-serif
 .wb-progress{height:2px;background:rgba(255,255,255,0.08);border-radius:2px;margin-top:10px;overflow:hidden;}
 .wb-progress-bar{height:100%;background:linear-gradient(90deg,#4ade80,#2d54b8);border-radius:2px;width:100%;transition:width linear;}
 
+/* ── FLOATING FEEDBACK BUTTON ── */
+#floatingFeedbackBtn{
+  position:fixed;
+  bottom:90px;
+  right:0;
+  z-index:850;
+  display:flex;
+  align-items:center;
+  gap:0;
+  cursor:pointer;
+  border:none;
+  background:none;
+  padding:0;
+  filter:drop-shadow(0 4px 18px rgba(45,84,184,0.45));
+  transform:translateX(0);
+  transition:filter .2s;
+}
+#floatingFeedbackBtn:hover{filter:drop-shadow(0 6px 22px rgba(45,84,184,0.7));}
+.ffb-pill{
+  background:linear-gradient(135deg,#2d54b8,#7c3aed);
+  color:#fff;
+  font-family:'Orbitron',sans-serif;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:1.5px;
+  padding:10px 14px 10px 16px;
+  border-radius:22px 0 0 22px;
+  white-space:nowrap;
+  overflow:hidden;
+  max-width:0;
+  opacity:0;
+  transition:max-width .45s cubic-bezier(.34,1.2,.64,1),opacity .35s,padding .35s;
+  pointer-events:none;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  line-height:1.4;
+  text-align:left;
+}
+.ffb-pill.visible{max-width:220px;opacity:1;padding:10px 14px 10px 16px;}
+.ffb-pill-text{display:flex;flex-direction:column;gap:2px;}
+.ffb-pill-line1{font-size:9px;letter-spacing:1px;color:#fff;}
+.ffb-pill-line2{font-size:8px;color:rgba(255,255,255,0.7);font-family:'Inter',sans-serif;letter-spacing:.3px;font-weight:500;}
+.ffb-icon-wrap{
+  width:48px;height:48px;
+  background:linear-gradient(135deg,#2d54b8,#7c3aed);
+  border-radius:50% 0 0 50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;
+  flex-shrink:0;
+  position:relative;
+  border-right:none;
+}
+/* floating animation */
+@keyframes floatBob{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-6px);}
+}
+#floatingFeedbackBtn{animation:floatBob 3s ease-in-out infinite;}
+#floatingFeedbackBtn:hover{animation:none;}
+
+/* ── FEEDBACK SIDE MODAL ── */
+#feedbackSideModal{
+  position:fixed;
+  top:0;right:0;bottom:0;
+  width:320px;
+  max-width:95vw;
+  background:#fff;
+  z-index:900;
+  box-shadow:-8px 0 40px rgba(0,0,0,0.22);
+  transform:translateX(110%);
+  transition:transform .4s cubic-bezier(.34,1.1,.64,1);
+  display:flex;
+  flex-direction:column;
+  border-left:2px solid var(--ui-border);
+}
+#feedbackSideModal.open{transform:translateX(0);}
+.fsm-head{
+  background:linear-gradient(135deg,#0f172a,#1e293b);
+  padding:18px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+}
+.fsm-head h3{color:#fff;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:900;letter-spacing:2px;}
+.fsm-head h3 span{color:#c4b5fd;}
+.fsm-close{background:rgba(255,0,0,0.7);border:none;color:#fff;font-size:18px;cursor:pointer;border-radius:5px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.fsm-close:hover{background:#dc2626;}
+.fsm-body{flex:1;overflow-y:auto;padding:20px;}
+.fsm-body::-webkit-scrollbar{width:4px;}
+.fsm-body::-webkit-scrollbar-thumb{background:#c0ceeb;border-radius:10px;}
+/* reuse rating styles inside side modal */
+.fsm-rating-wrap{text-align:center;margin-bottom:16px;}
+.fsm-stars{display:flex;justify-content:center;gap:8px;margin:10px 0 4px;}
+.fsm-star{font-size:28px;cursor:pointer;transition:transform .1s;filter:grayscale(1);opacity:.4;}
+.fsm-star.active{filter:none;opacity:1;transform:scale(1.15);}
+.fsm-star:hover{transform:scale(1.2);}
+.fsm-rating-label{font-size:11px;color:var(--ui-muted);min-height:16px;}
+.fsm-comment-label{font-size:10.5px;font-weight:700;color:var(--ui-muted);letter-spacing:.5px;margin-bottom:6px;display:block;text-transform:uppercase;}
+.fsm-comment-box{width:100%;border:1.5px solid var(--ui-input-b);border-radius:8px;padding:10px 12px;font-family:'Inter',sans-serif;font-size:13px;color:var(--ui-text);resize:vertical;min-height:80px;outline:none;transition:border-color .15s;}
+.fsm-comment-box:focus{border-color:var(--ui-accent);}
+.fsm-name-input{width:100%;background:#fff;border:1.5px solid var(--ui-input-b);border-radius:6px;color:var(--ui-text);font-family:'Inter',sans-serif;font-size:13px;font-weight:500;padding:9px 12px;outline:none;transition:border-color .15s;margin-top:4px;}
+.fsm-name-input:focus{border-color:var(--ui-accent);}
+.fsm-submit-btn{width:100%;margin-top:12px;padding:11px;background:linear-gradient(130deg,#2d54b8,#1a3880);border:none;border-radius:7px;color:#fff;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;}
+.fsm-submit-btn:hover{opacity:.9;transform:translateY(-1px);}
+.fsm-divider{height:1px;background:var(--ui-border);margin:16px 0;}
+.fsm-feature-label{font-size:10.5px;font-weight:700;color:var(--ui-muted);letter-spacing:.5px;margin-bottom:6px;display:block;text-transform:uppercase;}
+.fsm-feature-box{width:100%;border:1.5px solid var(--ui-input-b);border-radius:8px;padding:10px 12px;font-family:'Inter',sans-serif;font-size:13px;color:var(--ui-text);resize:vertical;min-height:60px;outline:none;transition:border-color .15s;}
+.fsm-feature-box:focus{border-color:#7c3aed;}
+.fsm-feat-btn{width:100%;margin-top:10px;padding:10px;background:linear-gradient(130deg,#7c3aed,#4f46e5);border:none;border-radius:7px;color:#fff;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;}
+.fsm-feat-btn:hover{opacity:.9;transform:translateY(-1px);}
+#feedbackSideOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:899;}
+#feedbackSideOverlay.open{display:block;}
+
 /* ── CHANGE TEMPLATE BUTTON ── */
 .change-template-btn{
   display:flex;align-items:center;gap:6px;padding: 10px;
@@ -112,61 +224,17 @@ body{background:var(--ui-bg);color:var(--ui-text);font-family:'Inter',sans-serif
 
 header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:300;box-shadow:0 2px 14px rgba(26,45,98,0.22);gap:10px;}
 .header-left{display:flex;align-items:center;gap:12px;}
-
-/* CHANGE 2: Title logo image in navbar */
-.logo-wrap{
-  position:relative;
-  display:flex;
-  align-items:center;
-}
-.logo-mobile{
-  height:68px;
-  display:none;   /* hidden on desktop */
-}
-.app-logo-wrap{
-  display:flex;
-  /* flex-direction:column;   STACK vertically */
-  align-items:center;      /* CENTER horizontally */
-  justify-content:center;
-  text-align:center;
-}
-/* .app-logo-img{
-  margin-top: 20px;
-  height:90px;
-  width:190px;  
-  max-width:100%;
-  display:block;
-  object-fit:contain;
-
-} */
-.app-logo-main{
-  height:60px;
-  width:auto;
-}
-.app-logo-left{
-    z-index: 2;
- margin-right: -14px;
- 
- margin-top: 8px;
-}
-.logo-badge{
-  background:#fcfcfc;        /* dark soft bg */
-  padding:4px 10px;
-  border-radius:16px;
-  display:flex;
-  align-items:center;
-}
-.app-logo-img{
-  height:40px;
-  width:auto;
-}
+.logo-wrap{position:relative;display:flex;align-items:center;}
+.logo-mobile{height:68px;display:none;}
+.app-logo-wrap{display:flex;align-items:center;justify-content:center;text-align:center;}
+.app-logo-main{height:60px;width:auto;}
+.app-logo-left{z-index:2;margin-right:-14px;margin-top:8px;}
+.logo-badge{background:#fcfcfc;padding:4px 10px;border-radius:16px;display:flex;align-items:center;}
+.app-logo-img{height:40px;width:auto;}
 .app-logo-text-wrap{display:flex;flex-direction:column;}
 .app-title{font-family:'Orbitron',sans-serif;font-weight:900;font-size:13px;letter-spacing:3px;color:#a8c0ff;white-space:nowrap;}
 .app-title span{color:#4ade80;}
-.app-subtitle{font-size:9px;color:rgba(255,255,255,0.3);letter-spacing:1px;white-space:nowrap; margin-left:22px;}
-/* Mobile: show only logo icon */
-/* .app-logo-mobile{display:none;height:32px;width:auto;} */
-
+.app-subtitle{font-size:9px;color:rgba(255,255,255,0.3);letter-spacing:1px;white-space:nowrap;margin-left:22px;}
 .header-center{display:flex;align-items:center;}
 .toggle-wrap{display:flex;border-radius:7px;overflow:hidden;border:1.5px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.07);}
 .tbtn{font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:2px;font-weight:700;padding:8px 18px;background:none;border:none;color:rgba(255,255,255,0.45);cursor:pointer;transition:all .2s;}
@@ -259,6 +327,7 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
 .fg input[type="date"]{color-scheme:light;direction:ltr;}
 .fg .readonly-field{background:#f0f4fc;color:var(--ui-muted);border-color:#d8e2f4;cursor:default;font-style:italic;}
 
+/* ── OPTIONAL TOGGLE (updated) ── */
 .optional-toggle{display:flex;align-items:center;gap:7px;margin-bottom:10px;cursor:pointer;padding:6px 10px;border-radius:6px;background:var(--ui-sec-bg);border:1.5px dashed var(--ui-border);transition:all .2s;user-select:none;}
 .optional-toggle:hover{border-color:var(--ui-accent);background:#e8eeff;}
 .optional-toggle-icon{font-size:11px;color:var(--ui-accent);transition:transform .2s;}
@@ -335,34 +404,7 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
 .cv-date-row{display:block;margin-top:12px;margin-bottom:6px;line-height:1.5;}
 .cv-date-row .cv-lbl u{text-decoration:underline;}
 .cv-date-row .cv-val{font-size:22px;}
-
-/* CHANGE 3: Invisible watermark link at bottom-right of cover */
-.cv-watermark-link{
-  position:absolute;
-  bottom:24px;
-  right:28px;
-  z-index:20;
-  display:block;
-  width:160px;
-  height:32px;
-  text-decoration:none;
-  cursor:pointer;
-  /* White text - invisible to eye but clickable in PDF */
-  color:rgba(255,255,255,0.01);
-  font-size:8px;
-  font-family:Arial,sans-serif;
-  line-height:32px;
-  text-align:center;
-  white-space:nowrap;
-  overflow:hidden;
-  /* Very subtle so it doesn't appear visually but renders as white text */
-  background:rgba(255,255,255,0);
-  border:none;
-}
-.cv-watermark-link:hover{
-  /* Still invisible but tooltip shows on hover */
-  color:rgba(255,255,255,0.01);
-}
+.cv-watermark-link{position:absolute;bottom:24px;right:28px;z-index:20;display:block;width:160px;height:32px;text-decoration:none;cursor:pointer;color:rgba(255,255,255,0.01);font-size:8px;font-family:Arial,sans-serif;line-height:32px;text-align:center;white-space:nowrap;overflow:hidden;background:rgba(255,255,255,0);border:none;}
 
 /* MERGE */
 .merge-view{display:none;width:100%;min-height:calc(100vh - 70px);background:var(--ui-bg);flex-direction:column;overflow-y:auto;}
@@ -464,19 +506,12 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
   .app-layout{padding-bottom:64px;}
   .merge-view.active{padding-bottom:64px;}
   .app-subtitle{display:none;}
-  /* CHANGE 2 mobile: hide title_logo, show logo only */
-  .logo-badge{
-  display:none;
-}
-
-.app-logo-left{
-  margin-right:0;  
-  display: none; /* remove negative overlap on mobile */
-}
+  .logo-badge{display:none;}
+  .app-logo-left{margin-right:0;display:none;}
   .app-logo-text-wrap{display:none;}
   .app-logo-img{display:none;}
   .logo-mobile{display:block;}
-  .change-template-btn .ct-text{display:flex;  white-space: normal;text-align: center;}
+  .change-template-btn .ct-text{display:flex;white-space:normal;text-align:center;}
   .change-template-btn{padding:12px 20px;}
   .visitor-badge{padding:2px 6px;border-radius:12px;}
   .visitor-icon{font-size:10px;}
@@ -486,6 +521,7 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
   .dl-count-val{font-size:8px;letter-spacing:.5px;}
   .merge-topbar,.merge-dropzone-wrap,.merge-cards-wrap,.merge-bottombar,.merge-progress-wrap{padding-left:14px;padding-right:14px;}
   .merge-steps{display:none;}
+  #floatingFeedbackBtn{bottom:74px;}
 }
 @media(max-width:580px){
   header{padding:0 14px;}
@@ -508,6 +544,7 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
   .add-cover-btn{width:100%;text-align:center;}
   .merge-bottombar{flex-direction:column;align-items:stretch;}
   .merge-dl-btn{width:100%;text-align:center;}
+  #feedbackSideModal{width:100%;max-width:100%;}
 }
 @media(max-width:400px){
   #cover-page .cv-body{padding:18px;}
@@ -546,6 +583,56 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
   </div>
 </div>
 
+<!-- FLOATING FEEDBACK BUTTON -->
+<button id="floatingFeedbackBtn" onclick="openFeedbackSide()" title="Comment &amp; Feedback">
+  <div class="ffb-pill" id="ffbPill">
+    <div class="ffb-pill-text">
+      <span class="ffb-pill-line1" id="ffbLine1">💬 COMMENT YOUR OPINION</span>
+      <span class="ffb-pill-line2" id="ffbLine2">Tap to share feedback</span>
+    </div>
+  </div>
+  <div class="ffb-icon-wrap">💬</div>
+</button>
+
+<!-- FEEDBACK SIDE OVERLAY -->
+<div id="feedbackSideOverlay" onclick="closeFeedbackSide()"></div>
+
+<!-- FEEDBACK SIDE MODAL -->
+<div id="feedbackSideModal">
+  <div class="fsm-head">
+    <h3>💬 FEEDBACK &amp; <span>SUGGESTIONS</span></h3>
+    <button class="fsm-close" onclick="closeFeedbackSide()">×</button>
+  </div>
+  <div class="fsm-body">
+    <!-- Rating Section -->
+    <div style="font-size:13px;font-weight:700;color:var(--ui-text);margin-bottom:4px;">Rate DIU Cover Point</div>
+    <div class="fsm-rating-wrap">
+      <div class="fsm-stars" id="fsmStars">
+        <span class="fsm-star" data-v="1" onclick="setFsmRating(1)">★</span>
+        <span class="fsm-star" data-v="2" onclick="setFsmRating(2)">★</span>
+        <span class="fsm-star" data-v="3" onclick="setFsmRating(3)">★</span>
+        <span class="fsm-star" data-v="4" onclick="setFsmRating(4)">★</span>
+        <span class="fsm-star" data-v="5" onclick="setFsmRating(5)">★</span>
+      </div>
+      <div class="fsm-rating-label" id="fsmRatingLabel">Click a star to rate</div>
+    </div>
+    <label class="fsm-comment-label">Your Comment</label>
+    <textarea class="fsm-comment-box" id="fsmCommentBox" placeholder="Share your thoughts or experience..."></textarea>
+    <label class="fsm-comment-label" style="margin-top:10px;">Your Name <span style="color:var(--ui-ph);font-weight:400;text-transform:none;">(optional)</span></label>
+    <input type="text" class="fsm-name-input" id="fsmNameInput" placeholder="e.g. Imran Sifat">
+    <button class="fsm-submit-btn" id="fsmSubmitBtn" onclick="submitFsmFeedback()">✅ Submit Rating &amp; Comment</button>
+
+    <div class="fsm-divider"></div>
+
+    <!-- Feature Suggestion -->
+    <div style="font-size:13px;font-weight:700;color:var(--ui-text);margin-bottom:4px;">💡 Suggest a Feature</div>
+    <div style="font-size:11px;color:var(--ui-muted);margin-bottom:8px;">Have an idea to make this better? Let us know!</div>
+    <label class="fsm-feature-label">Your Idea</label>
+    <!-- <textarea class="fsm-feature-box" id="fsmFeatureBox" placeholder="e.g. Add a dark mode, support for more templates, auto-fill from student ID..."></textarea>
+    <button class="fsm-feat-btn" id="fsmFeatBtn" onclick="submitFsmFeature()">🚀 Send Feature Suggestion</button> -->
+  </div>
+</div>
+
 <!-- TEMPLATE PICKER MODAL -->
 <div class="tpl-modal-bg" id="tplModal" onclick="closeTplBg(event)">
   <div class="tpl-modal">
@@ -574,46 +661,29 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
             Cover Page With Mark Table
             <span class="tpl-badge new">✦ NEW</span>
           </div>
-          <div class="tpl-card-desc">Full rubric mark table (Clarity, Content Quality, Spelling, Organization) with customizable page title dropdown. New update — designed to match the official DIU Lab Assignment Report format exactly.</div>
+          <div class="tpl-card-desc">Full rubric mark table (Clarity, Content Quality, Spelling, Organization) with customizable page title dropdown.</div>
         </div>
         <div class="tpl-go-btn">→</div>
       </a>
-      <div style="font-size:10px;color:var(--ui-ph);text-align:center;margin-top:4px;">More templates coming soon · <span style="color:var(--ui-accent);cursor:pointer;" onclick="openModal('ratingModal');closeModal('tplModal')">Suggest a template →</span></div>
+      <div style="font-size:10px;color:var(--ui-ph);text-align:center;margin-top:4px;">More templates coming soon · <span style="color:var(--ui-accent);cursor:pointer;" onclick="openFeedbackSide();closeModal('tplModal')">Suggest a template →</span></div>
     </div>
   </div>
 </div>
 
 <header>
   <div class="header-left">
-    <!-- CHANGE 2: Title logo image replaces text in navbar; mobile shows logo.png only -->
     <div class="app-logo-wrap">
-
-  <!-- Left Logo -->
- <div class="logo-wrap">
-  <div class="app-logo-left">
-   <img class="app-logo-main" 
-       src="img/titlelogo.png" 
-       alt="Logo">
-
- </div>
-
-  <!-- Right Logo -->
-  
-<div class="logo-badge">
- <img class="app-logo-img" 
-       src="img/title+logo.png" 
-       alt="DIU Cover Point"
-       onerror="this.style.display='none'">
-</div></div>
-  <!-- Mobile Logo -->
-  <img src="img/logo.png" class="logo-mobile" alt="CoverPoint Mobile">
-</div>
-  <!-- Subtitle -->
-  <div class="app-logo-text-wrap">
-    <!-- <div class="app-subtitle">COVER PAGE GENERATOR</div> -->
-  </div>
-
-</div>
+      <div class="logo-wrap">
+        <div class="app-logo-left">
+          <img class="app-logo-main" src="img/titlelogo.png" alt="Logo">
+        </div>
+        <div class="logo-badge">
+          <img class="app-logo-img" src="img/title+logo.png" alt="DIU Cover Point" onerror="this.style.display='none'">
+        </div>
+      </div>
+      <img src="img/logo.png" class="logo-mobile" alt="CoverPoint Mobile">
+    </div>
+    <div class="app-logo-text-wrap"></div>
     <button class="change-template-btn" onclick="openModal('tplModal')" title="Switch to another cover template">
       <span class="ct-icon">🎨</span>
       <span class="ct-text">CHANGE TEMPLATE</span>
@@ -625,9 +695,8 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
       <button class="tbtn active" id="btn-a" onclick="setMode('assignment')">ASSIGNMENT</button>
       <button class="tbtn" id="btn-l" onclick="setMode('lab')">LAB REPORT</button>
       <button class="tbtn merge-tab" id="btn-m" onclick="setMode('merge')">⊕ MERGE PDF</button>
-      
     </div>
-  <div class="app-subtitle">COVER PAGE GENERATOR</div>
+    <div class="app-subtitle">COVER PAGE GENERATOR</div>
   </div>
   <div class="header-right">
     <div class="dl-count-badge" title="Total downloads">
@@ -638,7 +707,7 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
       <span class="visitor-icon">👁</span>
       <span class="visitor-count" id="visitorCount">0</span>
     </div>
-    <span class="v-badge">v3.0</span>
+    <span class="v-badge">v3.1</span>
     <button class="hamburger" id="hamburgerBtn" onclick="toggleMenu()" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
@@ -658,7 +727,7 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
     <div><div>Developer Info</div><span class="dm-desc">About the creator &amp; links</span></div>
   </button>
   <div class="dm-divider"></div>
-  <button class="dm-item" onclick="openModal('ratingModal')">
+  <button class="dm-item" onclick="openFeedbackSide();closeMenu()">
     <span class="dm-icon">⭐</span>
     <div><div>Comment &amp; Rating</div><span class="dm-desc">Share your feedback</span></div>
   </button>
@@ -670,7 +739,7 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
   </button>
 </div>
 
-<!-- MODALS -->
+<!-- DEV MODAL -->
 <div class="modal-bg" id="devModal" onclick="closeBg(event,'devModal')">
   <div class="modal">
     <div class="modal-head"><h3>👨‍💻 Developer Info</h3><button class="modal-close" onclick="closeModal('devModal')">×</button></div>
@@ -685,45 +754,6 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
         <a class="dev-link" href="https://www.linkedin.com/in/s-r-imran/" target="_blank"><span class="dl-icon">💼</span> LinkedIn</a>
         <a class="dev-link" href="mailto:diucover.point@gmail.com" target="_blank"><span class="dl-icon">✉️</span> Contact via Email</a>
       </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal-bg" id="ratingModal" onclick="closeBg(event,'ratingModal')">
-  <div class="modal" style="max-width:460px;">
-    <div class="modal-head"><h3>⭐ Comment &amp; Rating</h3><button class="modal-close" onclick="closeModal('ratingModal')">×</button></div>
-    <div class="modal-body" id="ratingStep1">
-      <div class="rating-wrap">
-        <div style="font-size:14px;font-weight:600;color:var(--ui-text);">How would you rate DIU Cover Point?</div>
-        <div class="stars" id="stars">
-          <span class="star" data-v="1" onclick="setRating(1)">★</span>
-          <span class="star" data-v="2" onclick="setRating(2)">★</span>
-          <span class="star" data-v="3" onclick="setRating(3)">★</span>
-          <span class="star" data-v="4" onclick="setRating(4)">★</span>
-          <span class="star" data-v="5" onclick="setRating(5)">★</span>
-        </div>
-        <div class="rating-label" id="ratingLabel">Click a star to rate</div>
-      </div>
-      <label class="comment-label">Your Comment</label>
-      <textarea class="comment-box" id="commentBox" placeholder="Share your thoughts, suggestions, or feedback..."></textarea>
-      <button class="submit-btn" onclick="goToRatingStep2()">Next →</button>
-    </div>
-    <div class="modal-body" id="ratingStep2" style="display:none;">
-      <div style="text-align:center;margin-bottom:18px;">
-        <div style="font-size:36px;margin-bottom:8px;">🙏</div>
-        <div style="font-size:15px;font-weight:700;color:var(--ui-text);">Almost done!</div>
-        <div style="font-size:12px;color:var(--ui-muted);margin-top:4px;">Please enter your name so we know who to thank.</div>
-      </div>
-      <div style="background:var(--ui-sec-bg);border:1px solid var(--ui-border);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:11px;color:var(--ui-muted);">
-        <div style="font-weight:700;color:var(--ui-text);margin-bottom:4px;font-size:12px;">📋 Your Feedback Summary</div>
-        <div>⭐ Rating: <strong id="ratingPreview" style="color:var(--ui-accent);">— stars</strong></div>
-        <div style="margin-top:3px;">💬 Comment: <em id="commentPreview" style="color:var(--ui-text);">No comment</em></div>
-      </div>
-      <label class="comment-label">Your Name <span style="color:var(--ui-ph);font-weight:400;text-transform:none;">(optional — or stay anonymous)</span></label>
-      <input type="text" id="ratingName" style="width:100%;background:#fff;border:1.5px solid var(--ui-input-b);border-radius:6px;color:var(--ui-text);font-family:'Inter',sans-serif;font-size:14px;font-weight:500;padding:10px 12px;outline:none;transition:border-color .15s;" placeholder="e.g. Imran Sifat" onkeydown="if(event.key==='Enter')submitRatingFinal()">
-      <button class="submit-btn" onclick="submitRatingFinal()" id="submitFinalBtn" style="margin-top:12px;">✅ Submit Feedback</button>
-      <button onclick="backToRatingStep1()" style="width:100%;margin-top:8px;padding:9px;background:none;border:1.5px solid var(--ui-border);border-radius:7px;color:var(--ui-muted);font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;">← Back &amp; Edit</button>
-      <div class="submit-success" id="submitSuccess" style="margin-top:12px;">✅ Thank you for your feedback!</div>
     </div>
   </div>
 </div>
@@ -773,7 +803,7 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
             <label>Assignment No</label>
             <input type="text" id="a_assignmentNo" placeholder="e.g. 01" oninput="render()" disabled>
           </div>
-          <button class="field-toggle-btn" id="toggle-a_assignmentNo" onclick="toggleField('a_assignmentNo')" title="Enable/Disable"></button>
+          <button class="field-toggle-btn on" id="toggle-a_assignmentNo" onclick="toggleField('a_assignmentNo')" title="Enable/Disable"></button>
         </div>
       </div>
       <div class="fg"><label>Course Code</label><input type="text" id="a_courseCode" placeholder="e.g. CSE999" oninput="render()"></div>
@@ -792,7 +822,7 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
             <label>Teacher Designation</label>
             <input type="text" id="a_tDesignation" placeholder="e.g. Lecturer, Asst. Professor" oninput="render()" disabled>
           </div>
-          <button class="field-toggle-btn" id="toggle-a_tDesignation" onclick="toggleField('a_tDesignation')" title="Enable/Disable"></button>
+          <button class="field-toggle-btn on" id="toggle-a_tDesignation" onclick="toggleField('a_tDesignation')" title="Enable/Disable"></button>
         </div>
       </div>
       <div class="fg"><label>Department</label><input type="text" id="a_tDept" placeholder="e.g. CSE" oninput="render()"></div>
@@ -834,7 +864,7 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
             <label>Teacher Designation</label>
             <input type="text" id="l_tDesignation" placeholder="e.g. Lecturer, Asst. Professor" oninput="render()" disabled>
           </div>
-          <button class="field-toggle-btn" id="toggle-l_tDesignation" onclick="toggleField('l_tDesignation')" title="Enable/Disable"></button>
+          <button class="field-toggle-btn on" id="toggle-l_tDesignation" onclick="toggleField('l_tDesignation')" title="Enable/Disable"></button>
         </div>
       </div>
       <div class="fg"><label>Department</label><input type="text" id="l_tDept" placeholder="e.g. CSE" oninput="render()"></div>
@@ -854,7 +884,7 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
             <label>Group No</label>
             <input type="text" id="l_groupNo" placeholder="e.g. Group 03" oninput="render()" disabled>
           </div>
-          <button class="field-toggle-btn" id="toggle-l_groupNo" onclick="toggleField('l_groupNo')" title="Enable/Disable"></button>
+          <button class="field-toggle-btn on" id="toggle-l_groupNo" onclick="toggleField('l_groupNo')" title="Enable/Disable"></button>
         </div>
       </div>
       <div class="fg"><label>Section</label><input type="text" id="l_sSec" placeholder="e.g. 66_I" oninput="render()"></div>
@@ -892,7 +922,6 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
       <div class="cv-border"></div>
       <div class="cv-wm"></div>
       <div class="cv-body" id="cv-body"></div>
-      <!-- CHANGE 3: Invisible watermark link - white text, only visible on hover/click in PDF -->
       <a class="cv-watermark-link" href="https://coverpoint.netlify.app" target="_blank" title="Visit coverpoint.netlify.app">coverpoint.netlify.app</a>
     </div>
     <div class="prev-label bottom-label">
@@ -974,7 +1003,8 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script>
 if(window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
 let mode='assignment';
@@ -1005,54 +1035,170 @@ function dismissToast(t){
   setTimeout(()=>{if(t.parentElement)t.parentElement.removeChild(t);},400);
 }
 
-/* ── WELCOME BANNER ── 
-   CHANGE 4: Only show welcome banner on FIRST EVER visit using localStorage.
-   Uses a session flag too so navigating back from another template page won't re-show it.
-*/
+/* ── FLOATING FEEDBACK BUTTON ── */
+let ffbHasShownOnce=false;
+let ffbIdleTimer=null;
+let ffbRepeatTimer=null;
+let ffbPillHideTimer=null;
+let ffbCurrentMsg=0; // 0=comment opinion, 1=suggest feature
+
+const FFB_MESSAGES=[
+  {line1:'💬 COMMENT YOUR OPINION',line2:'Share your thoughts!'},
+  {line1:'💡 SUGGEST A FEATURE',line2:'Help us improve!'}
+];
+
+function ffbShowPill(msgIdx){
+  const pill=document.getElementById('ffbPill');
+  const line1=document.getElementById('ffbLine1');
+  const line2=document.getElementById('ffbLine2');
+  clearTimeout(ffbPillHideTimer);
+  // Set text first while hidden
+  line1.textContent=FFB_MESSAGES[msgIdx].line1;
+  line2.textContent=FFB_MESSAGES[msgIdx].line2;
+  pill.classList.add('visible');
+  // Auto hide text after 3.5s but keep icon
+  ffbPillHideTimer=setTimeout(()=>{
+    pill.classList.remove('visible');
+    // After first msg hides, show second msg after a pause then hide
+    if(msgIdx===0){
+      setTimeout(()=>{
+        ffbShowPill(1);
+      },1200);
+    }
+  },3500);
+}
+
+function ffbTriggerSequence(){
+  ffbShowPill(0);
+}
+
+function initFloatingFeedbackBtn(){
+  // Auto-enable the field when optional toggle is opened
+  // Show pill after welcome banner closes + a few seconds delay
+  const wbDelay=9500; // after welcome banner auto-closes (8s) + 1.5s
+  setTimeout(()=>{
+    if(!ffbHasShownOnce){
+      ffbHasShownOnce=true;
+      ffbTriggerSequence();
+    }
+    // Set up idle-based repeat: if user stays too long, randomly re-open
+    scheduleIdleRepeat();
+  }, wbDelay);
+}
+
+function scheduleIdleRepeat(){
+  clearTimeout(ffbRepeatTimer);
+  // Random interval between 90s and 180s
+  const delay=90000+Math.random()*90000;
+  ffbRepeatTimer=setTimeout(()=>{
+    // Only show again if side modal is NOT open
+    const modal=document.getElementById('feedbackSideModal');
+    if(!modal.classList.contains('open')){
+      ffbTriggerSequence();
+    }
+    scheduleIdleRepeat();
+  },delay);
+}
+
+function openFeedbackSide(){
+  document.getElementById('feedbackSideModal').classList.add('open');
+  document.getElementById('feedbackSideOverlay').classList.add('open');
+  // Hide pill if showing
+  document.getElementById('ffbPill').classList.remove('visible');
+  clearTimeout(ffbPillHideTimer);
+}
+function closeFeedbackSide(){
+  document.getElementById('feedbackSideModal').classList.remove('open');
+  document.getElementById('feedbackSideOverlay').classList.remove('open');
+}
+
+/* FSM Rating */
+let fsmRating=0;
+const fsmLabels=['','Awful 😞','Not great 😕','OK 😐','Good 😊','Excellent! 🎉'];
+function setFsmRating(v){
+  fsmRating=v;
+  document.querySelectorAll('.fsm-star').forEach(s=>s.classList.toggle('active',parseInt(s.dataset.v)<=v));
+  document.getElementById('fsmRatingLabel').textContent=fsmLabels[v];
+}
+
+async function submitFsmFeedback(){
+  if(!fsmRating){document.getElementById('fsmRatingLabel').textContent='⚠️ Please select a rating first';return;}
+  const name=document.getElementById('fsmNameInput').value.trim()||'Anonymous';
+  const comment=document.getElementById('fsmCommentBox').value.trim()||'(no comment)';
+  const ratingText=fsmLabels[fsmRating];
+  const btn=document.getElementById('fsmSubmitBtn');
+  btn.disabled=true;btn.innerHTML='⏳ Submitting...';
+  const FORM_ACTION='https://docs.google.com/forms/u/0/d/e/1FAIpQLSfoFHpaBqMIm0jV-OIzAfAcyrosfodkknnm1w027T8AG2XxrA/formResponse';
+  const ENTRY_NAME='entry.1386726769';const ENTRY_RATING='entry.1233291528';const ENTRY_COMMENT='entry.1004794290';
+  try{
+    const iframe=document.createElement('iframe');iframe.name='gf_'+Date.now();iframe.style.cssText='display:none;position:absolute;width:0;height:0;border:0;';document.body.appendChild(iframe);
+    const form=document.createElement('form');form.method='POST';form.action=FORM_ACTION;form.target=iframe.name;form.style.display='none';
+    [[ENTRY_NAME,name],[ENTRY_RATING,fsmRating+' ★ — '+ratingText],[ENTRY_COMMENT,comment]].forEach(([k,v])=>{const inp=document.createElement('input');inp.type='hidden';inp.name=k;inp.value=v;form.appendChild(inp);});
+    document.body.appendChild(form);form.submit();
+    setTimeout(()=>{[form,iframe].forEach(el=>{if(el.parentNode)el.parentNode.removeChild(el);});},4000);
+  }catch(e){}
+  showToast('success','Thank you, '+name.split(' ')[0]+'! ⭐','Your feedback has been recorded.');
+  btn.innerHTML='✅ Submitted! Thank you 🎉';
+  setTimeout(()=>{
+    btn.disabled=false;btn.innerHTML='✅ Submit Rating &amp; Comment';
+    document.getElementById('fsmCommentBox').value='';
+    document.getElementById('fsmNameInput').value='';
+    fsmRating=0;setFsmRating(0);
+    document.getElementById('fsmRatingLabel').textContent='Click a star to rate';
+  },3000);
+}
+
+async function submitFsmFeature(){
+  const idea=document.getElementById('fsmFeatureBox').value.trim();
+  if(!idea){showToast('warning','Empty','Please type your feature idea first.');return;}
+  const btn=document.getElementById('fsmFeatBtn');
+  btn.disabled=true;btn.innerHTML='⏳ Sending...';
+  const FORM_ACTION='https://docs.google.com/forms/u/0/d/e/1FAIpQLSfoFHpaBqMIm0jV-OIzAfAcyrosfodkknnm1w027T8AG2XxrA/formResponse';
+  const ENTRY_COMMENT='entry.1004794290';
+  try{
+    const iframe=document.createElement('iframe');iframe.name='gff_'+Date.now();iframe.style.cssText='display:none;position:absolute;width:0;height:0;border:0;';document.body.appendChild(iframe);
+    const form=document.createElement('form');form.method='POST';form.action=FORM_ACTION;form.target=iframe.name;form.style.display='none';
+    const inp=document.createElement('input');inp.type='hidden';inp.name=ENTRY_COMMENT;inp.value='[FEATURE SUGGESTION] '+idea;form.appendChild(inp);
+    document.body.appendChild(form);form.submit();
+    setTimeout(()=>{[form,iframe].forEach(el=>{if(el.parentNode)el.parentNode.removeChild(el);});},4000);
+  }catch(e){}
+  showToast('success','Suggestion Sent! 🚀','We appreciate your idea!');
+  btn.innerHTML='✅ Suggestion Sent!';
+  setTimeout(()=>{btn.disabled=false;btn.innerHTML='🚀 Send Feature Suggestion';document.getElementById('fsmFeatureBox').value='';},3000);
+}
+
+/* ── WELCOME BANNER ── */
 const WELCOME_DURATION=8000;
 const WELCOME_KEY='diu_cover_craft_welcome_shown';
 let wbTimer=null,wbInterval=null;
 
 function shouldShowWelcome(){
-  try{
-    // Check if already shown in this browser (persistent)
-    if(localStorage.getItem(WELCOME_KEY)==='1') return false;
-    // Check session storage - if set, means we navigated back from another page this session
-    if(sessionStorage.getItem(WELCOME_KEY)==='1') return false;
-    return true;
-  }catch(e){return false;}
+  try{if(localStorage.getItem(WELCOME_KEY)==='1')return false;if(sessionStorage.getItem(WELCOME_KEY)==='1')return false;return true;}catch(e){return false;}
 }
-
 function markWelcomeShown(){
-  try{
-    localStorage.setItem(WELCOME_KEY,'1');
-    sessionStorage.setItem(WELCOME_KEY,'1');
-  }catch(e){}
+  try{localStorage.setItem(WELCOME_KEY,'1');sessionStorage.setItem(WELCOME_KEY,'1');}catch(e){}
 }
-
 function showWelcome(){
-  if(!shouldShowWelcome()) return;
+  if(!shouldShowWelcome()){
+    // Still init floating btn even if welcome doesn't show
+    setTimeout(initFloatingFeedbackBtn,2000);
+    return;
+  }
   markWelcomeShown();
   setTimeout(()=>{
-    const b=document.getElementById('welcomeBanner');
-    b.classList.add('open');
-    const bar=document.getElementById('wbBar');
-    const secEl=document.getElementById('wbSec');
-    bar.style.transition='none';bar.style.width='100%';
-    bar.getBoundingClientRect();
-    bar.style.transition='width '+WELCOME_DURATION+'ms linear';
-    bar.style.width='0%';
-    let rem=Math.floor(WELCOME_DURATION/1000);
-    if(secEl) secEl.textContent=rem;
-    wbInterval=setInterval(()=>{rem--;if(secEl)secEl.textContent=Math.max(0,rem);if(rem<=0){clearInterval(wbInterval);}},1000);
-    wbTimer=setTimeout(closeWelcome,WELCOME_DURATION);
+    const b=document.getElementById('welcomeBanner');b.classList.add('open');
+    const bar=document.getElementById('wbBar');const secEl=document.getElementById('wbSec');
+    bar.style.transition='none';bar.style.width='100%';bar.getBoundingClientRect();
+    bar.style.transition='width '+WELCOME_DURATION+'ms linear';bar.style.width='0%';
+    let rem=Math.floor(WELCOME_DURATION/1000);if(secEl)secEl.textContent=rem;
+    wbInterval=setInterval(()=>{rem--;if(secEl)secEl.textContent=Math.max(0,rem);if(rem<=0)clearInterval(wbInterval);},1000);
+    wbTimer=setTimeout(()=>{closeWelcome();initFloatingFeedbackBtn();},WELCOME_DURATION);
   },700);
 }
 function closeWelcome(){
   clearTimeout(wbTimer);clearInterval(wbInterval);
   const b=document.getElementById('welcomeBanner');
-  b.style.transition='transform .4s cubic-bezier(.4,0,.2,1)';
-  b.classList.remove('open');
+  b.style.transition='transform .4s cubic-bezier(.4,0,.2,1)';b.classList.remove('open');
 }
 showWelcome();
 
@@ -1068,8 +1214,7 @@ const UNDO_SECONDS=15;
 /* VISITOR COUNTER */
 (function(){
   try{
-    const KEY='diu_cover_craft_visitors';
-    let c=parseInt(localStorage.getItem(KEY)||'0',10);c++;localStorage.setItem(KEY,c);
+    const KEY='diu_cover_craft_visitors';let c=parseInt(localStorage.getItem(KEY)||'0',10);c++;localStorage.setItem(KEY,c);
     const el=document.getElementById('visitorCount');
     if(el){let s=Math.max(0,c-8);const t=()=>{if(s<=c){el.textContent=s;s++;setTimeout(t,60);}};t();}
   }catch(e){try{document.getElementById('visitorCount').textContent='—';}catch(_){}}
@@ -1078,42 +1223,108 @@ const UNDO_SECONDS=15;
 /* DOWNLOAD COUNTER */
 (function(){
   try{
-    const KEY='diu_cover_craft_downloads';
-    let c=parseInt(localStorage.getItem(KEY)||'0',10);
+    const KEY='diu_cover_craft_downloads';let c=parseInt(localStorage.getItem(KEY)||'0',10);
     const el=document.getElementById('dlCount');
     if(el){let s=Math.max(0,c-5);const t=()=>{if(s<=c){el.textContent=s;s++;setTimeout(t,70);}};t();}
   }catch(e){try{document.getElementById('dlCount').textContent='—';}catch(_){}}
 })();
 function incrementDownloadCount(){
-  try{
-    const KEY='diu_cover_craft_downloads';
-    let c=parseInt(localStorage.getItem(KEY)||'0',10);c++;localStorage.setItem(KEY,c);
-    const el=document.getElementById('dlCount');if(el)el.textContent=c;
-  }catch(e){}
+  try{const KEY='diu_cover_craft_downloads';let c=parseInt(localStorage.getItem(KEY)||'0',10);c++;localStorage.setItem(KEY,c);const el=document.getElementById('dlCount');if(el)el.textContent=c;}catch(e){}
 }
 
-/* OPTIONAL FIELDS TOGGLE */
+/* ── OPTIONAL FIELDS TOGGLE (updated behaviour) ── 
+   When the toggle row is clicked:
+   1. It opens/closes as before
+   2. On OPEN — the field auto-enables (slider turns on, input unlocked)
+   3. When slider is turned OFF — the section auto-collapses/hides again
+*/
+const optGroupToField={
+  'a_optional_doc':'a_assignmentNo',
+  'a_optional_teacher':'a_tDesignation',
+  'l_optional_teacher':'l_tDesignation',
+  'l_optional_student':'l_groupNo'
+};
+const optGroupToIcon={
+  'a_optional_doc':'opt-icon-a-doc',
+  'a_optional_teacher':'opt-icon-a-teacher',
+  'l_optional_teacher':'opt-icon-l-teacher',
+  'l_optional_student':'opt-icon-l-student'
+};
+
 function toggleOptional(groupId){
   const el=document.getElementById(groupId);
   const isOpen=el.classList.contains('open');
-  const iconMap={'a_optional_doc':'opt-icon-a-doc','a_optional_teacher':'opt-icon-a-teacher','l_optional_teacher':'opt-icon-l-teacher','l_optional_student':'opt-icon-l-student'};
-  const iconEl=document.getElementById(iconMap[groupId]);
-  if(isOpen){el.classList.remove('open');if(iconEl)iconEl.classList.remove('open');}
-  else{el.classList.add('open');if(iconEl)iconEl.classList.add('open');}
+  const iconEl=document.getElementById(optGroupToIcon[groupId]);
+  if(isOpen){
+    // Closing: also disable the field
+    el.classList.remove('open');if(iconEl)iconEl.classList.remove('open');
+    const fieldId=optGroupToField[groupId];
+    if(fieldId)disableField(fieldId);
+  }else{
+    // Opening: show section AND auto-enable the field
+    el.classList.add('open');if(iconEl)iconEl.classList.add('open');
+    const fieldId=optGroupToField[groupId];
+    if(fieldId)enableField(fieldId);
+  }
 }
-function toggleField(fieldId){
+
+function enableField(fieldId){
   const inp=document.getElementById(fieldId);
   const fg=document.getElementById('fg-'+fieldId);
   const btn=document.getElementById('toggle-'+fieldId);
   if(!inp||!fg||!btn)return;
-  const enabling=inp.disabled;
-  inp.disabled=!enabling;
-  fg.classList.toggle('fg-optional',!enabling);
-  fg.classList.toggle('enabled',enabling);
-  btn.classList.toggle('on',enabling);
-  if(enabling) inp.focus();
+  if(!inp.disabled)return; // already enabled
+  inp.disabled=false;
+  fg.classList.remove('fg-optional');fg.classList.add('enabled');
+  btn.classList.add('on');
+  setTimeout(()=>inp.focus(),50);
   render();
 }
+
+function disableField(fieldId){
+  const inp=document.getElementById(fieldId);
+  const fg=document.getElementById('fg-'+fieldId);
+  const btn=document.getElementById('toggle-'+fieldId);
+  if(!inp||!fg||!btn)return;
+  if(inp.disabled)return; // already disabled
+  inp.disabled=true;
+  fg.classList.add('fg-optional');fg.classList.remove('enabled');
+  btn.classList.remove('on');
+  render();
+}
+
+function toggleField(fieldId){
+  const inp=document.getElementById(fieldId);
+  if(!inp)return;
+  if(inp.disabled){
+    // Turning ON
+    enableField(fieldId);
+  }else{
+    // Turning OFF — also collapse the parent optional-fields group
+    disableField(fieldId);
+    // Find which group owns this field and close it
+    const groupId=Object.keys(optGroupToField).find(k=>optGroupToField[k]===fieldId);
+    if(groupId){
+      const el=document.getElementById(groupId);
+      const iconEl=document.getElementById(optGroupToIcon[groupId]);
+      el.classList.remove('open');if(iconEl)iconEl.classList.remove('open');
+    }
+  }
+}
+
+// On page init: make sure all optional fields start as disabled & collapsed
+// (buttons have class 'on' in HTML but fields are disabled — fix the visual state)
+document.addEventListener('DOMContentLoaded',()=>{
+  Object.values(optGroupToField).forEach(fieldId=>{
+    const inp=document.getElementById(fieldId);
+    const fg=document.getElementById('fg-'+fieldId);
+    const btn=document.getElementById('toggle-'+fieldId);
+    if(inp&&inp.disabled){
+      if(fg){fg.classList.add('fg-optional');fg.classList.remove('enabled');}
+      if(btn)btn.classList.remove('on');
+    }
+  });
+});
 
 /* FIELD VALIDATION */
 const REQUIRED_FIELDS={
@@ -1139,12 +1350,8 @@ function countFilledFields(modeKey){
 }
 
 /* RESET + UNDO */
-function captureSnapshot(modeKey){
-  const snap={};REQUIRED_FIELDS[modeKey].forEach(id=>{const el=document.getElementById(id);if(el)snap[id]=el.value;});return snap;
-}
-function hasAnyData(modeKey){
-  return REQUIRED_FIELDS[modeKey].some(id=>{const el=document.getElementById(id);return el&&el.value.trim();});
-}
+function captureSnapshot(modeKey){const snap={};REQUIRED_FIELDS[modeKey].forEach(id=>{const el=document.getElementById(id);if(el)snap[id]=el.value;});return snap;}
+function hasAnyData(modeKey){return REQUIRED_FIELDS[modeKey].some(id=>{const el=document.getElementById(id);return el&&el.value.trim();});}
 function resetFields(modeKey){
   if(!hasAnyData(modeKey)){showToast('warning','Nothing to reset','All fields are already empty.');return;}
   undoState[modeKey]=captureSnapshot(modeKey);
@@ -1153,42 +1360,29 @@ function resetFields(modeKey){
   showToast('warning','Fields cleared','Press Undo within 15s to restore.','3000');
 }
 function startUndoTimer(modeKey){
-  const btn=document.getElementById('undo-btn-'+modeKey);
-  const timerSpan=document.getElementById('undo-timer-'+modeKey);
-  const bar=document.getElementById('undo-bar-'+modeKey);
-  if(undoTimerHandle[modeKey])clearTimeout(undoTimerHandle[modeKey]);
-  if(undoIntervalHandle[modeKey])clearInterval(undoIntervalHandle[modeKey]);
-  btn.disabled=false;
-  let remaining=UNDO_SECONDS;
-  timerSpan.textContent='('+remaining+'s)';
-  bar.style.transition='none';bar.style.width='100%';
-  bar.getBoundingClientRect();
+  const btn=document.getElementById('undo-btn-'+modeKey);const timerSpan=document.getElementById('undo-timer-'+modeKey);const bar=document.getElementById('undo-bar-'+modeKey);
+  if(undoTimerHandle[modeKey])clearTimeout(undoTimerHandle[modeKey]);if(undoIntervalHandle[modeKey])clearInterval(undoIntervalHandle[modeKey]);
+  btn.disabled=false;let remaining=UNDO_SECONDS;timerSpan.textContent='('+remaining+'s)';
+  bar.style.transition='none';bar.style.width='100%';bar.getBoundingClientRect();
   bar.style.transition='width '+UNDO_SECONDS+'s linear';bar.style.width='0%';
   undoIntervalHandle[modeKey]=setInterval(()=>{remaining--;if(timerSpan)timerSpan.textContent='('+remaining+'s)';if(remaining<=0){clearInterval(undoIntervalHandle[modeKey]);undoIntervalHandle[modeKey]=null;}},1000);
   undoTimerHandle[modeKey]=setTimeout(()=>expireUndo(modeKey),UNDO_SECONDS*1000);
 }
 function expireUndo(modeKey){
-  undoState[modeKey]=null;
-  if(undoIntervalHandle[modeKey]){clearInterval(undoIntervalHandle[modeKey]);undoIntervalHandle[modeKey]=null;}
-  const btn=document.getElementById('undo-btn-'+modeKey);
-  const timerSpan=document.getElementById('undo-timer-'+modeKey);
-  const bar=document.getElementById('undo-bar-'+modeKey);
+  undoState[modeKey]=null;if(undoIntervalHandle[modeKey]){clearInterval(undoIntervalHandle[modeKey]);undoIntervalHandle[modeKey]=null;}
+  const btn=document.getElementById('undo-btn-'+modeKey);const timerSpan=document.getElementById('undo-timer-'+modeKey);const bar=document.getElementById('undo-bar-'+modeKey);
   if(btn)btn.disabled=true;if(timerSpan)timerSpan.textContent='';if(bar){bar.style.transition='none';bar.style.width='0%';}
 }
 function undoReset(modeKey){
   if(!undoState[modeKey])return;
-  const snap=undoState[modeKey];
-  Object.keys(snap).forEach(id=>{const el=document.getElementById(id);if(el)el.value=snap[id];});
-  render();
-  if(undoTimerHandle[modeKey]){clearTimeout(undoTimerHandle[modeKey]);undoTimerHandle[modeKey]=null;}
-  expireUndo(modeKey);
-  showToast('success','Restored!','Your fields have been recovered.');
+  const snap=undoState[modeKey];Object.keys(snap).forEach(id=>{const el=document.getElementById(id);if(el)el.value=snap[id];});
+  render();if(undoTimerHandle[modeKey]){clearTimeout(undoTimerHandle[modeKey]);undoTimerHandle[modeKey]=null;}
+  expireUndo(modeKey);showToast('success','Restored!','Your fields have been recovered.');
 }
 
 /* MODE SWITCHER */
 function setMode(m){
-  if(m!=='merge')lastModeBeforeMerge=m;
-  mode=m;
+  if(m!=='merge')lastModeBeforeMerge=m;mode=m;
   document.getElementById('btn-a').className='tbtn'+(m==='assignment'?' active':'');
   document.getElementById('btn-l').className='tbtn'+(m==='lab'?' active':'');
   document.getElementById('btn-m').className='tbtn merge-tab'+(m==='merge'?' active':'');
@@ -1228,86 +1422,6 @@ function openModal(id){closeMenu();document.getElementById(id).classList.add('op
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 function closeBg(e,id){if(e.target===document.getElementById(id))closeModal(id);}
 
-const ratingLabels=['','Awful 😞','Not great 😕','OK 😐','Good 😊','Excellent! 🎉'];
-function setRating(v){
-  currentRating=v;
-  document.querySelectorAll('.star').forEach(s=>s.classList.toggle('active',parseInt(s.dataset.v)<=v));
-  document.getElementById('ratingLabel').textContent=ratingLabels[v];
-}
-function goToRatingStep2(){
-  if(!currentRating){document.getElementById('ratingLabel').textContent='⚠️ Please select a rating first';return;}
-  const comment=document.getElementById('commentBox').value.trim();
-  document.getElementById('ratingPreview').textContent=ratingLabels[currentRating]+' ('+currentRating+'/5)';
-  document.getElementById('commentPreview').textContent=comment||'No comment';
-  document.getElementById('ratingStep1').style.display='none';
-  document.getElementById('ratingStep2').style.display='block';
-  document.getElementById('ratingName').focus();
-}
-function backToRatingStep1(){
-  document.getElementById('ratingStep2').style.display='none';
-  document.getElementById('ratingStep1').style.display='block';
-}
-async function submitRatingFinal(){
-  const name=document.getElementById('ratingName').value.trim()||'Anonymous';
-  const comment=document.getElementById('commentBox').value.trim()||'(no comment)';
-  const ratingText=ratingLabels[currentRating]||'—';
-  const btn=document.getElementById('submitFinalBtn');
-  btn.disabled=true;btn.innerHTML='<span style="display:inline-block;animation:spin .8s linear infinite;margin-right:6px">⏳</span> Submitting...';
-  const FORM_ACTION='https://docs.google.com/forms/u/0/d/e/1FAIpQLSfoFHpaBqMIm0jV-OIzAfAcyrosfodkknnm1w027T8AG2XxrA/formResponse';
-  const ENTRY_NAME   ='entry.1386726769';
-  const ENTRY_RATING ='entry.1233291528';
-  const ENTRY_COMMENT='entry.1004794290';
-  try{
-    const iframe=document.createElement('iframe');
-    iframe.name='gf_'+Date.now();
-    iframe.style.cssText='display:none;position:absolute;width:0;height:0;border:0;';
-    document.body.appendChild(iframe);
-    const form=document.createElement('form');
-    form.method='POST';form.action=FORM_ACTION;form.target=iframe.name;form.style.display='none';
-    [[ENTRY_NAME, name],[ENTRY_RATING, currentRating+' ★ — '+ratingText],[ENTRY_COMMENT, comment]].forEach(([k,v])=>{
-      const inp=document.createElement('input');inp.type='hidden';inp.name=k;inp.value=v;form.appendChild(inp);
-    });
-    document.body.appendChild(form);form.submit();
-    setTimeout(()=>{[form,iframe].forEach(el=>{if(el.parentNode)el.parentNode.removeChild(el);});},4000);
-  }catch(e){}
-  document.getElementById('ratingStep2').innerHTML=`
-    <div style="text-align:center;padding:20px 0 10px;">
-      <div style="font-size:52px;margin-bottom:12px;animation:dlSuccess .4s ease;">🎉</div>
-      <div style="font-size:17px;font-weight:700;color:var(--ui-text);margin-bottom:6px;">Thank you, ${name.split(' ')[0]}!</div>
-      <div style="font-size:13px;color:var(--ui-muted);line-height:1.6;">Your ${currentRating}★ rating and feedback<br>have been submitted successfully.</div>
-      <div style="margin-top:18px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
-        <span style="background:#fef9c3;border:1px solid #fde047;border-radius:20px;padding:4px 14px;font-size:12px;font-weight:600;color:#713f12;">${ratingText}</span>
-        <span style="background:#f0fdf4;border:1px solid #86efac;border-radius:20px;padding:4px 14px;font-size:12px;color:#166534;">${comment.slice(0,40)}${comment.length>40?'…':''}</span>
-      </div>
-    </div>`;
-  showToast('success','Thank you, '+name.split(' ')[0]+'! ⭐','Your feedback has been recorded.');
-  setTimeout(()=>{
-    closeModal('ratingModal');
-    setTimeout(()=>{
-      document.getElementById('ratingStep1').style.display='block';
-      document.getElementById('ratingStep2').style.display='none';
-      document.getElementById('ratingStep2').innerHTML=`
-      <div style="text-align:center;margin-bottom:18px;">
-        <div style="font-size:36px;margin-bottom:8px;">🙏</div>
-        <div style="font-size:15px;font-weight:700;color:var(--ui-text);">Almost done!</div>
-        <div style="font-size:12px;color:var(--ui-muted);margin-top:4px;">Please enter your name so we know who to thank.</div>
-      </div>
-      <div style="background:var(--ui-sec-bg);border:1px solid var(--ui-border);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:11px;color:var(--ui-muted);">
-        <div style="font-weight:700;color:var(--ui-text);margin-bottom:4px;font-size:12px;">📋 Your Feedback Summary</div>
-        <div>⭐ Rating: <strong id="ratingPreview" style="color:var(--ui-accent);">— stars</strong></div>
-        <div style="margin-top:3px;">💬 Comment: <em id="commentPreview" style="color:var(--ui-text);">No comment</em></div>
-      </div>
-      <label class="comment-label">Your Name <span style="color:var(--ui-ph);font-weight:400;text-transform:none;">(optional — or stay anonymous)</span></label>
-      <input type="text" id="ratingName" style="width:100%;background:#fff;border:1.5px solid var(--ui-input-b);border-radius:6px;color:var(--ui-text);font-family:'Inter',sans-serif;font-size:14px;font-weight:500;padding:10px 12px;outline:none;transition:border-color .15s;" placeholder="e.g. Imran Sifat" onkeydown="if(event.key==='Enter')submitRatingFinal()">
-      <button class="submit-btn" onclick="submitRatingFinal()" id="submitFinalBtn" style="margin-top:12px;">✅ Submit Feedback</button>
-      <button onclick="backToRatingStep1()" style="width:100%;margin-top:8px;padding:9px;background:none;border:1.5px solid var(--ui-border);border-radius:7px;color:var(--ui-muted);font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;">← Back &amp; Edit</button>
-      <div class="submit-success" id="submitSuccess" style="margin-top:12px;">✅ Thank you for your feedback!</div>`;
-      document.getElementById('commentBox').value='';
-      currentRating=0;setRating(0);
-    },400);
-  },2800);
-}
-function submitRating(){goToRatingStep2();}
 function copyFromAssignment(){
   ['courseCode','courseTitle','tName','tDept','sName','sId','sSec','sSem','sDept','subDate'].forEach(f=>{
     const src=document.getElementById('a_'+f),dst=document.getElementById('l_'+f);if(src&&dst)dst.value=src.value;
@@ -1317,11 +1431,7 @@ function copyFromAssignment(){
 
 function g(id){const e=document.getElementById(id);return e?e.value.trim():'';}
 function gmFor(modeKey,f){return g((modeKey==='assignment'?'a_':'l_')+f);}
-function fd(s){
-  if(!s)return'';
-  const d=new Date(s+'T12:00:00');
-  return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();
-}
+function fd(s){if(!s)return'';const d=new Date(s+'T12:00:00');return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();}
 function isFieldEnabled(id){const el=document.getElementById(id);return el&&!el.disabled&&el.value.trim();}
 function row(l,v){return`<div class="cv-row"><span class="cv-lbl">${l} </span><span class="cv-val">${v||''}</span></div>`;}
 function irow(l,v,b=false){return`<div class="cv-ir"><span class="cv-il">${l} </span><span class="cv-iv${b?' cv-iv-name':''}">${v||''}</span></div>`;}
@@ -1329,39 +1439,24 @@ function irow(l,v,b=false){return`<div class="cv-ir"><span class="cv-il">${l} </
 function buildHTMLForMode(modeKey){
   const isLab=modeKey==='lab';
   const get=(f)=>gmFor(modeKey,f);
-  const getOptional=(f)=>{
-    const id=(isLab?'l_':'a_')+f;
-    const el=document.getElementById(id);
-    return(el&&!el.disabled)?el.value.trim():'';
-  };
+  const getOptional=(f)=>{const id=(isLab?'l_':'a_')+f;const el=document.getElementById(id);return(el&&!el.disabled)?el.value.trim():'';};
   let h='';
   h+=`<div class="cv-logo"><img src="img/DIU-Logo.png" alt="DIU" onerror="this.style.display='none'"></div>`;
   h+=`<div class="cv-title">${isLab?'LAB REPORT':'Assignment'}</div>`;
-  if(!isLab){
-    const assignNo=getOptional('assignmentNo');
-    if(assignNo) h+=row('Assignment No:',assignNo);
-    h+=row('Topic Name:',get('topicName'));
-  }else{
-    h+=row('Experiment Name:',get('expName'));
-    h+=row('Experiment No:',get('expNo'));
-  }
-  h+=row('Course Code:',get('courseCode'));
-  h+=row('Course Title:',get('courseTitle'));
+  if(!isLab){const assignNo=getOptional('assignmentNo');if(assignNo)h+=row('Assignment No:',assignNo);h+=row('Topic Name:',get('topicName'));}
+  else{h+=row('Experiment Name:',get('expName'));h+=row('Experiment No:',get('expNo'));}
+  h+=row('Course Code:',get('courseCode'));h+=row('Course Title:',get('courseTitle'));
   const tDesig=getOptional('tDesignation');
   h+=`<div class="cv-sec"><u>Submitted To</u>:</div><div class="cv-ib">
-    ${irow('Teacher Name:',get('tName'),true)}
-    ${tDesig?irow('Designation:',tDesig):''}
+    ${irow('Teacher Name:',get('tName'),true)}${tDesig?irow('Designation:',tDesig):''}
     ${irow('Department:',get('tDept'))}
     <div class="cv-uline">Daffodil International University.</div>
   </div>`;
   const groupNo=isLab?getOptional('groupNo'):'';
   h+=`<div class="cv-sec"><u>Submitted By</u>:</div><div class="cv-ib">
-    ${irow('Name:',get('sName'),true)}
-    ${irow('ID:',get('sId'))}
+    ${irow('Name:',get('sName'),true)}${irow('ID:',get('sId'))}
     ${isLab&&groupNo?irow('Group No:',groupNo):''}
-    ${irow('Section:',get('sSec'))}
-    ${irow('Semester:',get('sSem'))}
-    ${irow('Department:',get('sDept'))}
+    ${irow('Section:',get('sSec'))}${irow('Semester:',get('sSem'))}${irow('Department:',get('sDept'))}
     <div class="cv-uline">Daffodil International University.</div>
   </div>`;
   h+=`<div style="height:26px"></div>`;
@@ -1389,20 +1484,16 @@ function triggerParticleBurst(btn){
 function universalDownload(blob,filename){
   try{
     if(window.navigator&&window.navigator.msSaveOrOpenBlob){window.navigator.msSaveOrOpenBlob(blob,filename);return;}
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement('a');a.href=url;a.download=filename;a.style.display='none';
+    const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;a.style.display='none';
     document.body.appendChild(a);a.click();
     setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},500);
-    setTimeout(()=>{showToast('success','PDF Downloaded!','Check your downloads folder.',5000);},800);
-    return;
+    setTimeout(()=>{showToast('success','PDF Downloaded!','Check your downloads folder.',5000);},800);return;
   }catch(e1){}
   try{
-    const url=URL.createObjectURL(blob);
-    const opened=window.open(url,'_blank');
+    const url=URL.createObjectURL(blob);const opened=window.open(url,'_blank');
     setTimeout(()=>URL.revokeObjectURL(url),15000);
     if(!opened||opened.closed){blobToDataURIDownload(blob,filename);}
-    else{showToast('info','PDF Opened','Save it from the new tab/window.',5000);}
-    return;
+    else{showToast('info','PDF Opened','Save it from the new tab/window.',5000);}return;
   }catch(e2){}
   blobToDataURIDownload(blob,filename);
 }
@@ -1430,37 +1521,28 @@ async function buildCoverPDFBlobForMode(modeKey){
       <div style="position:absolute;top:16px;left:22px;right:22px;bottom:16px;border:1.5px solid #444;z-index:10;margin-right:2px;"></div>
       <div id="pwm" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:420px;height:420px;background-image:url('img/watermark.jpg');background-size:contain;background-repeat:no-repeat;background-position:center;opacity:0.075;z-index:1;"></div>
       <div style="position:relative;z-index:5;padding:36px 55px 40px 55px;display:flex;flex-direction:column;">${buildHTMLForMode(modeKey)}</div>
-      <!-- CHANGE 3: Invisible URL watermark in PDF - white text on white background, hyperlinked -->
       <a id="pdf-wm-link" href="${SITE_URL}" style="position:absolute;bottom:24px;right:28px;z-index:20;display:block;width:160px;height:28px;color:rgba(255,255,255,0.01);font-size:7px;font-family:Arial,sans-serif;line-height:28px;text-align:center;text-decoration:none;background:transparent;white-space:nowrap;overflow:hidden;">${SITE_URL}</a>
     </div>`;
   document.body.appendChild(wrapper);
   const cl=wrapper.querySelector('#pci');
-  const st=document.createElement('style');
-  st.textContent='.cv-iv-name{font-size:23px!important;font-weight:400!important;position:relative;top:2px;}';
-  cl.appendChild(st);
+  const st=document.createElement('style');st.textContent='.cv-iv-name{font-size:23px!important;font-weight:400!important;position:relative;top:2px;}';cl.appendChild(st);
   try{const lg=cl.querySelector('.cv-logo img');if(lg&&lg.src&&!lg.src.startsWith('data:')){const d=await toDataURL(lg.src);if(d)lg.src=d;}}catch(e){}
   try{const wm=cl.querySelector('#pwm');if(wm){const bg=wm.style.backgroundImage;const m=bg.match(/url\(['"]?(.*?)['"]?\)/);if(m&&m[1]&&!m[1].startsWith('data:')){const d=await toDataURL(m[1]);if(d)wm.style.backgroundImage=`url(${d})`;}}}catch(e){}
   await new Promise(r=>setTimeout(r,80));
   const opt={margin:0,image:{type:'jpeg',quality:1},html2canvas:{scale:3,useCORS:true,allowTaint:true,logging:false,width:794,height:1122,scrollX:0,scrollY:0},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}};
   const blob=await html2pdf().set(opt).from(cl).outputPdf('blob');
-  document.body.removeChild(wrapper);
-  return blob;
+  document.body.removeChild(wrapper);return blob;
 }
 
 async function downloadPDF(){
-  const btn=document.getElementById('dlBtn');
-  if(btn.disabled)return;
-  btn.classList.add('generating');
-  btn.innerHTML='<span style="display:inline-block;animation:spin 1s linear infinite;margin-right:8px">⏳</span> GENERATING...';
-  btn.disabled=true;
+  const btn=document.getElementById('dlBtn');if(btn.disabled)return;
+  btn.classList.add('generating');btn.innerHTML='<span style="display:inline-block;animation:spin 1s linear infinite;margin-right:8px">⏳</span> GENERATING...';btn.disabled=true;
   try{
     const modeKey=mode==='merge'?lastModeBeforeMerge:mode;
     const blob=await buildCoverPDFBlobForMode(modeKey);
     btn.classList.remove('generating');btn.classList.add('success');
     const fname=(modeKey==='lab'?'Lab_Report_Cover-diucoverpoint':'Assignment_Cover_Page-diucoverpoint')+'.pdf';
-    triggerParticleBurst(btn);
-    universalDownload(blob,fname);
-    incrementDownloadCount();
+    triggerParticleBurst(btn);universalDownload(blob,fname);incrementDownloadCount();
     btn.innerHTML='✅ DOWNLOADED!';
     setTimeout(()=>{btn.classList.remove('success');btn.innerHTML='⬇ &nbsp; DOWNLOAD PDF';checkFields();},2500);
   }catch(e){
@@ -1521,23 +1603,20 @@ async function addCoverToPile(){
     document.getElementById('cco-l-count').textContent=lC+' field'+(lC!==1?'s':'')+' filled';
     const aFields=REQUIRED_FIELDS['assignment'].filter(id=>{const e=document.getElementById(id);return e&&e.value.trim();}).map(id=>({a_topicName:'Topic',a_courseCode:'Code',a_courseTitle:'Title',a_tName:'Teacher',a_tDept:'Dept',a_sName:'Name',a_sId:'ID',a_sSec:'Section',a_sSem:'Semester',a_sDept:'S.Dept',a_subDate:'Date'}[id]||id)).join(', ');
     const lFields=REQUIRED_FIELDS['lab'].filter(id=>{const e=document.getElementById(id);return e&&e.value.trim();}).map(id=>({l_expName:'Exp Name',l_expNo:'Exp No',l_courseCode:'Code',l_courseTitle:'Title',l_tName:'Teacher',l_tDept:'Dept',l_sName:'Name',l_sId:'ID',l_sSec:'Section',l_sSem:'Semester',l_sDept:'S.Dept',l_subDate:'Date'}[id]||id)).join(', ');
-    document.getElementById('cco-a-fields').textContent=aFields||'';
-    document.getElementById('cco-l-fields').textContent=lFields||'';
+    document.getElementById('cco-a-fields').textContent=aFields||'';document.getElementById('cco-l-fields').textContent=lFields||'';
     selectCoverChoice('assignment');openModal('chooseCoverModal');return;
   }
   await addCoverWithMode(decision);
 }
 async function addCoverWithMode(modeKey){
   mergeItems=mergeItems.filter(x=>!x.isCover);
-  const btn=document.getElementById('addCoverBtn');
-  btn.textContent='⏳ Generating...';btn.disabled=true;
+  const btn=document.getElementById('addCoverBtn');btn.textContent='⏳ Generating...';btn.disabled=true;
   try{
     const blob=await buildCoverPDFBlobForMode(modeKey);
     const bytes=new Uint8Array(await blob.arrayBuffer());let thumb=null;
     try{
       const pdf=await pdfjsLib.getDocument({data:bytes.slice()}).promise;const page=await pdf.getPage(1);
-      const vp=page.getViewport({scale:0.42});const canvas=document.createElement('canvas');
-      canvas.width=vp.width;canvas.height=vp.height;
+      const vp=page.getViewport({scale:0.42});const canvas=document.createElement('canvas');canvas.width=vp.width;canvas.height=vp.height;
       await page.render({canvasContext:canvas.getContext('2d'),viewport:vp}).promise;thumb=canvas;
     }catch(e){}
     const label=modeKey==='lab'?'Lab Cover (Generated)':'Assignment Cover (Generated)';
@@ -1545,16 +1624,13 @@ async function addCoverWithMode(modeKey){
     document.getElementById('coverNoteWrap').style.display='block';
     renderMergeCards();updateMergeSteps();
     showToast('success','Cover Added','Your cover page is ready in the queue.',3000);
-  }catch(e){
-    showToast('error','Cover Generation Failed','Fill in cover details first then try again.',5000);
-  }
+  }catch(e){showToast('error','Cover Generation Failed','Fill in cover details first then try again.',5000);}
   btn.textContent='＋ ADD MY COVER PAGE';btn.disabled=false;
 }
 
 function renderMergeCards(){
   mergeCardsEl.innerHTML='';
-  const total=mergeItems.reduce((a,x)=>a+x.pageCount,0);
-  const totalSize=mergeItems.reduce((a,x)=>a+(x.size||0),0);
+  const total=mergeItems.reduce((a,x)=>a+x.pageCount,0);const totalSize=mergeItems.reduce((a,x)=>a+(x.size||0),0);
   const hasItems=mergeItems.length>0;
   document.getElementById('cardCount').textContent=mergeItems.length+' file'+(mergeItems.length!==1?'s':'');
   document.getElementById('mergeDlBtn').disabled=mergeItems.length<2;
@@ -1566,15 +1642,12 @@ function renderMergeCards(){
     const card=document.createElement('div');card.className='pdf-card'+(item.isCover?' is-cover':'');card.draggable=true;card.dataset.idx=idx;
     const badge=document.createElement('div');badge.className='card-badge';badge.textContent=item.isCover?'COVER':'#'+(idx+1);card.appendChild(badge);
     const rm=document.createElement('button');rm.className='card-remove';rm.innerHTML='&times;';rm.title='Remove';
-    rm.onclick=e=>{e.stopPropagation();mergeItems.splice(idx,1);if(item.isCover)document.getElementById('coverNoteWrap').style.display='none';renderMergeCards();updateMergeSteps();};
-    card.appendChild(rm);
+    rm.onclick=e=>{e.stopPropagation();mergeItems.splice(idx,1);if(item.isCover)document.getElementById('coverNoteWrap').style.display='none';renderMergeCards();updateMergeSteps();};card.appendChild(rm);
     const thumb=document.createElement('div');thumb.className='card-thumb';
     if(item.thumb){const c=item.thumb.cloneNode(true);c.style.cssText='width:100%;height:100%;object-fit:contain;display:block;';thumb.appendChild(c);}
-    else{thumb.innerHTML='<div class="card-thumb-placeholder">📄</div>';}
-    card.appendChild(thumb);
+    else{thumb.innerHTML='<div class="card-thumb-placeholder">📄</div>';}card.appendChild(thumb);
     const info=document.createElement('div');info.className='card-info';
-    info.innerHTML=`<div class="card-name" title="${item.name}">${item.name}</div><div class="card-meta"><span class="card-pages">${item.pageCount} pg${item.pageCount!==1?'s':''}</span><span class="card-size">${fmtSize(item.size||0)}</span></div>`;
-    card.appendChild(info);
+    info.innerHTML=`<div class="card-name" title="${item.name}">${item.name}</div><div class="card-meta"><span class="card-pages">${item.pageCount} pg${item.pageCount!==1?'s':''}</span><span class="card-size">${fmtSize(item.size||0)}</span></div>`;card.appendChild(info);
     const arrows=document.createElement('div');arrows.className='card-arrows';
     const lb=document.createElement('button');lb.className='arr-btn';lb.textContent='◀';lb.title='Move left';lb.disabled=idx===0;
     lb.onclick=e=>{e.stopPropagation();[mergeItems[idx-1],mergeItems[idx]]=[mergeItems[idx],mergeItems[idx-1]];renderMergeCards();updateMergeSteps();};
@@ -1590,17 +1663,12 @@ function renderMergeCards(){
   });
 }
 
-function clearAll(){
-  mergeItems=[];renderMergeCards();updateMergeSteps();
-  showToast('info','Queue Cleared','All PDFs removed from the merge queue.',3000);
-}
+function clearAll(){mergeItems=[];renderMergeCards();updateMergeSteps();showToast('info','Queue Cleared','All PDFs removed from the merge queue.',3000);}
 
 async function doMerge(){
   if(mergeItems.length<2)return;
   const btn=document.getElementById('mergeDlBtn');
-  btn.classList.add('generating');
-  btn.innerHTML='<span style="display:inline-block;animation:spin 1s linear infinite;margin-right:6px">⏳</span> MERGING...';
-  btn.disabled=true;
+  btn.classList.add('generating');btn.innerHTML='<span style="display:inline-block;animation:spin 1s linear infinite;margin-right:6px">⏳</span> MERGING...';btn.disabled=true;
   const prog=document.getElementById('mergeProgress');const bar=document.getElementById('mergeProgressBar');
   prog.classList.add('show');bar.style.width='0%';
   try{
@@ -1608,15 +1676,12 @@ async function doMerge(){
     for(let i=0;i<mergeItems.length;i++){
       bar.style.width=Math.round((i/mergeItems.length)*88)+'%';
       const src=await PDFDocument.load(mergeItems[i].bytes);
-      const pages=await merged.copyPages(src,src.getPageIndices());
-      pages.forEach(p=>merged.addPage(p));
+      const pages=await merged.copyPages(src,src.getPageIndices());pages.forEach(p=>merged.addPage(p));
     }
     bar.style.width='96%';const out=await merged.save();bar.style.width='100%';
     const blob=new Blob([out],{type:'application/pdf'});
     btn.classList.remove('generating');btn.classList.add('success');
-    triggerParticleBurst(btn);
-    universalDownload(blob,'DIU_Merged_Document-diucoverpoint.pdf');
-    incrementDownloadCount();
+    triggerParticleBurst(btn);universalDownload(blob,'DIU_Merged_Document-diucoverpoint.pdf');incrementDownloadCount();
     btn.innerHTML='✅ DOWNLOADED!';
     setTimeout(()=>{btn.classList.remove('success');btn.innerHTML='⬇ &nbsp; DOWNLOAD MERGED PDF';btn.disabled=mergeItems.length<2;prog.classList.remove('show');bar.style.width='0%';},2500);
   }catch(err){
@@ -1629,6 +1694,19 @@ async function doMerge(){
 // Initialize
 render();
 updateResetBarVisibility();
+
+// Fix initial state of optional field toggles (ensure disabled fields look disabled)
+(function(){
+  Object.values(optGroupToField).forEach(fieldId=>{
+    const inp=document.getElementById(fieldId);
+    const fg=document.getElementById('fg-'+fieldId);
+    const btn=document.getElementById('toggle-'+fieldId);
+    if(inp&&inp.disabled){
+      if(fg){fg.classList.add('fg-optional');fg.classList.remove('enabled');}
+      if(btn)btn.classList.remove('on');
+    }
+  });
+})();
 </script>
 </body>
 </html>
