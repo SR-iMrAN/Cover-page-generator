@@ -4,12 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DIU Cover Point</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 <link rel="icon" type="image/png" href="img/logo.png">
 <link rel="shortcut icon" type="image/png" href="img/logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
 <style>
 :root{
   --ui-bg:#eef2fb;--ui-surface:#ffffff;--ui-border:#c8d5ee;--ui-accent:#2d54b8;
@@ -567,16 +572,16 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
     <button class="wb-close" onclick="closeWelcome()" title="Close">×</button>
     <div class="wb-title">Welcome to DIU <span>Cover</span> Point ✨</div>
     <div class="wb-grid">
-      <div class="wb-feat"><span class="wb-feat-icon">📄</span><div class="wb-feat-text"><strong>Assignment & Lab Covers</strong>Fill in your info and get a professional DIU cover page PDF instantly.</div></div>
-      <div class="wb-feat wb-new"><span class="wb-feat-icon">🆕</span><div class="wb-feat-text"><strong>New Template: Cover Page With Mark Table</strong>New update! Full rubric mark table cover for other depts. Click "Change Template" in the header to access it.</div></div>
-      <div class="wb-feat"><span class="wb-feat-icon">⊕</span><div class="wb-feat-text"><strong>Merge PDF Tool</strong>Combine your cover page with any PDF — drag to reorder, one-click download.</div></div>
-      <div class="wb-feat"><span class="wb-feat-icon">✨</span><div class="wb-feat-text"><strong>Optional Fields</strong>Expand optional fields like Designation & Group No to add more detail.</div></div>
-      <div class="wb-feat"><span class="wb-feat-icon">⚡</span><div class="wb-feat-text"><strong>Copy from Assignment</strong>In Lab Report, instantly copy teacher & student info from your assignment.</div></div>
-      <div class="wb-feat"><span class="wb-feat-icon">↩</span><div class="wb-feat-text"><strong>Undo Reset</strong>Accidentally cleared fields? Undo within 15 seconds to restore everything.</div></div>
-      <div class="wb-feat"><span class="wb-feat-icon">🌐</span><div class="wb-feat-text"><strong>Download Issues?</strong>If PDF doesn't download, try Chrome or Firefox instead of Messenger browser.</div></div>
+      <div class="wb-feat"><span class="wb-feat-icon"><i class="bi bi-file-earmark-text"></i></span><div class="wb-feat-text"><strong>Assignment & Lab Covers</strong>Fill in your info and get a professional DIU cover page PDF instantly.</div></div>
+      <div class="wb-feat wb-new"><span class="wb-feat-icon"><i class="ri-sparkles-fill"></i></span><div class="wb-feat-text"><strong>New Template: Cover Page With Mark Table</strong>New update! Full rubric mark table cover for other depts. Click "Change Template" in the header to access it.</div></div>
+      <div class="wb-feat"><span class="wb-feat-icon"><i class="bi bi-intersect"></i></span><div class="wb-feat-text"><strong>Merge PDF Tool</strong>Combine your cover page with any PDF — drag to reorder, one-click download.</div></div>
+      <div class="wb-feat"><span class="wb-feat-icon"><i class="bi bi-toggles"></i></span><div class="wb-feat-text"><strong>Optional Fields</strong>Expand optional fields like Designation & Group No to add more detail.</div></div>
+      <div class="wb-feat"><span class="wb-feat-icon"><i class="bi bi-lightning-charge-fill"></i></span><div class="wb-feat-text"><strong>Copy from Assignment</strong>In Lab Report, instantly copy teacher & student info from your assignment.</div></div>
+      <div class="wb-feat"><span class="wb-feat-icon"><i class="bi bi-arrow-counterclockwise"></i></span><div class="wb-feat-text"><strong>Undo Reset</strong>Accidentally cleared fields? Undo within 15 seconds to restore everything.</div></div>
+      <div class="wb-feat"><span class="wb-feat-icon"><i class="bi bi-globe2"></i></span><div class="wb-feat-text"><strong>Download Issues?</strong>If PDF doesn't download, try Chrome or Firefox instead of Messenger browser.</div></div>
     </div>
     <div class="wb-footer">
-      <div class="wb-hint">⚠️ Problems? <a onclick="openModal('devModal');closeWelcome()">Contact the developer</a></div>
+      <div class="wb-hint"><i class="bi bi-exclamation-triangle-fill" style="color:#f59e0b;"></i> Problems? <a onclick="openModal('devModal');closeWelcome()">Contact the developer</a></div>
       <div class="wb-timer" id="wbTimer">Auto-closing in <span id="wbSec">8</span>s</div>
     </div>
     <div class="wb-progress"><div class="wb-progress-bar" id="wbBar"></div></div>
@@ -587,11 +592,11 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
 <button id="floatingFeedbackBtn" onclick="openFeedbackSide()" title="Comment &amp; Feedback">
   <div class="ffb-pill" id="ffbPill">
     <div class="ffb-pill-text">
-      <span class="ffb-pill-line1" id="ffbLine1">💬 COMMENT YOUR OPINION</span>
+      <span class="ffb-pill-line1" id="ffbLine1"><i class="fa-regular fa-comment-dots"></i> COMMENT YOUR OPINION</span>
       <span class="ffb-pill-line2" id="ffbLine2">Tap to share feedback</span>
     </div>
   </div>
-  <div class="ffb-icon-wrap">💬</div>
+  <div class="ffb-icon-wrap"><i class="fa-regular fa-comment-dots" style="font-size:20px;"></i></div>
 </button>
 
 <!-- FEEDBACK SIDE OVERLAY -->
@@ -600,7 +605,7 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
 <!-- FEEDBACK SIDE MODAL -->
 <div id="feedbackSideModal">
   <div class="fsm-head">
-    <h3>💬 FEEDBACK &amp; <span>SUGGESTIONS</span></h3>
+    <h3><i class="fa-regular fa-comment-dots"></i> FEEDBACK &amp; <span>SUGGESTIONS</span></h3>
     <button class="fsm-close" onclick="closeFeedbackSide()">×</button>
   </div>
   <div class="fsm-body">
@@ -620,12 +625,12 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
     <textarea class="fsm-comment-box" id="fsmCommentBox" placeholder="Share your thoughts or experience..."></textarea>
     <label class="fsm-comment-label" style="margin-top:10px;">Your Name <span style="color:var(--ui-ph);font-weight:400;text-transform:none;">(optional)</span></label>
     <input type="text" class="fsm-name-input" id="fsmNameInput" placeholder="e.g. Imran Sifat">
-    <button class="fsm-submit-btn" id="fsmSubmitBtn" onclick="submitFsmFeedback()">✅ Submit Rating &amp; Comment</button>
+    <button class="fsm-submit-btn" id="fsmSubmitBtn" onclick="submitFsmFeedback()"><i class="bi bi-send-check-fill"></i> Submit Rating &amp; Comment</button>
 
     <div class="fsm-divider"></div>
 
     <!-- Feature Suggestion -->
-    <div style="font-size:13px;font-weight:700;color:var(--ui-text);margin-bottom:4px;">💡 Suggest a Feature</div>
+    <div style="font-size:13px;font-weight:700;color:var(--ui-text);margin-bottom:4px;"><i class="bi bi-lightbulb-fill" style="color:#f59e0b;"></i> Suggest a Feature</div>
     <div style="font-size:11px;color:var(--ui-muted);margin-bottom:8px;">Have an idea to make this better? Let us know!</div>
     <label class="fsm-feature-label">Your Idea</label>
     <!-- <textarea class="fsm-feature-box" id="fsmFeatureBox" placeholder="e.g. Add a dark mode, support for more templates, auto-fill from student ID..."></textarea>
@@ -637,13 +642,13 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
 <div class="tpl-modal-bg" id="tplModal" onclick="closeTplBg(event)">
   <div class="tpl-modal">
     <div class="tpl-modal-head">
-      <h3>🎨 CHANGE <span>TEMPLATE</span></h3>
+      <h3><i class="bi bi-palette2"></i> CHANGE <span>TEMPLATE</span></h3>
       <button class="tpl-modal-close" onclick="closeModal('tplModal')">×</button>
     </div>
     <div class="modal-body" style="padding:22px;">
       <div class="tpl-modal-sub">Choose the cover page format that matches your department or assignment type.</div>
       <div class="tpl-card tpl-current">
-        <div class="tpl-card-icon">📄</div>
+        <div class="tpl-card-icon"><i class="bi bi-file-earmark-text" style="font-size:32px;color:#2d54b8;"></i></div>
         <div class="tpl-card-info">
           <div class="tpl-card-title">
             DIU Standard Cover
@@ -655,7 +660,7 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
         <div class="tpl-go-btn">✓</div>
       </div>
       <a class="tpl-card tpl-new" href="template-lab-assignment.html">
-        <div class="tpl-card-icon">📊</div>
+        <div class="tpl-card-icon"><i class="bi bi-table" style="font-size:32px;color:#7c3aed;"></i></div>
         <div class="tpl-card-info">
           <div class="tpl-card-title">
             Cover Page With Mark Table
@@ -685,7 +690,7 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
     </div>
     <div class="app-logo-text-wrap"></div>
     <button class="change-template-btn" onclick="openModal('tplModal')" title="Switch to another cover template">
-      <span class="ct-icon">🎨</span>
+      <span class="ct-icon"><i class="bi bi-palette2"></i></span>
       <span class="ct-text">CHANGE TEMPLATE</span>
       <span class="ct-new">NEW</span>
     </button>
@@ -694,17 +699,17 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
     <div class="toggle-wrap">
       <button class="tbtn active" id="btn-a" onclick="setMode('assignment')">ASSIGNMENT</button>
       <button class="tbtn" id="btn-l" onclick="setMode('lab')">LAB REPORT</button>
-      <button class="tbtn merge-tab" id="btn-m" onclick="setMode('merge')">⊕ MERGE PDF</button>
+      <button class="tbtn merge-tab" id="btn-m" onclick="setMode('merge')"><i class="bi bi-intersect"></i> MERGE PDF</button>
     </div>
     <div class="app-subtitle">COVER PAGE GENERATOR</div>
   </div>
   <div class="header-right">
     <div class="dl-count-badge" title="Total downloads">
-      <span class="dl-count-icon">⬇</span>
+      <span class="dl-count-icon"><i class="bi bi-download"></i></span>
       <span class="dl-count-val" id="dlCount">0</span>
     </div>
     <div class="visitor-badge" title="Total page loads">
-      <span class="visitor-icon">👁</span>
+      <span class="visitor-icon"><i class="bi bi-eye"></i></span>
       <span class="visitor-count" id="visitorCount">0</span>
     </div>
     <span class="v-badge">v3.1</span>
@@ -718,23 +723,23 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
 <div class="dropdown-menu" id="dropdownMenu">
   <div class="dm-section">Navigation</div>
   <button class="dm-item" onclick="openModal('tplModal');closeMenu()">
-    <span class="dm-icon">🎨</span>
+    <span class="dm-icon"><i class="bi bi-palette2"></i></span>
     <div><div>Change Template <span style="font-size:9px;background:linear-gradient(130deg,#7c3aed,#4f46e5);color:#fff;border-radius:4px;padding:1px 5px;margin-left:4px;font-weight:700;">NEW</span></div><span class="dm-desc">Switch to Cover Page With Mark Table (new update)</span></div>
   </button>
   <div class="dm-divider"></div>
   <button class="dm-item" onclick="openModal('devModal')">
-    <span class="dm-icon">👨‍💻</span>
+    <span class="dm-icon"><i class="fa-solid fa-code"></i></span>
     <div><div>Developer Info</div><span class="dm-desc">About the creator &amp; links</span></div>
   </button>
   <div class="dm-divider"></div>
   <button class="dm-item" onclick="openFeedbackSide();closeMenu()">
-    <span class="dm-icon">⭐</span>
+    <span class="dm-icon"><i class="bi bi-star-half"></i></span>
     <div><div>Comment &amp; Rating</div><span class="dm-desc">Share your feedback</span></div>
   </button>
   <div class="dm-divider"></div>
   <div class="dm-section" style="display:none" id="mobileModeSection">Switch Mode</div>
   <button class="dm-item" id="mobileToggleBtn" style="display:none" onclick="toggleModeFromMenu()">
-    <span class="dm-icon">🔄</span>
+    <span class="dm-icon"><i class="bi bi-arrow-repeat"></i></span>
     <div><div id="mobileToggleLabel">Switch to Lab Report</div><span class="dm-desc">Toggle assignment / lab report</span></div>
   </button>
 </div>
@@ -742,17 +747,17 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
 <!-- DEV MODAL -->
 <div class="modal-bg" id="devModal" onclick="closeBg(event,'devModal')">
   <div class="modal">
-    <div class="modal-head"><h3>👨‍💻 Developer Info</h3><button class="modal-close" onclick="closeModal('devModal')">×</button></div>
+    <div class="modal-head"><h3><i class="fa-solid fa-code"></i> Developer Info</h3><button class="modal-close" onclick="closeModal('devModal')">×</button></div>
     <div class="modal-body">
       <div class="dev-card">
-        <div class="dev-avatar">🧑‍💻</div>
+        <div class="dev-avatar"><i class="fa-solid fa-user-tie" style="font-size:32px;"></i></div>
         <div><div class="dev-name">Sifatur Rahman Imran</div><div class="dev-role">Web Developer · DIU Student</div></div>
       </div>
       <div class="dev-links">
-        <a class="dev-link" href="https://sr-imran.github.io/sri/" target="_blank"><span class="dl-icon">🌐</span> Portfolio Website</a>
-        <a class="dev-link" href="https://github.com/SR-iMrAN?tab=repositories" target="_blank"><span class="dl-icon">🐙</span> GitHub Profile</a>
-        <a class="dev-link" href="https://www.linkedin.com/in/s-r-imran/" target="_blank"><span class="dl-icon">💼</span> LinkedIn</a>
-        <a class="dev-link" href="mailto:diucover.point@gmail.com" target="_blank"><span class="dl-icon">✉️</span> Contact via Email</a>
+        <a class="dev-link" href="https://sr-imran.github.io/sri/" target="_blank"><span class="dl-icon"><i class="bi bi-globe2"></i></span> Portfolio Website</a>
+        <a class="dev-link" href="https://github.com/SR-iMrAN?tab=repositories" target="_blank"><span class="dl-icon"><i class="bi bi-github"></i></span> GitHub Profile</a>
+        <a class="dev-link" href="https://www.linkedin.com/in/s-r-imran/" target="_blank"><span class="dl-icon"><i class="bi bi-linkedin"></i></span> LinkedIn</a>
+        <a class="dev-link" href="/cdn-cgi/l/email-protection#0c6865796f637a697e227c636562784c6b616d6560226f6361" target="_blank"><span class="dl-icon"><i class="bi bi-envelope-at-fill"></i></span> Contact via Email</a>
       </div>
     </div>
   </div>
@@ -761,11 +766,11 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
 <!-- Choose cover modal -->
 <div class="modal-bg" id="chooseCoverModal" onclick="closeBg(event,'chooseCoverModal')">
   <div class="modal choose-cover-modal">
-    <div class="modal-head"><h3>📋 Choose Cover Page</h3><button class="modal-close" onclick="closeModal('chooseCoverModal')">×</button></div>
+    <div class="modal-head"><h3><i class="bi bi-card-checklist"></i> Choose Cover Page</h3><button class="modal-close" onclick="closeModal('chooseCoverModal')">×</button></div>
     <div class="modal-body">
       <p style="font-size:12px;color:var(--ui-muted);margin-bottom:16px;">Both covers have filled fields. Which one would you like to add to the merge queue?</p>
       <div class="choose-cover-option" id="cco-assignment" onclick="selectCoverChoice('assignment')">
-        <div class="cco-icon">📄</div>
+        <div class="cco-icon"><i class="bi bi-file-earmark-text" style="font-size:28px;color:#2d54b8;"></i></div>
         <div class="cco-info">
           <div class="cco-title">Assignment Cover</div>
           <div class="cco-count" id="cco-a-count">0 fields filled</div>
@@ -773,7 +778,7 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
         </div>
       </div>
       <div class="choose-cover-option" id="cco-lab" onclick="selectCoverChoice('lab')">
-        <div class="cco-icon">🔬</div>
+        <div class="cco-icon"><i class="bi bi-motherboard" style="font-size:28px;color:#7c3aed;"></i></div>
         <div class="cco-info">
           <div class="cco-title">Lab Report Cover</div>
           <div class="cco-count" id="cco-l-count">0 fields filled</div>
@@ -790,7 +795,7 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
   <div class="inp-panel">
     <!-- ASSIGNMENT PANEL -->
     <div class="mode-panel active" id="panel-assignment">
-      <div class="sec-head">📄 Document Info</div>
+      <div class="sec-head"><i class="bi bi-file-earmark-text"></i> Document Info</div>
       <div class="fg"><label>Topic Name</label><input type="text" id="a_topicName" placeholder="e.g. SQL SELECT, Query and Sub Query" oninput="render()"></div>
       <div class="optional-toggle" onclick="toggleOptional('a_optional_doc')" id="opt-tog-a-doc">
         <span class="optional-toggle-icon" id="opt-icon-a-doc">▶</span>
@@ -836,13 +841,13 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
       <div class="fg"><label>Department</label><input type="text" id="a_sDept" placeholder="e.g. CSE" oninput="render()"></div>
       <div class="fg"><label>University</label><input class="readonly-field" type="text" value="Daffodil International University." readonly></div>
       <div class="sgap"></div>
-      <div class="sec-head">📅 Submission Date</div>
+      <div class="sec-head"><i class="bi bi-calendar-check"></i> Submission Date</div>
       <div class="fg"><label>Date</label><input type="date" id="a_subDate" oninput="render()"></div>
     </div>
 
     <!-- LAB REPORT PANEL -->
     <div class="mode-panel" id="panel-lab">
-      <div class="sec-head">📄 Document Info</div>
+      <div class="sec-head"><i class="bi bi-file-earmark-text"></i> Document Info</div>
       <div class="fg"><label>Experiment Name</label><input type="text" id="l_expName" placeholder="e.g. Study of Basic Logic Gates" oninput="render()"></div>
       <div class="fg"><label>Experiment No</label><input type="text" id="l_expNo" placeholder="e.g. 01" oninput="render()"></div>
       <div class="fg"><label>Course Code</label><input type="text" id="l_courseCode" placeholder="e.g. CSE444" oninput="render()"></div>
@@ -850,7 +855,7 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
       <div class="sgap"></div>
       <div class="sec-head-row">
         <div class="sec-head">👨‍🏫 Submitted To</div>
-        <button class="copy-btn" onclick="copyFromAssignment()">⚡ Copy from Assignment</button>
+        <button class="copy-btn" onclick="copyFromAssignment()"><i class="bi bi-lightning-charge-fill"></i> Copy from Assignment</button>
       </div>
       <div class="fg"><label>Teacher Name</label><input type="text" id="l_tName" placeholder="e.g. Grace Hopper, Tim Berners-Lee" oninput="render()"></div>
       <div class="optional-toggle" onclick="toggleOptional('l_optional_teacher')" id="opt-tog-l-teacher">
@@ -892,25 +897,25 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
       <div class="fg"><label>Department</label><input type="text" id="l_sDept" placeholder="e.g. CSE" oninput="render()"></div>
       <div class="fg"><label>University</label><input class="readonly-field" type="text" value="Daffodil International University." readonly></div>
       <div class="sgap"></div>
-      <div class="sec-head">📅 Submission Date</div>
+      <div class="sec-head"><i class="bi bi-calendar-check"></i> Submission Date</div>
       <div class="fg"><label>Date</label><input type="date" id="l_subDate" oninput="render()"></div>
     </div>
 
     <div style="position:relative;" class="dl-btn-wrap">
       <div class="dl-btn-tooltip" id="dlTooltip">Fill at least all but 2 fields to download</div>
-      <button class="dl-btn" id="dlBtn" onclick="downloadPDF()" disabled>⬇ &nbsp; DOWNLOAD PDF</button>
+      <button class="dl-btn" id="dlBtn" onclick="downloadPDF()" disabled><i class="bi bi-download"></i> &nbsp; DOWNLOAD PDF</button>
     </div>
     <div class="reset-bar" id="resetBarA" style="display:none">
-      <button class="reset-btn" onclick="resetFields('assignment')">🗑 Reset</button>
+      <button class="reset-btn" onclick="resetFields('assignment')"><i class="bi bi-trash3-fill"></i> Reset</button>
       <button class="undo-btn" id="undo-btn-assignment" onclick="undoReset('assignment')" disabled>
-        ↩ Undo <span id="undo-timer-assignment"></span>
+        <i class="bi bi-arrow-counterclockwise"></i> Undo <span id="undo-timer-assignment"></span>
         <div class="undo-timer" id="undo-bar-assignment" style="width:0%;height:3px;position:absolute;bottom:0;left:0;background:#f59e0b;border-radius:0 0 0 4px;"></div>
       </button>
     </div>
     <div class="reset-bar" id="resetBarL" style="display:none">
-      <button class="reset-btn" onclick="resetFields('lab')">🗑 Reset</button>
+      <button class="reset-btn" onclick="resetFields('lab')"><i class="bi bi-trash3-fill"></i> Reset</button>
       <button class="undo-btn" id="undo-btn-lab" onclick="undoReset('lab')" disabled>
-        ↩ Undo <span id="undo-timer-lab"></span>
+        <i class="bi bi-arrow-counterclockwise"></i> Undo <span id="undo-timer-lab"></span>
         <div class="undo-timer" id="undo-bar-lab" style="width:0%;height:3px;position:absolute;bottom:0;left:0;background:#f59e0b;border-radius:0 0 0 4px;"></div>
       </button>
     </div>
@@ -934,7 +939,7 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
 <div class="merge-view" id="mergeView">
   <div class="merge-topbar">
     <div class="merge-topbar-left">
-      <div class="merge-topbar-title">⊕ MERGE <span>PDF</span></div>
+      <div class="merge-topbar-title"><i class="bi bi-intersect"></i> MERGE <span>PDF</span></div>
       <div class="merge-topbar-desc">Combine cover page with any PDF · Drag to reorder · Download as one file</div>
     </div>
     <div class="merge-steps" id="mergeSteps">
@@ -943,13 +948,13 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
       <div class="merge-step" id="mstep3"><div class="ms-num">3</div><span>DOWNLOAD</span></div>
     </div>
     <div class="merge-topbar-right">
-      <button class="add-cover-btn" id="addCoverBtn" onclick="addCoverToPile()">＋ ADD MY COVER PAGE</button>
+      <button class="add-cover-btn" id="addCoverBtn" onclick="addCoverToPile()"><i class="bi bi-plus-circle"></i> ADD MY COVER PAGE</button>
     </div>
   </div>
   <div class="merge-dropzone-wrap">
     <div class="merge-dropzone" id="mergeDropzone">
       <input type="file" id="mergeFileInput" accept="application/pdf" multiple onchange="handleMergeFiles(this.files)">
-      <div class="dz-icon">📂</div>
+      <div class="dz-icon"><i class="bi bi-folder2-open" style="font-size:34px;color:#9aabc8;"></i></div>
       <div class="dz-text">Drop PDF files here, or click to browse</div>
       <div class="dz-sub">Multiple files supported · Any PDF works</div>
     </div>
@@ -957,21 +962,21 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
   <div class="merge-cards-wrap">
     <div id="coverNoteWrap" style="display:none">
       <div class="cover-note">
-        <span style="font-size:15px;flex-shrink:0">🟢</span>
+        <span style="font-size:15px;flex-shrink:0;color:#16a34a;"><i class="bi bi-check-circle-fill"></i></span>
         <span>Your <strong>generated cover page</strong> has been added. Drag it or use arrows to reorder, then hit Download Merged PDF.</span>
       </div>
     </div>
     <div class="merge-cards-header">
       <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-        <span class="merge-cards-title">📑 PDF Queue</span>
+        <span class="merge-cards-title"><i class="fa-regular fa-file-pdf"></i> PDF Queue</span>
         <span class="merge-cards-count" id="cardCount">0 files</span>
-        <span class="drag-hint" id="dragHint" style="display:none">☰ Drag cards to reorder</span>
+        <span class="drag-hint" id="dragHint" style="display:none"><i class="bi bi-grip-horizontal"></i> Drag cards to reorder</span>
       </div>
       <button class="clear-btn" id="clearBtn" onclick="clearAll()" style="display:none">✕ Clear All</button>
     </div>
     <div class="merge-cards" id="mergeCards">
       <div class="merge-empty" id="mergeEmpty">
-        <div class="merge-empty-icon">🗂️</div>
+        <div class="merge-empty-icon"><i class="bi bi-folder-x" style="font-size:50px;color:#b0c2e8;"></i></div>
         <div class="merge-empty-text">No PDFs yet</div>
         <div class="merge-empty-sub">Drop files above, or click "Add My Cover Page" to start</div>
       </div>
@@ -984,7 +989,7 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
   </div>
   <div class="merge-bottombar">
     <div class="merge-info" id="mergeInfo">Add at least 2 PDFs to merge</div>
-    <button class="merge-dl-btn" id="mergeDlBtn" onclick="doMerge()" disabled>⬇ &nbsp; DOWNLOAD MERGED PDF</button>
+    <button class="merge-dl-btn" id="mergeDlBtn" onclick="doMerge()" disabled><i class="bi bi-download"></i> &nbsp; DOWNLOAD MERGED PDF</button>
   </div>
 </div>
 
@@ -992,18 +997,18 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
 <div class="mobile-tab-bar" id="mobileTabBar">
   <div class="mob-tabs">
     <button class="mob-tab active" id="mobtab-a" onclick="setMode('assignment')">
-      <span class="mt-icon">📄</span><span>ASSIGNMENT</span>
+      <span class="mt-icon"><i class="bi bi-file-earmark-text"></i></span><span>ASSIGNMENT</span>
     </button>
     <button class="mob-tab" id="mobtab-l" onclick="setMode('lab')">
-      <span class="mt-icon">🔬</span><span>LAB REPORT</span>
+      <span class="mt-icon"><i class="bi bi-motherboard"></i></span><span>LAB REPORT</span>
     </button>
     <button class="mob-tab" id="mobtab-m" onclick="setMode('merge')">
-      <span class="mt-icon">⊕</span><span>MERGE</span>
+      <span class="mt-icon"><i class="bi bi-intersect"></i></span><span>MERGE</span>
     </button>
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script>
 if(window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
@@ -1014,12 +1019,12 @@ let coverChoiceSelected='assignment';
 
 /* ── TOAST SYSTEM ── */
 function showToast(type,title,msg,duration=4000){
-  const icons={success:'✅',error:'❌',info:'ℹ️',warning:'⚠️'};
+  const icons={success:'<i class="bi bi-check-circle-fill"></i>',error:'<i class="bi bi-x-circle-fill"></i>',info:'<i class="bi bi-info-circle-fill"></i>',warning:'<i class="bi bi-exclamation-triangle-fill"></i>'};
   const container=document.getElementById('toast-container');
   const t=document.createElement('div');
   t.className=`toast ${type}`;
   t.style.position='relative';
-  t.innerHTML=`<span class="toast-icon">${icons[type]||'💬'}</span>
+  t.innerHTML=`<span class="toast-icon">${icons[type]||'<i class="fa-regular fa-comment-dots"></i>'}</span>
     <div class="toast-body"><div class="toast-title">${title}</div>${msg?`<div class="toast-msg">${msg}</div>`:''}
     </div><button class="toast-close" onclick="dismissToast(this.parentElement)">×</button>`;
   container.appendChild(t);
@@ -1043,8 +1048,8 @@ let ffbPillHideTimer=null;
 let ffbCurrentMsg=0; // 0=comment opinion, 1=suggest feature
 
 const FFB_MESSAGES=[
-  {line1:'💬 COMMENT YOUR OPINION',line2:'Share your thoughts!'},
-  {line1:'💡 SUGGEST A FEATURE',line2:'Help us improve!'}
+  {line1:'<i class="fa-regular fa-comment-dots"></i> COMMENT YOUR OPINION',line2:'Share your thoughts!'},
+  {line1:'<i class="bi bi-lightbulb-fill"></i> SUGGEST A FEATURE',line2:'Help us improve!'}
 ];
 
 function ffbShowPill(msgIdx){
@@ -1053,8 +1058,8 @@ function ffbShowPill(msgIdx){
   const line2=document.getElementById('ffbLine2');
   clearTimeout(ffbPillHideTimer);
   // Set text first while hidden
-  line1.textContent=FFB_MESSAGES[msgIdx].line1;
-  line2.textContent=FFB_MESSAGES[msgIdx].line2;
+line1.innerHTML = FFB_MESSAGES[msgIdx].line1;
+line2.innerHTML = FFB_MESSAGES[msgIdx].line2;
   pill.classList.add('visible');
   // Auto hide text after 3.5s but keep icon
   ffbPillHideTimer=setTimeout(()=>{
@@ -1122,7 +1127,7 @@ function setFsmRating(v){
 }
 
 async function submitFsmFeedback(){
-  if(!fsmRating){document.getElementById('fsmRatingLabel').textContent='⚠️ Please select a rating first';return;}
+  if(!fsmRating){document.getElementById('fsmRatingLabel').innerHTML='<i class="bi bi-exclamation-triangle-fill" style="color:#f59e0b;"></i> Please select a rating first';return;}
   const name=document.getElementById('fsmNameInput').value.trim()||'Anonymous';
   const comment=document.getElementById('fsmCommentBox').value.trim()||'(no comment)';
   const ratingText=fsmLabels[fsmRating];
@@ -1137,10 +1142,10 @@ async function submitFsmFeedback(){
     document.body.appendChild(form);form.submit();
     setTimeout(()=>{[form,iframe].forEach(el=>{if(el.parentNode)el.parentNode.removeChild(el);});},4000);
   }catch(e){}
-  showToast('success','Thank you, '+name.split(' ')[0]+'! ⭐','Your feedback has been recorded.');
-  btn.innerHTML='✅ Submitted! Thank you 🎉';
+  showToast('success','Thank you, '+name.split(' ')[0]+'! <i class="bi bi-star-fill" style="color:#fbbf24"></i>','Your feedback has been recorded.');
+  btn.innerHTML='<i class="bi bi-check-circle-fill"></i> Submitted! Thank you';
   setTimeout(()=>{
-    btn.disabled=false;btn.innerHTML='✅ Submit Rating &amp; Comment';
+    btn.disabled=false;btn.innerHTML='<i class="bi bi-send-check-fill"></i> Submit Rating &amp; Comment';
     document.getElementById('fsmCommentBox').value='';
     document.getElementById('fsmNameInput').value='';
     fsmRating=0;setFsmRating(0);
@@ -1543,10 +1548,10 @@ async function downloadPDF(){
     btn.classList.remove('generating');btn.classList.add('success');
     const fname=(modeKey==='lab'?'Lab_Report_Cover-diucoverpoint':'Assignment_Cover_Page-diucoverpoint')+'.pdf';
     triggerParticleBurst(btn);universalDownload(blob,fname);incrementDownloadCount();
-    btn.innerHTML='✅ DOWNLOADED!';
-    setTimeout(()=>{btn.classList.remove('success');btn.innerHTML='⬇ &nbsp; DOWNLOAD PDF';checkFields();},2500);
+    btn.innerHTML='<i class="bi bi-check-circle-fill"></i> DOWNLOADED!';
+    setTimeout(()=>{btn.classList.remove('success');btn.innerHTML='<i class="bi bi-download"></i> &nbsp; DOWNLOAD PDF';checkFields();},2500);
   }catch(e){
-    btn.classList.remove('generating');btn.innerHTML='⬇ &nbsp; DOWNLOAD PDF';checkFields();
+    btn.classList.remove('generating');btn.innerHTML='<i class="bi bi-download"></i> &nbsp; DOWNLOAD PDF';checkFields();
     showToast('error','Generation Failed','Could not create PDF. Try again or switch browser.',5000);
   }
 }
@@ -1565,23 +1570,84 @@ dz.addEventListener('drop',e=>{
 });
 function fmtSize(bytes){if(bytes<1024)return bytes+'B';if(bytes<1024*1024)return(bytes/1024).toFixed(1)+'KB';return(bytes/(1024*1024)).toFixed(1)+'MB';}
 
+// async function handleMergeFiles(files){
+//   for(const f of files){
+//     const bytes=new Uint8Array(await f.arrayBuffer());
+//     const id='f'+Date.now()+Math.random();let pageCount=1,thumb=null;
+//     try{
+//       const pdf=await pdfjsLib.getDocument({data:bytes.slice()}).promise;pageCount=pdf.numPages;
+//       const page=await pdf.getPage(1);const vp=page.getViewport({scale:0.42});
+//       const canvas=document.createElement('canvas');canvas.width=vp.width;canvas.height=vp.height;
+//       await page.render({canvasContext:canvas.getContext('2d'),viewport:vp}).promise;thumb=canvas;
+//     }catch(e){}
+//     mergeItems.push({id,name:f.name,bytes,pageCount,isCover:false,thumb,size:f.size});
+//   }
+//   document.getElementById('mergeFileInput').value='';
+//   renderMergeCards();updateMergeSteps();
+//   showToast('info','Files Added',`${files.length} PDF${files.length>1?'s':''} added to queue.`,3000);
+// }
 async function handleMergeFiles(files){
+
+  // guard condition
+  if(!files || files.length === 0){
+    return;
+  }
+
+  // only allow PDF
+  files = [...files].filter(f => f.type === "application/pdf");
+
+  if(files.length === 0){
+    showToast('warning','Invalid File','Only PDF files are allowed.');
+    return;
+  }
+
   for(const f of files){
     const bytes=new Uint8Array(await f.arrayBuffer());
-    const id='f'+Date.now()+Math.random();let pageCount=1,thumb=null;
-    try{
-      const pdf=await pdfjsLib.getDocument({data:bytes.slice()}).promise;pageCount=pdf.numPages;
-      const page=await pdf.getPage(1);const vp=page.getViewport({scale:0.42});
-      const canvas=document.createElement('canvas');canvas.width=vp.width;canvas.height=vp.height;
-      await page.render({canvasContext:canvas.getContext('2d'),viewport:vp}).promise;thumb=canvas;
-    }catch(e){}
-    mergeItems.push({id,name:f.name,bytes,pageCount,isCover:false,thumb,size:f.size});
-  }
-  document.getElementById('mergeFileInput').value='';
-  renderMergeCards();updateMergeSteps();
-  showToast('info','Files Added',`${files.length} PDF${files.length>1?'s':''} added to queue.`,3000);
-}
+    const id='f'+Date.now()+Math.random();
+    let pageCount=1,thumb=null;
 
+    try{
+      const pdf=await pdfjsLib.getDocument({data:bytes.slice()}).promise;
+      pageCount=pdf.numPages;
+
+      const page=await pdf.getPage(1);
+      const vp=page.getViewport({scale:0.42});
+
+      const canvas=document.createElement('canvas');
+      canvas.width=vp.width;
+      canvas.height=vp.height;
+
+      await page.render({
+        canvasContext:canvas.getContext('2d'),
+        viewport:vp
+      }).promise;
+
+      thumb=canvas;
+
+    }catch(e){}
+
+    mergeItems.push({
+      id,
+      name:f.name,
+      bytes,
+      pageCount,
+      isCover:false,
+      thumb,
+      size:f.size
+    });
+  }
+
+  document.getElementById('mergeFileInput').value='';
+  renderMergeCards();
+  updateMergeSteps();
+
+  showToast(
+    'info',
+    'Files Added',
+    `${files.length} PDF${files.length>1?'s':''} added to queue.`,
+    3000
+  );
+}
 function getCoverModeDecision(){
   const aC=countFilledFields('assignment');const lC=countFilledFields('lab');
   const aT=REQUIRED_FIELDS['assignment'].length;const lT=REQUIRED_FIELDS['lab'].length;
@@ -1610,7 +1676,7 @@ async function addCoverToPile(){
 }
 async function addCoverWithMode(modeKey){
   mergeItems=mergeItems.filter(x=>!x.isCover);
-  const btn=document.getElementById('addCoverBtn');btn.textContent='⏳ Generating...';btn.disabled=true;
+  const btn=document.getElementById('addCoverBtn');btn.innerHTML='<i class="bi bi-hourglass-split" style="display:inline-block;animation:spin 1s linear infinite;"></i> Generating...';btn.disabled=true;
   try{
     const blob=await buildCoverPDFBlobForMode(modeKey);
     const bytes=new Uint8Array(await blob.arrayBuffer());let thumb=null;
@@ -1625,7 +1691,7 @@ async function addCoverWithMode(modeKey){
     renderMergeCards();updateMergeSteps();
     showToast('success','Cover Added','Your cover page is ready in the queue.',3000);
   }catch(e){showToast('error','Cover Generation Failed','Fill in cover details first then try again.',5000);}
-  btn.textContent='＋ ADD MY COVER PAGE';btn.disabled=false;
+  btn.innerHTML='<i class="bi bi-plus-circle"></i> ADD MY COVER PAGE';btn.disabled=false;
 }
 
 function renderMergeCards(){
@@ -1645,7 +1711,7 @@ function renderMergeCards(){
     rm.onclick=e=>{e.stopPropagation();mergeItems.splice(idx,1);if(item.isCover)document.getElementById('coverNoteWrap').style.display='none';renderMergeCards();updateMergeSteps();};card.appendChild(rm);
     const thumb=document.createElement('div');thumb.className='card-thumb';
     if(item.thumb){const c=item.thumb.cloneNode(true);c.style.cssText='width:100%;height:100%;object-fit:contain;display:block;';thumb.appendChild(c);}
-    else{thumb.innerHTML='<div class="card-thumb-placeholder">📄</div>';}card.appendChild(thumb);
+    else{thumb.innerHTML='<div class="card-thumb-placeholder"><i class="bi bi-file-earmark-pdf" style="font-size:30px;color:#b0c2e8;"></i></div>';}card.appendChild(thumb);
     const info=document.createElement('div');info.className='card-info';
     info.innerHTML=`<div class="card-name" title="${item.name}">${item.name}</div><div class="card-meta"><span class="card-pages">${item.pageCount} pg${item.pageCount!==1?'s':''}</span><span class="card-size">${fmtSize(item.size||0)}</span></div>`;card.appendChild(info);
     const arrows=document.createElement('div');arrows.className='card-arrows';
@@ -1668,7 +1734,7 @@ function clearAll(){mergeItems=[];renderMergeCards();updateMergeSteps();showToas
 async function doMerge(){
   if(mergeItems.length<2)return;
   const btn=document.getElementById('mergeDlBtn');
-  btn.classList.add('generating');btn.innerHTML='<span style="display:inline-block;animation:spin 1s linear infinite;margin-right:6px">⏳</span> MERGING...';btn.disabled=true;
+  btn.classList.add('generating');btn.innerHTML='<i class="bi bi-arrow-repeat" style="display:inline-block;animation:spin 1s linear infinite;margin-right:6px"></i> MERGING...';btn.disabled=true;
   const prog=document.getElementById('mergeProgress');const bar=document.getElementById('mergeProgressBar');
   prog.classList.add('show');bar.style.width='0%';
   try{
@@ -1682,12 +1748,12 @@ async function doMerge(){
     const blob=new Blob([out],{type:'application/pdf'});
     btn.classList.remove('generating');btn.classList.add('success');
     triggerParticleBurst(btn);universalDownload(blob,'DIU_Merged_Document-diucoverpoint.pdf');incrementDownloadCount();
-    btn.innerHTML='✅ DOWNLOADED!';
-    setTimeout(()=>{btn.classList.remove('success');btn.innerHTML='⬇ &nbsp; DOWNLOAD MERGED PDF';btn.disabled=mergeItems.length<2;prog.classList.remove('show');bar.style.width='0%';},2500);
+    btn.innerHTML='<i class="bi bi-check-circle-fill"></i> DOWNLOADED!';
+    setTimeout(()=>{btn.classList.remove('success');btn.innerHTML='<i class="bi bi-download"></i> &nbsp; DOWNLOAD MERGED PDF';btn.disabled=mergeItems.length<2;prog.classList.remove('show');bar.style.width='0%';},2500);
   }catch(err){
     btn.classList.remove('generating');
     showToast('error','Merge Failed','Make sure PDFs are valid and not password-protected.',6000);
-    btn.innerHTML='⬇ &nbsp; DOWNLOAD MERGED PDF';btn.disabled=false;prog.classList.remove('show');
+    btn.innerHTML='<i class="bi bi-download"></i> &nbsp; DOWNLOAD MERGED PDF';btn.disabled=false;prog.classList.remove('show');
   }
 }
 
