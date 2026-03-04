@@ -14,7 +14,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V8YVLWELY9"></script>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-V8YVLWELY9');
+  </script>
 <style>
 :root{
   --ui-bg:#eef2fb;--ui-surface:#ffffff;--ui-border:#c8d5ee;--ui-accent:#2d54b8;
@@ -706,11 +713,11 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
   <div class="header-right">
     <div class="dl-count-badge" title="Total downloads">
       <span class="dl-count-icon"><i class="bi bi-download"></i></span>
-      <span class="dl-count-val" id="dlCount">0</span>
+      <span class="dl-count-val" id="dlCount">—</span>
     </div>
     <div class="visitor-badge" title="Total page loads">
       <span class="visitor-icon"><i class="bi bi-eye"></i></span>
-      <span class="visitor-count" id="visitorCount">0</span>
+      <span class="visitor-count" id="visitorCount">—</span>
     </div>
     <span class="v-badge">v3.1</span>
     <button class="hamburger" id="hamburgerBtn" onclick="toggleMenu()" aria-label="Menu">
@@ -757,7 +764,7 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
         <a class="dev-link" href="https://sr-imran.github.io/sri/" target="_blank"><span class="dl-icon"><i class="bi bi-globe2"></i></span> Portfolio Website</a>
         <a class="dev-link" href="https://github.com/SR-iMrAN?tab=repositories" target="_blank"><span class="dl-icon"><i class="bi bi-github"></i></span> GitHub Profile</a>
         <a class="dev-link" href="https://www.linkedin.com/in/s-r-imran/" target="_blank"><span class="dl-icon"><i class="bi bi-linkedin"></i></span> LinkedIn</a>
-        <a class="dev-link" href="/cdn-cgi/l/email-protection#0c6865796f637a697e227c636562784c6b616d6560226f6361" target="_blank"><span class="dl-icon"><i class="bi bi-envelope-at-fill"></i></span> Contact via Email</a>
+        <a class="dev-link" href="mailto:diucover.point@gmail.com"><span class="dl-icon"><i class="bi bi-envelope-at-fill"></i></span> Contact via Email</a>
       </div>
     </div>
   </div>
@@ -903,7 +910,7 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
 
     <div style="position:relative;" class="dl-btn-wrap">
       <div class="dl-btn-tooltip" id="dlTooltip">Fill at least all but 2 fields to download</div>
-      <button class="dl-btn" id="dlBtn" onclick="downloadPDF()" disabled><i class="bi bi-download"></i> &nbsp; DOWNLOAD PDF</button>
+      <button class="dl-btn" id="dlBtn" onclick="downloadPDF()" disabled><i class="bi bi-download"></i > &nbsp; DOWNLOAD PDF</button>
     </div>
     <div class="reset-bar" id="resetBarA" style="display:none">
       <button class="reset-btn" onclick="resetFields('assignment')"><i class="bi bi-trash3-fill"></i> Reset</button>
@@ -1008,7 +1015,7 @@ header{background:var(--ui-header);padding:0 20px;height:70px;display:flex;align
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<!-- Cloudflare email-decode removed (local dev) -->
 <script>
 if(window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
@@ -1216,26 +1223,102 @@ let undoTimerHandle={assignment:null,lab:null};
 let undoIntervalHandle={assignment:null,lab:null};
 const UNDO_SECONDS=15;
 
-/* VISITOR COUNTER */
+/* ── REAL PERSISTENT COUNTERS (counterapi.dev) ──
+   Visitor : increments once per browser session (sessionStorage guard).
+   Download: increments on every real PDF download.
+   Floor   : never shows below 3 so the site never looks empty.
+   API docs: https://counterapi.dev
+*/
 (function(){
-  try{
-    const KEY='diu_cover_craft_visitors';let c=parseInt(localStorage.getItem(KEY)||'0',10);c++;localStorage.setItem(KEY,c);
-    const el=document.getElementById('visitorCount');
-    if(el){let s=Math.max(0,c-8);const t=()=>{if(s<=c){el.textContent=s;s++;setTimeout(t,60);}};t();}
-  }catch(e){try{document.getElementById('visitorCount').textContent='—';}catch(_){}}
-})();
+  const NS   = 'cover-points-team-3138';   // change this string to reset both counters to 0
+const BASE = "https://api.counterapi.dev/v2/" + NS;
+  const FLOOR_V = 0;   // minimum visitors shown
+  const FLOOR_D = 0;   // minimum downloads shown
 
-/* DOWNLOAD COUNTER */
-(function(){
-  try{
-    const KEY='diu_cover_craft_downloads';let c=parseInt(localStorage.getItem(KEY)||'0',10);
-    const el=document.getElementById('dlCount');
-    if(el){let s=Math.max(0,c-5);const t=()=>{if(s<=c){el.textContent=s;s++;setTimeout(t,70);}};t();}
-  }catch(e){try{document.getElementById('dlCount').textContent='—';}catch(_){}}
+  /* count-up animation */
+  function animateCount(elId, target){
+    const el = document.getElementById(elId);
+    if(!el) return;
+    const start = parseInt(el.textContent) || 0;
+    const diff  = target - start;
+    if(diff <= 0){ el.textContent = target; return; }
+    const steps = Math.min(40, diff);
+    let step = 0;
+    const tick = () => {
+      step++;
+      el.textContent = Math.round(start + (diff * step / steps));
+      if(step < steps) setTimeout(tick, 28);
+    };
+    tick();
+  }
+
+  function display(elId, raw, floor){
+    animateCount(elId, Math.max(raw || 0, floor));
+  }
+
+  /* ── helper: fetch with timeout ── */
+  function fetchCount(url, timeoutMs){
+    timeoutMs = timeoutMs || 6000;
+    return new Promise(function(resolve, reject){
+      const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+      const timer = setTimeout(function(){ if(ctrl) ctrl.abort(); reject(new Error('timeout')); }, timeoutMs);
+      fetch(url, ctrl ? { signal: ctrl.signal } : {})
+        .then(function(r){
+          clearTimeout(timer);
+          if(!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        })
+        .then(resolve)
+        .catch(function(e){ clearTimeout(timer); reject(e); });
+    });
+  }
+
+  /* ── VISITOR COUNTER ── */
+  (function initVisits(){
+    const SESSION_KEY = 'dcp_visited';
+    const url = SESSION_KEY in sessionStorage
+      ? BASE + '/visitsx'
+      : BASE + '/visitsx/up';
+    if(!(SESSION_KEY in sessionStorage)) sessionStorage.setItem(SESSION_KEY,'1');
+
+    fetchCount(url)
+      .then(function(d){ display('visitorCount', d.data.up_count, FLOOR_V); })
+      .catch(function(err){
+        console.warn('[CounterAPI] visitor fetch failed:', err);
+        /* retry once after 3 s */
+        setTimeout(function(){
+          fetchCount(url)
+            .then(function(d){ display('visitorCount', d.data.up_count, FLOOR_V); })
+            .catch(function(){ display('visitorCount', FLOOR_V, FLOOR_V); });
+        }, 3000);
+      });
+  })();
+
+  /* ── DOWNLOAD COUNTER (read on load) ── */
+  fetchCount(BASE + '/downloadsx')
+    .then(function(d){ display('dlCount', d.data.up_count, FLOOR_D); })
+    .catch(function(err){
+      console.warn('[CounterAPI] download fetch failed:', err);
+      setTimeout(function(){
+        fetchCount(BASE + '/downloadsx')
+          .then(function(d){ display('dlCount', d.data.up_count, FLOOR_D); })
+          .catch(function(){ display('dlCount', FLOOR_D, FLOOR_D); });
+      }, 3000);
+    });
+
+  /* ── incrementDownloadCount called on every real PDF save ── */
+  window.incrementDownloadCount = function(){
+    fetchCount(BASE + '/downloadsx/up')
+      .then(function(d){ display('dlCount', d.data.up_count, FLOOR_D); })
+      .catch(function(){
+        const el = document.getElementById('dlCount');
+        if(el) el.textContent = Math.max(parseInt(el.textContent)||0, FLOOR_D) + 1;
+      });
+    if(typeof gtag === 'function'){
+      gtag('event','download_pdf',{event_category:'PDF',event_label:'Cover Download'});
+    }
+  };
 })();
-function incrementDownloadCount(){
-  try{const KEY='diu_cover_craft_downloads';let c=parseInt(localStorage.getItem(KEY)||'0',10);c++;localStorage.setItem(KEY,c);const el=document.getElementById('dlCount');if(el)el.textContent=c;}catch(e){}
-}
 
 /* ── OPTIONAL FIELDS TOGGLE (updated behaviour) ── 
    When the toggle row is clicked:
@@ -1542,6 +1625,10 @@ async function buildCoverPDFBlobForMode(modeKey){
 async function downloadPDF(){
   const btn=document.getElementById('dlBtn');if(btn.disabled)return;
   btn.classList.add('generating');btn.innerHTML='<span style="display:inline-block;animation:spin 1s linear infinite;margin-right:8px">⏳</span> GENERATING...';btn.disabled=true;
+  gtag('event', 'download_pdf', {
+  event_category: 'PDF',
+  event_label: 'Cover Download'
+});
   try{
     const modeKey=mode==='merge'?lastModeBeforeMerge:mode;
     const blob=await buildCoverPDFBlobForMode(modeKey);

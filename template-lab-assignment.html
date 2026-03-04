@@ -725,6 +725,10 @@ async function downloadPDF(){
   btn.classList.add('generating');
   btn.innerHTML='<i class="bi bi-arrow-repeat" style="display:inline-block;animation:spin 1s linear infinite;margin-right:8px"></i> GENERATING...';
   btn.disabled=true;
+  gtag('event', 'download_pdf', {
+  event_category: 'PDF',
+  event_label: 'Cover Download'
+});
   try{
     const blob=await buildBlob();
     btn.classList.remove('generating');btn.classList.add('success');
